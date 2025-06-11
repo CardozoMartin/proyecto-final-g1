@@ -1,0 +1,18 @@
+.bg-navbar{
+    background-color: #000000!important;
+    
+}
+
+.nav-item{
+    color: #f7ca0b!important;
+    font-weight: bolder;
+}
+
+.nav-item:hover{
+    color: #a0850c!important;
+}
+
+.btn-item{
+    background-color: #a0850c!important;
+
+}
