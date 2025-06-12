@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Admin, Home, Login, Register } from '../../routes/Path'
-import "../css/Navbar.css"
+import "../../css/Navbar.css"
 import { AlignJustify } from 'lucide-react'
 
 const Navbar = () => {
