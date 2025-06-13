@@ -49,7 +49,7 @@ const FormRegister = () => {
     }
 
     const passRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/;
     if (contraseña && !passRegex.test(contraseña)) {
       nuevosErrores.contraseña =
         "Su contraseña debe contener al menos una mayúscula, una minúscula y un carácter especial.";
