@@ -1,0 +1,24 @@
+.contact-card {
+  background-color: #000000;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  min-height: 520px;
+  font-family: "fira-code", monospace;
+}
+
+.btn-item {
+  background-color: #a0850c !important;
+  color: white !important;
+}
+
+.btn-item:hover {
+  background-color: #f7ca0b !important;
+  color: black !important;
+}
+
+.form-control:focus {
+  border-color: #a0850c !important;
+  box-shadow: 0 0 0 0.2rem #f7ca0b !important;
+  outline: none;
+}
