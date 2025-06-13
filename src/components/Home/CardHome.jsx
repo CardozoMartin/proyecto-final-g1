@@ -1,4 +1,4 @@
-import "../../css/CardHome.css"
+import "../../css/Home/CardHome.css"
 
 
 
