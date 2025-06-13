@@ -1,0 +1,23 @@
+.login-card {
+  background-color: #000000;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.btn-item {
+  background-color: #a0850c !important;
+  color: white !important;
+  
+}
+
+.btn-item:hover {
+  background-color: #f7ca0b !important;
+  color: black !important;
+}
+
+.form-control:focus {
+  border-color: #a0850c !important;
+  outline: none;
+  box-shadow: 0 0 5px 2px #a0850c;
+}
