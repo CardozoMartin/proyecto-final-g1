@@ -7,7 +7,6 @@ const Contact = () => {
     email: "",
     mensaje: "",
   });
-  //hola
 
   const [errores, setErrores] = useState({});
 

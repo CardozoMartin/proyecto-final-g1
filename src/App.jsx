@@ -9,6 +9,8 @@ import LoginPage from './pages/LoginPage'
 import AdminPage from './pages/AdminPage'
 import ErrorPage from './pages/ErrorPage'
 import Navbar from './components/Common/Navbar'
+import Contact from './components/contacto/Contact';
+
 
 
 
@@ -24,8 +26,7 @@ function App() {
           <Route path="/Login" element={<LoginPage></LoginPage>}></Route>
           <Route path="/Admin" element={<AdminPage></AdminPage>}></Route>
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
-       
-
+          <Route path="/Contact" element={<Contact></Contact>}></Route>
         </Routes>
       </BrowserRouter>
     </>
