@@ -26,11 +26,6 @@ const AdminPage = () => {
 
   return (
 
-    <div>
-    
-    </div>
-  )
-
     <>
       <div className="d-flex min-vh-100">
         {/* Sidebar */}
