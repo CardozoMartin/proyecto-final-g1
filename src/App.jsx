@@ -12,6 +12,7 @@ import ErrorPage from './pages/ErrorPage'
 import Navbar from './components/Common/Navbar'
 
 
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -25,6 +26,8 @@ function App() {
           <Route path="/Login" element={<LoginPage></LoginPage>}></Route>
           <Route path="/Admin" element={<AdminPage></AdminPage>}></Route>
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
+       
+
         </Routes>
       </BrowserRouter>
     </>
