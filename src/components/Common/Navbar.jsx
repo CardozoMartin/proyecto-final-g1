@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Admin, Home, Login, Register } from '../../routes/Path'
+import { Admin, Home, Login, Register, Contact } from '../../routes/Path'
 import "../../css/Navbar.css"
 import { AlignJustify } from 'lucide-react'
-import Contact from '../contacto/Contact'
+
 
 const Navbar = () => {
     return (
@@ -28,10 +28,12 @@ const Navbar = () => {
                         <li className="nav-item">
                             <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Admin}>Admin</Link>
                         </li>
-                        
+
                         <li className="nav-item">
-                            <Link className="btn btn-item" aria-current="page" to={Login}>Ingresar</Link>
+                            <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Contact}>Contacto</Link>
                         </li>
+                        
+                      
                        
 
 
