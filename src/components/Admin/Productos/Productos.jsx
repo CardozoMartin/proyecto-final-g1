@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Productos = ({ menuItems, activeTab }) => {
+const Productos = () => {
 
   return (
     <div className="row">

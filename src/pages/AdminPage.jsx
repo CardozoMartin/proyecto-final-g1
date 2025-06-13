@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import Productos from '../components/Admin/Productos';
-import Pedidos from '../components/Admin/Pedidos';
-import Cliente from '../components/Admin/Cliente';
+import Productos from '../components/Admin/Productos/Productos';
+import Pedidos from '../components/Admin/Pedidos/Pedidos';
+import Cliente from '../components/Admin/Cliente/Cliente';
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -150,12 +150,10 @@ const AdminPage = () => {
             {activeTab === 'orders' && (
               <Pedidos />
             )}
-
             {/* Productos Component */}
             {activeTab === 'products' && (
               <Productos menuItems={menuItems} activeTab={activeTab} />
             )}
-
             {/* Cliente Component */}
             {activeTab === 'customers' && (
               <Cliente menuItems={menuItems} activeTab={activeTab} />
