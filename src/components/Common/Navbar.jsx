@@ -32,11 +32,6 @@ const Navbar = () => {
                         <li className="nav-item">
                             <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Contact}>Contacto</Link>
                         </li>
-                        
-                      
-                       
-
-
                     </ul>
                 </div>
             </div>
