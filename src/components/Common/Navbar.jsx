@@ -30,6 +30,7 @@ const Navbar = () => {
                         <li className="nav-item">
                             <Link className="btn btn-item" aria-current="page" to={Login}>Ingresar</Link>
                         </li>
+                         
 
                     </ul>
                 </div>
