@@ -12,6 +12,7 @@ import Navbar from './components/Common/Navbar'
 
 
 
+
 function App() {
 
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/Login" element={<LoginPage></LoginPage>}></Route>
           <Route path="/Admin" element={<AdminPage></AdminPage>}></Route>
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
+          
        
 
         </Routes>

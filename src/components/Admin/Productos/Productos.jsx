@@ -1,31 +1,146 @@
-import React from 'react'
+import React from "react";
+import FormProductos from "./FormProductos";
 
 const Productos = () => {
+  const productos = [
+    {
+      id: "#001",
+      product: "maquina",
+      descripcion: "el mejor producto",
+      precio: "$699",
+      stock: "6",
+      imagen:"https://www.example.com/imagen1.jpg",
+    },
+    {
+      id: "#002",
+      product: "amoladora",
+      descripcion: "alta gamma",
+      precio: "$1,299",
+      stock: "2",
+      imagen:"https://www.example.com/imagen2.jpg",
+    },
+    {
+      id: "#003",
+      product: "cortadora de cesped",
+      descripcion: "una genialidad",
+      precio: "$399",
+      stock: "3",
+      imagen:"https://www.example.com/imagen3.jpg",
+    },
+    {
+      id: "#004",
+      product: "sopladora de hoja",
+      descripcion: "se escuchan re piola",
+      precio: "$199",
+      stock: "6",
+      imagen:"https://www.example.com/imagen4.jpg",
+    },
+    {
+      id: "#005",
+      product: "nivel laser",
+      descripcion: "se ve re piola",
+      precio: "$299",
+      stock: "8",
+      imagen:"https://www.example.com/imagen5.jpg",
+    },
+  ];
 
   return (
     <div className="row">
       <div className="col-12">
         <div className="card shadow-sm border-0">
-          <div className="card-header bg-white">
-            <h5 className="card-title mb-0">
-
-            </h5>
+          <div className="card-header bg-white d-flex justify-content-between aling-items-center">
+            <h5 className="card-title mb-0">Productos</h5>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >   Agregar nuevo Prodcuto  </button>
           </div>
-          <div className="card-body text-center py-5">
-            <span style={{ fontSize: '4rem' }}>
-
-            </span>
-            <h4 className="mt-3">
-
-            </h4>
-            <p className="text-muted">
-              Esta sección está en desarrollo. Aquí irá el contenido de.
-            </p>
+          <div className="card-body">
+            <div className="table-responsive">
+              <table className="table table-hover">
+                <thead>
+                  <tr>
+                    <th>SKU</th>
+                    <th>Producto</th>
+                    <th>Descripcion</th>
+                    <th>Imagen</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {productos.map((prod) => (
+                    <tr key={prod.id}>
+                      <td>
+                        <code>{prod.id}</code>
+                      </td>
+                      <td>{prod.product}</td>
+                      <td>{prod.descripcion}</td>
+                      <td>{prod.imagen}</td>
+                      <td className="fw-bold">{prod.precio}</td>
+                      <td className="fw-bold">{prod.stock}</td>
+                      <td>
+                        <div className="btn-group" role="group">
+                          <button className="btn btn-outline-primary btn-sm">
+                            Editar
+                          </button>
+                          <button className="btn btn-outline-primary btn-sm">
+                            Ver
+                          </button>
+                          <button className="btn btn-outline-primary btn-sm">
+                            Eliminar
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true" >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Modal title
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">{<FormProductos/>}</div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="button" class="btn btn-primary">
+                Save changes
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Productos
+export default Productos;
