@@ -11,7 +11,7 @@ const FormProductos = ({onAgregar}) => {
     stock: '',
     imagen: ''
   });
-  const handleChange = (e) => {
+  const handleAgregarProducto = (e) => {
     setNuevoProducto({...nuevoProducto, [e.target.name]: e.target.value });
   }
   const handleSubmit = (e) => {
@@ -24,12 +24,12 @@ const FormProductos = ({onAgregar}) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-      <input name="id" value={nuevoProducto.id} onChange={handleChange} placeholder="SKU" />
-      <input name="product" value={nuevoProducto.product} onChange={handleChange} placeholder="Producto" />
-      <input name="descripcion" value={nuevoProducto.descripcion} onChange={handleChange} placeholder="Descripción" />
-      <input name="imagen" value={nuevoProducto.imagen} onChange={handleChange} placeholder="URL Imagen" />
-      <input name="precio" value={nuevoProducto.precio} onChange={handleChange} placeholder="Precio" />
-      <input name="stock" value={nuevoProducto.stock} onChange={handleChange} placeholder="Stock" />
+      <input name="id" value={nuevoProducto.id} onChange={handleAgregarProducto} placeholder="SKU" />
+      <input name="product" value={nuevoProducto.product} onChange={handleAgregarProducto} placeholder="Producto" />
+      <input name="descripcion" value={nuevoProducto.descripcion} onChange={handleAgregarProducto} placeholder="Descripción" />
+      <input name="imagen" value={nuevoProducto.imagen} onChange={handleAgregarProducto} placeholder="URL Imagen" />
+      <input name="precio" value={nuevoProducto.precio} onChange={handleAgregarProducto} placeholder="Precio" />
+      <input name="stock" value={nuevoProducto.stock} onChange={handleAgregarProducto} placeholder="Stock" />
       <button type="submit">Agregar</button>
     </form>
     </div>
