@@ -1,49 +1,53 @@
 import React from "react";
+import { useState } from "react";
 import FormProductos from "./FormProductos";
 
 const Productos = () => {
-  const productos = [
+  const [productos, setProductos] = useState([
     {
       id: "#001",
       product: "maquina",
       descripcion: "el mejor producto",
+      imagen:"https://www.example.com/imagen1.jpg",
       precio: "$699",
       stock: "6",
-      imagen:"https://www.example.com/imagen1.jpg",
     },
     {
       id: "#002",
       product: "amoladora",
       descripcion: "alta gamma",
+      imagen:"https://www.example.com/imagen2.jpg",
       precio: "$1,299",
       stock: "2",
-      imagen:"https://www.example.com/imagen2.jpg",
     },
     {
       id: "#003",
       product: "cortadora de cesped",
       descripcion: "una genialidad",
+      imagen:"https://www.example.com/imagen3.jpg",
       precio: "$399",
       stock: "3",
-      imagen:"https://www.example.com/imagen3.jpg",
     },
     {
       id: "#004",
       product: "sopladora de hoja",
       descripcion: "se escuchan re piola",
+      imagen:"https://www.example.com/imagen4.jpg",
       precio: "$199",
       stock: "6",
-      imagen:"https://www.example.com/imagen4.jpg",
     },
     {
       id: "#005",
       product: "nivel laser",
       descripcion: "se ve re piola",
+      imagen:"https://www.example.com/imagen5.jpg",
       precio: "$299",
       stock: "8",
-      imagen:"https://www.example.com/imagen5.jpg",
     },
-  ];
+  ]);
+  const handleAgregarProducto = (nuevoProducto) => {
+    setProductos([...productos, nuevoProducto]);
+  }
 
   return (
     <div className="row">
@@ -123,7 +127,7 @@ const Productos = () => {
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">{<FormProductos/>}</div>
+            <div class="modal-body"><FormProductos onAgregar={handleAgregarProducto}></FormProductos></div>
             <div class="modal-footer">
               <button
                 type="button"
