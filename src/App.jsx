@@ -9,6 +9,7 @@ import LoginPage from './pages/LoginPage'
 import AdminPage from './pages/AdminPage'
 import ErrorPage from './pages/ErrorPage'
 import Navbar from './components/Common/Navbar'
+import Footer from './components/Common/Footer';
 
 
 
@@ -27,6 +28,7 @@ function App() {
        
 
         </Routes>
+        <Footer></Footer>
       </BrowserRouter>
     </>
   )
