@@ -1,37 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Busqueda from "./Busqueda";
+import Informacion from "./Informacion";
+import clientStore from "../../../store/clientStore";
+
 
 const Cliente = () => {
-  const recentOrders = [
-    {
-      id: "#001",
-      nombre: "Juan",
-      apellido: "Gomez",
-      correo: "juang95@gmail.com",
-      status: "Activa",
-    },
-    {
-      id: "#002",
-      nombre: "Maria",
-      apellido: "Lopez",
-      correo: "marialopez@hotmail.com",
-      status: "Inactiva",
-    },
-    {
-      id: "#003",
-      nombre: "Carlos",
-      apellido: "Perez",
-      correo: "cperez.8080@outlook.com",
-      status: "Activa",
-    },
-    {
-      id: "#004",
-      nombre: "Ana",
-      apellido: "Martinez",
-      correo: "anita.rrhh@gmail.com",
-      status: "Bloqueada",
-    },
-  ];
+  const { usuarios } = clientStore();
+
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+  const [mostrarInfo, setMostrarInfo] = useState(false);
+
   const getStatusBadge = (status) => {
     const badges = {
       Activa: "success",
@@ -39,6 +17,11 @@ const Cliente = () => {
       Bloqueada: "danger",
     };
     return badges[status] || "secondary";
+  };
+
+  const handleVer = (usuario) => {
+    setUsuarioSeleccionado(usuario);
+    setMostrarInfo(true);
   };
 
   return (
@@ -55,35 +38,36 @@ const Cliente = () => {
                 <table className="table table-hover">
                   <thead>
                     <tr>
-                      <th>ID</th>
+                      <th>#</th>
                       <th>Nombre</th>
                       <th>Apellido</th>
-                      <th>Correo Electronico</th>
+                      <th>Correo Electrónico</th>
                       <th>Estado</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {recentOrders.map((order) => (
-                      <tr key={order.id}>
+                    {usuarios.map((usuario, index) => (
+                      <tr key={index}>
                         <td>
-                          <code>{order.id}</code>
+                          <code>{usuario.id}</code>
                         </td>
-                        <td>{order.nombre}</td>
-                        <td>{order.apellido}</td>
-                        <td>{order.correo}</td>
+                        <td>{usuario.nombre}</td>
+                        <td>{usuario.apellido}</td>
+                        <td>{usuario.correo}</td>
                         <td>
                           <span
-                            className={`badge bg-${getStatusBadge(
-                              order.status
-                            )}`}
+                            className={`badge bg-${getStatusBadge("Activa")}`}
                           >
-                            {order.status}
+                            Activa
                           </span>
                         </td>
                         <td>
                           <div className="btn-group" role="group">
-                            <button className="btn btn-outline-primary btn-sm">
+                            <button
+                              className="btn btn-outline-primary btn-sm"
+                              onClick={() => handleVer(usuario)}
+                            >
                               Ver
                             </button>
                             <button className="btn btn-outline-secondary btn-sm">
@@ -93,6 +77,13 @@ const Cliente = () => {
                         </td>
                       </tr>
                     ))}
+                    {usuarios.length === 0 && (
+                      <tr>
+                        <td colSpan="6" className="text-center text-muted">
+                          No hay clientes registrados aún.
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -100,6 +91,13 @@ const Cliente = () => {
           </div>
         </div>
       </div>
+
+      {mostrarInfo && usuarioSeleccionado && (
+        <Informacion
+          usuario={usuarioSeleccionado}
+          onCerrar={() => setMostrarInfo(false)}
+        />
+      )}
     </>
   );
 };

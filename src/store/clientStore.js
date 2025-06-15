@@ -9,7 +9,19 @@ const clientStore = create((set) => ({
     correo: "",
     contraseña: "",
   },
-  setUsuario: (nuevoUsuario) => set({ usuario: nuevoUsuario }),
+  usuarios: [],
+
+  setUsuario: (nuevoUsuario) =>
+    set((state) => ({
+      usuario: nuevoUsuario,
+      usuarios: [...state.usuarios, nuevoUsuario],
+    })),
+
+  agregarUsuario: (nuevoUsuario) =>
+    set((state) => ({
+      usuarios: [...state.usuarios, nuevoUsuario],
+    })),
+
   limpiarUsuario: () =>
     set({
       usuario: {
@@ -21,6 +33,10 @@ const clientStore = create((set) => ({
         contraseña: "",
       },
     }),
+
+
 }));
 
 export default clientStore;
+
+

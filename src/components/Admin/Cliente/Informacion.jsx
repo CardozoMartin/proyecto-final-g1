@@ -1,99 +1,96 @@
 import React from "react";
-import useUserStore from "../../store/clienteStore"; 
-const Informacion = () => {
-  const { usuario } = useUserStore();
+import "../../../css/Clientes/Informacion.css";
+
+const Informacion = ({ usuario, onCerrar }) => {
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <form className="formulario text-center">
-            <div className="mb-3 formint">
-              <label htmlFor="nombre" className="form-label label-80">
-                Nombre
-              </label>
-              <input
-                type="text"
-                className="form-control w-75 mx-auto inputform"
-                id="nombre"
-                name="nombre"
-                value={usuario.nombre}
-                disabled
-              />
+    <>
+      <div
+        className="modal fade show d-block bg-light"
+      >
+        <div className="modal-dialog modal-dialog-centered text-center">
+          <div className="modal-content text-center">
+
+            <div className="modal-header">
+              <h5 className="modal-title ">Información del Cliente</h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={onCerrar}
+              ></button>
             </div>
 
-            <div className="mb-3">
-              <label htmlFor="apellido" className="form-label">
-                Apellido
-              </label>
-              <input
-                type="text"
-                className="form-control w-75 mx-auto inputform"
-                id="apellido"
-                value={usuario.apellido}
-                disabled
-              />
+            <div className="modal-body">
+              <form className="text-center">
+                <div className="mb-3">
+                  <label className="form-label">Nombre</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={usuario.nombre}
+                    disabled
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label">Apellido</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={usuario.apellido}
+                    disabled
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label">Fecha de Nacimiento</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    value={usuario.fechaNac}
+                    disabled
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label">Dirección</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={usuario.direccion}
+                    disabled
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label">Correo Electrónico</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    value={usuario.correo}
+                    disabled
+                  />
+                </div>
+
+                <div className="mb-3">
+                </div>
+              </form>
             </div>
 
-            <div className="mb-3">
-              <label htmlFor="fecha" className="form-label">
-                Fecha de Nacimiento
-              </label>
-              <input
-                type="date"
-                className="form-control w-75 mx-auto inputform"
-                id="fecha"
-                value={usuario.fechaNac}
-                disabled
-              />
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={onCerrar}
+              >
+                Cerrar
+              </button>
             </div>
 
-            <div className="mb-3">
-              <label htmlFor="direccion" className="form-label">
-                Dirección
-              </label>
-              <input
-                type="text"
-                className="form-control w-75 mx-auto inputform"
-                id="direccion"
-                value={usuario.direccion}
-                disabled
-              />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="correo" className="form-label">
-                Correo Electrónico
-              </label>
-              <input
-                type="text"
-                className="form-control w-75 mx-auto inputform"
-                id="correo"
-                value={usuario.correo}
-                disabled
-              />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Contraseña
-              </label>
-              <input
-                type="password"
-                className="form-control w-75 mx-auto inputform"
-                id="password"
-                value={usuario.contraseña}
-                disabled
-              />
-            </div>
-
-            <button type="button" className="btn btn-primary w-auto">
-              Cerrar
-            </button>
-          </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
