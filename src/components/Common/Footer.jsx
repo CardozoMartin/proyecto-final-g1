@@ -33,6 +33,14 @@ const Footer = () => {
         {
             icon: "bi bi-telephone-fill",
             text: "Asesoramiento personalizado",
+        },
+        {
+            icon: "bi bi-shield-check ",
+            text: "Garantía Extendida",
+        },
+        {
+            icon: "bi bi-star ",
+            text: "Descuentos para clientes registrados",
         }
     ];
 
@@ -49,11 +57,11 @@ const Footer = () => {
       
     </div>
     <div className="footer-container">
-      <i className="bi bi-geo-alt-fill"></i>
+      <i className="bi bi-geo-alt-fill"> Nuestras Sucursales</i>
       <div className="footer">
 {                sucursales.map((sucursal, index) => (
           <div key={index} className="sucursal">
-            <a className="no-link-style" href={sucursal.ubicacion}><h5>{sucursal.nombre}</h5></a>
+            <a className="no-link-style" href={sucursal.ubicacion}><h5>| {sucursal.nombre} | </h5></a>
             
           </div>
         ))
