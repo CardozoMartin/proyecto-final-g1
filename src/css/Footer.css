@@ -8,6 +8,7 @@
   padding: 1.5rem;
   gap: 0.5rem;
 }
+
 .footer {
   padding: 1rem 2rem;
   display: flex;
@@ -28,3 +29,22 @@
   justify-content: center;
   margin-top: 0.5rem;
 }
+
+.servicios {
+  background-color: #373333;
+  color: #ffffff;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem; 
+  justify-content: center;
+}
+
+.servicio-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0.5rem; 
+}
+  
