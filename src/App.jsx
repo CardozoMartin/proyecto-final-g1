@@ -10,6 +10,7 @@ import AdminPage from './pages/AdminPage'
 import ErrorPage from './pages/ErrorPage'
 import Navbar from './components/Common/Navbar'
 import Contact from './components/contacto/Contact';
+import { Toaster } from 'sonner';
 
 
 
@@ -29,6 +30,8 @@ function App() {
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
           <Route path="/Contact" element={<Contact></Contact>}></Route>
         </Routes>
+
+         <Toaster position="top-right" richColors />
       </BrowserRouter>
     </>
   )
