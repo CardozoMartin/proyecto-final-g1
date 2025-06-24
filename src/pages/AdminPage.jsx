@@ -3,6 +3,7 @@ import Productos from '../components/Admin/Productos/Productos';
 import Pedidos from '../components/Admin/Pedidos/Pedidos';
 import Cliente from '../components/Admin/Cliente/Cliente';
 
+
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -24,6 +25,7 @@ const AdminPage = () => {
   ];
 
   return (
+
     <>
       <div className="d-flex min-vh-100">
         {/* Sidebar */}

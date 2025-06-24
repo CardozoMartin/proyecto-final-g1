@@ -1,0 +1,30 @@
+.bg-dark {
+  background-color: #000 !important;
+}
+
+.text-white {
+  color: #fff !important;
+}
+
+.btn-item {
+  background-color: #a0850c !important;
+  color: white !important;
+  border: none;
+  font-weight: bold;
+}
+
+.btn-item:hover {
+  background-color: #f7ca0b !important;
+  color: black !important;
+}
+
+.card {
+  border: 1px solid #333;
+  border-radius: 10px;
+}
+
+.card:hover {
+  border-color: #a0850c !important;
+  box-shadow: 0 0 0 0.2rem #f7ca0b !important;
+  outline: none;
+}
