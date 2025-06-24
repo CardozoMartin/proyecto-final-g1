@@ -8,7 +8,7 @@ const Productos = () => {
   const { productos, loading, error, eliminarProducto } = useCustomProductos();
   // Estado para el producto seleccionado (para editar)
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-  
+
   //---------------------Handlers---------------------
   const handlerDeleteProducto = (prod) => {
     const swalWithBootstrapButtons = Swal.mixin({
@@ -102,6 +102,7 @@ const Productos = () => {
                 <th>Precio</th>
                 <th>P.Costo</th>
                 <th>Stock</th>
+                <th>Categoria</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -127,6 +128,7 @@ const Productos = () => {
                   <td className="fw-bold">${prod.precio_venta}</td>
                   <td className="fw-bold">${prod.precio_costo}</td>
                   <td className="fw-bold">{prod.cantidad_producto}</td>
+                  <td className="fw-bold">{prod.nombre_categoria}</td>
                   <td>
                     <div className="btn-group" role="group">
                       {/* Al hacer click en Editar, guardamos el producto y abrimos el modal */}
