@@ -49,15 +49,7 @@ const Cliente = () => {
     );
   }
 
-  if (isLoading) {
-
-
-    return <div className="text-center">Cargando clientes...</div>;
-  }
-
-  if (isError) {
-    return <div className="text-center text-danger">Error al cargar los clientes.</div>;
-  }
+  
   return (
     <>
     <div className="d-flex justify-content-between align-items-center mb-3">
@@ -88,9 +80,7 @@ const Cliente = () => {
                       <th>Nombre</th>
                       <th>Apellido</th>
                       <th>DNI</th>
-                      <th>Correo Electrónico</th>
                       <th>Telefono</th>
-                      <th>Domicilio</th>
                       <th>Estado</th>
                       <th>Acciones</th>
                     </tr>
@@ -104,9 +94,9 @@ const Cliente = () => {
                         <td>{usuario.Nombre}</td>
                         <td>{usuario.Apellido}</td>
                         <td>{usuario.DNI}</td>
-                        <td>{usuario.Email}</td>
+                        
                         <td>{usuario.Telefono}</td>
-                        <td>{usuario.Domicilio}</td>
+                        
                         <td><span>{usuario.Estado}</span> </td>
                         <td>
                           <div className="btn-group" role="group">
