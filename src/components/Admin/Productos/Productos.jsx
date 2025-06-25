@@ -115,8 +115,8 @@ const Productos = () => {
                   <td>
                     {prod.idProductos}
                   </td>
-                  <td>{prod.Nombre_producto}</td>
-                  <td>{prod.Descripcion}</td>
+                  <td>{prod.nombre_producto}</td>
+                  <td>{prod.descripcion}</td>
                   <td>
                     {prod.imagen ? (
                       <img
@@ -128,10 +128,10 @@ const Productos = () => {
                       'Sin imagen'
                     )}
                   </td>
-                  <td className="fw-bold">${prod.Precio_venta}</td>
-                  <td className="fw-bold">${prod.Precio_costo}</td>
-                  <td className="fw-bold">{prod.Cantidad_producto}</td>
-                  <td className="fw-bold">{prod.Nombre_categoria}</td>
+                  <td className="fw-bold">${prod.precio_venta}</td>
+                  <td className="fw-bold">${prod.precio_costo}</td>
+                  <td className="fw-bold">{prod.cantidad_producto}</td>
+                  <td className="fw-bold">{prod.nombre_categoria}</td>
                   <td>
                     <div className="btn-group" role="group">
                       {/* Al hacer click en Editar, guardamos el producto y abrimos el modal */}
@@ -165,7 +165,7 @@ const Productos = () => {
       <div className="col-12">
         <div className="card shadow-sm border-0">
           <div className="card-header bg-white d-flex justify-content-between align-items-center">
-            <h5 className="card-title mb-0">Productos</h5>
+            <h5 className="card-title mb-0 ">Productos</h5>
             {/* Al agregar nuevo producto, limpiamos el producto seleccionado */}
             <button
               type="button"
@@ -191,7 +191,7 @@ const Productos = () => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">
+              <h1 className="modal-title fs-5 text-dark" id="exampleModalLabel">
                 {/* Cambia el título según si es edición o nuevo */}
                 {productoSeleccionado ? 'Editar Producto' : 'Agregar Nuevo Producto'}
               </h1>

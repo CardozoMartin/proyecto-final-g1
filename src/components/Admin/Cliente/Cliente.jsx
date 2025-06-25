@@ -8,12 +8,9 @@ import useCustomCliente from "../../../CustomHooks/CustomCliente/useCustomClient
 const Cliente = () => {
 
   //--------------Importaciones del useCliente
-  const { cliente,isLoading,isError } = useCustomCliente();
+  const { cliente, isLoading, isError } = useCustomCliente();
 
- const resultado = cliente?.Clientes || cliente || [];
-
-  
-  const { usuarios } = clientStore();
+  const resultado = cliente?.Clientes || cliente || [];
 
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [mostrarInfo, setMostrarInfo] = useState(false);
@@ -32,24 +29,49 @@ const Cliente = () => {
     setMostrarInfo(true);
   };
 
-  if(!usuarios || usuarios.length === 0) {
+  if (!resultado || resultado.length === 0) {
     return (
-      <div className="text-center text-muted alert alert-info">
-        No hay clientes registrados aún.
+      <div>
+        <button
+          type="button"
+          className="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+
+        >
+          Agregar Clientes
+        </button>
+        <div className="text-center text-muted alert alert-info">
+          No hay clientes registrados aún.
+        </div>
       </div>
     );
   }
-  
-  if(isLoading){
+
+  if (isLoading) {
+
+
     return <div className="text-center">Cargando clientes...</div>;
   }
 
-  if(isError){
+  if (isError) {
     return <div className="text-center text-danger">Error al cargar los clientes.</div>;
   }
   return (
     <>
+    <div className="d-flex justify-content-between align-items-center mb-3">
       <Busqueda />
+
+         <button
+          type="button"
+          className="btn btn-primary mt-2 mb-3 col-12 col-md-3"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+
+        >
+          Agregar Clientes
+        </button>
+    </div>
       <div className="row">
         <div className="col-12">
           <div className="card shadow-sm border-0">
@@ -64,29 +86,27 @@ const Cliente = () => {
                       <th>#</th>
                       <th>Nombre</th>
                       <th>Apellido</th>
+                      <th>DNI</th>
                       <th>Correo Electrónico</th>
+                      <th>Telefono</th>
+                      <th>Domicilio</th>
                       <th>Estado</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {resultado.map((usuario,index) => (
+                    {resultado.map((usuario, index) => (
                       <tr key={index}>
                         <td>
                           <code>{usuario.idClientes}</code>
                         </td>
                         <td>{usuario.Nombre}</td>
                         <td>{usuario.Apellido}</td>
+                        <td>{usuario.DNI}</td>
                         <td>{usuario.Email}</td>
                         <td>{usuario.Telefono}</td>
                         <td>{usuario.Domicilio}</td>
-                        <td>
-                          <span
-                            className={`badge bg-${getStatusBadge("Activa")}`}
-                          >
-                            Activa
-                          </span>
-                        </td>
+                        <td><span>{usuario.Estado}</span> </td>
                         <td>
                           <div className="btn-group" role="group">
                             <button
@@ -102,7 +122,7 @@ const Cliente = () => {
                         </td>
                       </tr>
                     ))}
-                    {usuarios.length === 0 && (
+                    {resultado.length === 0 && (
                       <tr>
                         <td colSpan="6" className="text-center text-muted">
                           No hay clientes registrados aún.
