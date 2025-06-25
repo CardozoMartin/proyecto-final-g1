@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import useUserStore from "../../store/clientStore"; 
 import "../../css/Register/MainRegister.css";
+
 const initialState = {
   nombre: "",
   apellido: "",
@@ -12,6 +14,8 @@ const initialState = {
 const FormRegister = () => {
   const [datos, setDatos] = useState(initialState);
   const [errores, setErrores] = useState({});
+  const { setUsuario } = useUserStore(); 
+
   const { nombre, apellido, fechaNac, direccion, correo, contraseña } = datos;
 
   const handleChange = (e) => {
@@ -21,7 +25,7 @@ const FormRegister = () => {
       [name]: value,
     });
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -60,7 +64,9 @@ const FormRegister = () => {
       return;
     }
 
-    console.log("Formulario enviado:", datos);
+    setUsuario(datos);
+    console.log("Datos guardados en el store global:", datos);
+
 
     setDatos(initialState);
     setErrores({});
@@ -70,7 +76,7 @@ const FormRegister = () => {
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <form className="formulario text-center " onSubmit={handleSubmit}>
+          <form className="formulario text-center" onSubmit={handleSubmit}>
             <div className="mb-3 formint">
               <label htmlFor="nombre" className="form-label label-80">
                 Nombre
@@ -167,7 +173,7 @@ const FormRegister = () => {
               <input
                 type="password"
                 className="form-control w-75 mx-auto inputform"
-                id="text"
+                id="password"
                 placeholder="abc123*"
                 name="contraseña"
                 value={contraseña}
