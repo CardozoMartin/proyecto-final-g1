@@ -118,9 +118,9 @@ const Productos = () => {
                   <td>{prod.nombre_producto}</td>
                   <td>{prod.descripcion}</td>
                   <td>
-                    {prod.imagen ? (
+                    {prod.imagen_producto ? (
                       <img
-                        src={prod.imagen}
+                        src={prod.imagen_producto}
                         alt={prod.product}
                         style={{ width: '50px', height: '50px', objectFit: 'cover' }}
                       />

@@ -3,6 +3,7 @@ import Busqueda from "./Busqueda";
 import Informacion from "./Informacion";
 import clientStore from "../../../store/clientStore";
 import useCustomCliente from "../../../CustomHooks/CustomCliente/useCustomCliente";
+import FormClientes from "./FormClientes";
 
 
 const Cliente = () => {
@@ -48,15 +49,7 @@ const Cliente = () => {
     );
   }
 
-  if (isLoading) {
-
-
-    return <div className="text-center">Cargando clientes...</div>;
-  }
-
-  if (isError) {
-    return <div className="text-center text-danger">Error al cargar los clientes.</div>;
-  }
+  
   return (
     <>
     <div className="d-flex justify-content-between align-items-center mb-3">
@@ -87,9 +80,7 @@ const Cliente = () => {
                       <th>Nombre</th>
                       <th>Apellido</th>
                       <th>DNI</th>
-                      <th>Correo Electrónico</th>
                       <th>Telefono</th>
-                      <th>Domicilio</th>
                       <th>Estado</th>
                       <th>Acciones</th>
                     </tr>
@@ -103,9 +94,9 @@ const Cliente = () => {
                         <td>{usuario.Nombre}</td>
                         <td>{usuario.Apellido}</td>
                         <td>{usuario.DNI}</td>
-                        <td>{usuario.Email}</td>
+                        
                         <td>{usuario.Telefono}</td>
-                        <td>{usuario.Domicilio}</td>
+                        
                         <td><span>{usuario.Estado}</span> </td>
                         <td>
                           <div className="btn-group" role="group">
@@ -143,6 +134,34 @@ const Cliente = () => {
           onCerrar={() => setMostrarInfo(false)}
         />
       )}
+
+      {/* Modal para agregar/editar un cliente */}
+      <div
+        className="modal fade"
+        id="exampleModal"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5 text-dark" id="exampleModalLabel">
+                Agregar Cliente
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              {/* Pasamos el producto seleccionado al formulario */}
+              <FormClientes />
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
