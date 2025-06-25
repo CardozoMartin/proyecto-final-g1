@@ -3,6 +3,7 @@ import Busqueda from "./Busqueda";
 import Informacion from "./Informacion";
 import clientStore from "../../../store/clientStore";
 import useCustomCliente from "../../../CustomHooks/CustomCliente/useCustomCliente";
+import FormClientes from "./FormClientes";
 
 
 const Cliente = () => {
@@ -143,6 +144,34 @@ const Cliente = () => {
           onCerrar={() => setMostrarInfo(false)}
         />
       )}
+
+      {/* Modal para agregar/editar un cliente */}
+      <div
+        className="modal fade"
+        id="exampleModal"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5 text-dark" id="exampleModalLabel">
+                Agregar Cliente
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              {/* Pasamos el producto seleccionado al formulario */}
+              <FormClientes />
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

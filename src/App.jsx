@@ -11,6 +11,7 @@ import ErrorPage from './pages/ErrorPage'
 import Navbar from './components/Common/Navbar'
 import Contact from './components/contacto/Contact';
 import { Toaster } from 'sonner';
+import ProductosPage from './pages/ProductosPage';
 
 
 
@@ -30,6 +31,8 @@ function App() {
           <Route path="/Admin" element={<AdminPage></AdminPage>}></Route>
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
           <Route path="/Contact" element={<Contact></Contact>}></Route>
+          <Route path="/productos" element={<ProductosPage></ProductosPage>}></Route>
+
         </Routes>
 
          <Toaster position="top-right" richColors />

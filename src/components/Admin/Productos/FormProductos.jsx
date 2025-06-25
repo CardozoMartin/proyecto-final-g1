@@ -112,6 +112,19 @@ const FormProductos = ({ producto }) => {
             required
           />
         </div>
+         {/* Campo: Imagen producto */}
+        <div className="mb-3">
+          <label htmlFor="imagen_producto" className="form-label">Imagen del Producto</label>
+          <input 
+            id="imagen_producto"
+            name="imagen_producto" 
+            value={nuevoProducto.imagen_producto} 
+            onChange={handleAgregarProducto} 
+            placeholder="Ingrese la URL de la imagen" 
+            className="form-control"
+            required
+          />
+        </div>
         {/* Campo: Precio costo */}
         <div className="mb-3">
           <label htmlFor="precio_costo" className="form-label">Precio Costo</label>
