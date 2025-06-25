@@ -98,9 +98,9 @@ const ProductosPage = () => {
                                 <div className="card h-100 shadow-sm">
                                     <div className="position-relative overflow-hidden" style={{ height: '250px' }}>
                                         <img
-                                            src={producto.imagen_producto || "error al cargar imagen"}
+                                            src={producto.imagenProducto || "error al cargar imagen"}
                                             className="card-img-top w-100 h-100"
-                                            alt={producto.nombre}
+                                            alt={producto.nombreProducto}
                                             style={{
                                                 objectFit: 'cover',
                                                 objectPosition: 'center'
@@ -111,7 +111,7 @@ const ProductosPage = () => {
                                     <div className="card-body d-flex flex-column">
                                         <div className="mb-3">
                                             <h5 className="card-title fw-bold mb-2">
-                                                {producto.nombre}
+                                                {producto.nombreProducto}
                                             </h5>
                                             <p className="card-text text-muted small mb-0">
                                                 {producto.descripcion}
@@ -122,7 +122,7 @@ const ProductosPage = () => {
                                             <div className="d-flex justify-content-between align-items-center">
                                                 <div>
                                                     <span className="h5 text-primary fw-bold mb-0">
-                                                        ${producto.precio_venta}
+                                                        ${producto.precioVenta}
                                                     </span>
                                                 </div>
                                                 <button className="btn btn-primary btn-sm">

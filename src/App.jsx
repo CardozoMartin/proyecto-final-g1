@@ -32,7 +32,6 @@ function App() {
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
           <Route path="/Contact" element={<Contact></Contact>}></Route>
           <Route path="/productos" element={<ProductosPage></ProductosPage>}></Route>
-
         </Routes>
 
          <Toaster position="top-right" richColors />

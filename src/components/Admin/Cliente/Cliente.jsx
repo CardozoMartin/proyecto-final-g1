@@ -91,13 +91,13 @@ const Cliente = () => {
                         <td>
                           <code>{usuario.idClientes}</code>
                         </td>
-                        <td>{usuario.Nombre}</td>
-                        <td>{usuario.Apellido}</td>
+                        <td>{usuario.nombreCliente}</td>
+                        <td>{usuario.apellidoCliente}</td>
                         <td>{usuario.DNI}</td>
                         
-                        <td>{usuario.Telefono}</td>
+                        <td>{usuario.telefonoCliente}</td>
                         
-                        <td><span>{usuario.Estado}</span> </td>
+                        <td><span>{usuario.estadoCliente}</span> </td>
                         <td>
                           <div className="btn-group" role="group">
                             <button

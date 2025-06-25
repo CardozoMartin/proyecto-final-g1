@@ -9,34 +9,34 @@ const FormProductos = ({ producto }) => {
 
   // Estado para el formulario, inicializa vacío
   const [nuevoProducto, setNuevoProducto] = useState({
-    nombre_producto: '',
-    precio_costo: '',
+    nombreProducto: '',
+    precioCosto: '',
     descripcion: '',
-    precio_venta: '',
-    cantidad_producto: '',
-    nombre_categoria: ''
+    precioVenta: '',
+    cantidadProducto: '',
+    nombreCategoria: ''
   });
 
   // Si recibimos un producto para editar, llenamos el formulario con sus datos
   useEffect(() => {
     if (producto) {
       setNuevoProducto({
-        nombre_producto: producto.nombre_producto || '',
-        precio_costo: producto.precio_costo || '',
+        nombreProducto: producto.nombreProducto || '',
+        precioCosto: producto.precioCosto || '',
         descripcion: producto.descripcion || '',
-        precio_venta: producto.precio_venta || '',
-        cantidad_producto: producto.cantidad_producto || '',
-        nombre_categoria: producto.nombre_categoria || ''
+        precioVenta: producto.precioVenta || '',
+        cantidadProducto: producto.cantidadProducto || '',
+        nombreCategoria: producto.nombreCategoria || ''
       });
     } else {
       // Si no hay producto (modo agregar), limpiamos el formulario
       setNuevoProducto({
-        nombre_producto: '',
-        precio_costo: '',
+        nombreProducto: '',
+        precioCosto: '',
         descripcion: '',
-        precio_venta: '',
-        cantidad_producto: '',
-        nombre_categoria: ''
+        precioVenta: '',
+        cantidadProducto: '',
+        nombreCategoria: ''
       });
     }
   }, [producto]);
@@ -63,12 +63,12 @@ const FormProductos = ({ producto }) => {
       if (resultado.success) {
         toast.success('Producto editado correctamente');
         setNuevoProducto({
-          nombre_producto: '',
-          precio_costo: '',
+          nombreProducto: '',
+          precioCosto: '',
           descripcion: '',
-          precio_venta: '',
-          cantidad_producto: '',
-          nombre_categoria: ''
+          precioVenta: '',
+          cantidadProducto: '',
+          nombreCategoria: ''
         });
         // Solo refrescamos la lista si la edición fue exitosa
         await obtenerProductos();
@@ -80,12 +80,14 @@ const FormProductos = ({ producto }) => {
       const resultado = await agregarProducto(nuevoProducto);
       if (resultado.success) {
         setNuevoProducto({
-          nombre_producto: '',
-          precio_costo: '',
+          nombreProducto: '',
+          precioCosto: '',
           descripcion: '',
-          precio_venta: '',
-          cantidad_producto: '',
-          nombre_categoria: ''
+          precioVenta: '',
+          cantidadProducto: '',
+          nombreCategoria: '',
+          imagenProducto:''
+
         });
         toast.success('Producto agregado correctamente');
       } else {
@@ -101,11 +103,11 @@ const FormProductos = ({ producto }) => {
       <form onSubmit={handleSubmit}>
         {/* Campo: Nombre del producto */}
         <div className="mb-3">
-          <label htmlFor="nombre_producto" className="form-label">Nombre del Producto</label>
+          <label htmlFor="nombreProducto" className="form-label">Nombre del Producto</label>
           <input 
-            id="nombre_producto"
-            name="nombre_producto" 
-            value={nuevoProducto.nombre_producto} 
+            id="nombreProducto"
+            name="nombreProducto" 
+            value={nuevoProducto.nombreProducto} 
             onChange={handleAgregarProducto} 
             placeholder="Ingrese el nombre del producto" 
             className="form-control"
@@ -114,11 +116,11 @@ const FormProductos = ({ producto }) => {
         </div>
          {/* Campo: Imagen producto */}
         <div className="mb-3">
-          <label htmlFor="imagen_producto" className="form-label">Imagen del Producto</label>
+          <label htmlFor="imagenProducto" className="form-label">Imagen del Producto</label>
           <input 
-            id="imagen_producto"
-            name="imagen_producto" 
-            value={nuevoProducto.imagen_producto} 
+            id="imagenProducto"
+            name="imagenProducto" 
+            value={nuevoProducto.imagenProducto} 
             onChange={handleAgregarProducto} 
             placeholder="Ingrese la URL de la imagen" 
             className="form-control"
@@ -127,13 +129,13 @@ const FormProductos = ({ producto }) => {
         </div>
         {/* Campo: Precio costo */}
         <div className="mb-3">
-          <label htmlFor="precio_costo" className="form-label">Precio Costo</label>
+          <label htmlFor="precioCosto" className="form-label">Precio Costo</label>
           <div className="input-group">
             <span className="input-group-text">$</span>
             <input 
-              id="precio_costo"
-              name="precio_costo" 
-              value={nuevoProducto.precio_costo} 
+              id="precioCosto"
+              name="precioCosto" 
+              value={nuevoProducto.precioCosto} 
               onChange={handleAgregarProducto} 
               placeholder="0.00" 
               className="form-control"
@@ -160,13 +162,13 @@ const FormProductos = ({ producto }) => {
         </div>
         {/* Campo: Precio de venta */}
         <div className="mb-3">
-          <label htmlFor="precio_venta" className="form-label">Precio de Venta</label>
+          <label htmlFor="precioVenta" className="form-label">Precio de Venta</label>
           <div className="input-group">
             <span className="input-group-text">$</span>
             <input 
-              id="precio_venta"
-              name="precio_venta" 
-              value={nuevoProducto.precio_venta} 
+              id="precioVenta"
+              name="precioVenta" 
+              value={nuevoProducto.precioVenta} 
               onChange={handleAgregarProducto} 
               placeholder="0.00" 
               className="form-control"
@@ -181,11 +183,11 @@ const FormProductos = ({ producto }) => {
         <div className="row">
           <div className="col-md-6">
             <div className="mb-3">
-              <label htmlFor="cantidad_producto" className="form-label">Cantidad en Stock</label>
+              <label htmlFor="cantidadProducto" className="form-label">Cantidad en Stock</label>
               <input 
-                id="cantidad_producto"
-                name="cantidad_producto" 
-                value={nuevoProducto.cantidad_producto} 
+                id="cantidadProducto"
+                name="cantidadProducto" 
+                value={nuevoProducto.cantidadProducto} 
                 onChange={handleAgregarProducto} 
                 placeholder="Cantidad disponible" 
                 className="form-control"
@@ -197,11 +199,11 @@ const FormProductos = ({ producto }) => {
           </div>
           <div className="col-md-6">
             <div className="mb-3">
-              <label htmlFor="nombre_categoria" className="form-label">Categoría</label>
+              <label htmlFor="nombreCategoria" className="form-label">Categoría</label>
               <input 
-                id="nombre_categoria"
-                name="nombre_categoria" 
-                value={nuevoProducto.nombre_categoria} 
+                id="nombreCategoria"
+                name="nombreCategoria" 
+                value={nuevoProducto.nombreCategoria} 
                 onChange={handleAgregarProducto} 
                 placeholder="Nombre de la categoría" 
                 className="form-control"

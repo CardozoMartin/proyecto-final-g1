@@ -115,12 +115,12 @@ const Productos = () => {
                   <td>
                     {prod.idProductos}
                   </td>
-                  <td>{prod.nombre_producto}</td>
+                  <td>{prod.nombreProducto}</td>
                   <td>{prod.descripcion}</td>
                   <td>
-                    {prod.imagen_producto ? (
+                    {prod.imagenProducto ? (
                       <img
-                        src={prod.imagen_producto}
+                        src={prod.imagenProducto}
                         alt={prod.product}
                         style={{ width: '50px', height: '50px', objectFit: 'cover' }}
                       />
@@ -128,10 +128,10 @@ const Productos = () => {
                       'Sin imagen'
                     )}
                   </td>
-                  <td className="fw-bold">${prod.precio_venta}</td>
-                  <td className="fw-bold">${prod.precio_costo}</td>
-                  <td className="fw-bold">{prod.cantidad_producto}</td>
-                  <td className="fw-bold">{prod.nombre_categoria}</td>
+                  <td className="fw-bold">${prod.precioVenta}</td>
+                  <td className="fw-bold">${prod.precioCosto}</td>
+                  <td className="fw-bold">{prod.cantidadProducto}</td>
+                  <td className="fw-bold">{prod.nombreCategoriaProductos}</td>
                   <td>
                     <div className="btn-group" role="group">
                       {/* Al hacer click en Editar, guardamos el producto y abrimos el modal */}

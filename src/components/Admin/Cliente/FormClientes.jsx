@@ -5,12 +5,12 @@ import { toast } from 'sonner';
 const FormClientes = () => {
     const { crearCliente,cliente, obtenerClientes } = useCustomCliente();
     const [nuevoCliente, setNuevoCliente] = useState({
-        Nombre: '',
-        Apellido: '',
+        nombreCliente: '',
+        apellidoCliente: '',
         DNI: '',
-        Telefono: '',
-        Email: '',
-        Domicilio: ''
+        telefonoCliente: '',
+        emailCliente: '',
+        domicilioCliente: ''
     })
     // Handler para manejar los cambios en los campos del formulario
     const handleAgregarCliente = (e) => {
@@ -26,12 +26,12 @@ const FormClientes = () => {
         await crearCliente(nuevoCliente);
         // Reiniciar el formulario después de agregar
         setNuevoCliente({
-            Nombre: '',
-            Apellido: '',
+            nombreCliente: '',
+            apellidoCliente: '',
             DNI: '',
-            Telefono: '',
-            Email: '',
-            Domicilio: ''
+            telefonoCliente: '',
+            emailCliente: '',
+            domicilioCliente: ''
         });
         // Mostrar mensaje de éxito
         toast.success("Cliente agregado correctamente");
@@ -44,28 +44,28 @@ const FormClientes = () => {
         <div>
             {/* Formulario para agregar o editar producto */}
             <form onSubmit={handleSubmit} className="p-3">
-                {/* Campo: Nombre del Cliente */}
+                {/* Campo: nombreCliente del Cliente */}
                 <div className="mb-3">
-                    <label htmlFor="Nombre" className="form-label">Nombre del Cliente</label>
+                    <label htmlFor="nombreCliente" className="form-label">nombreCliente del Cliente</label>
                     <input
-                        id="Nombre"
-                        name="Nombre"
-                        value={nuevoCliente.Nombre}
+                        id="nombreCliente"
+                        name="nombreCliente"
+                        value={nuevoCliente.nombreCliente}
                         onChange={handleAgregarCliente}
-                        placeholder="Ingrese el nombre del cliente"
+                        placeholder="Ingrese el nombreCliente del cliente"
                         className="form-control"
                         required
                     />
                 </div>
                 {/* Campo: Imagen producto */}
                 <div className="mb-3">
-                    <label htmlFor="Apellido" className="form-label">Apellido del Cliente</label>
+                    <label htmlFor="apellidoCliente" className="form-label">apellidoCliente del Cliente</label>
                     <input
-                        id="Apellido"
-                        name="Apellido"
-                        value={nuevoCliente.Apellido}
+                        id="apellidoCliente"
+                        name="apellidoCliente"
+                        value={nuevoCliente.apellidoCliente}
                         onChange={handleAgregarCliente}
-                        placeholder="Ingrese el apellido del cliente"
+                        placeholder="Ingrese el apellidoCliente del cliente"
                         className="form-control"
                         required
                     />
@@ -89,27 +89,27 @@ const FormClientes = () => {
                 </div>
                 {/* Campo: Descripción */}
                 <div className="mb-3">
-                    <label htmlFor="Telefono" className="form-label">Ingrese el telefono</label>
+                    <label htmlFor="telefonoCliente" className="form-label">Ingrese el telefonoCliente</label>
                     <input
-                        id="Telefono"
-                        name="Telefono"
-                        value={nuevoCliente.Telefono}
+                        id="telefonoCliente"
+                        name="telefonoCliente"
+                        value={nuevoCliente.telefonoCliente}
                         onChange={handleAgregarCliente}
-                        placeholder="Telefono del cliente"
+                        placeholder="telefonoCliente del cliente"
                         className="form-control"
                         required
                     />
                 </div>
                 {/* Campo: Precio de venta */}
                 <div className="mb-3">
-                    <label htmlFor="Email" className="form-label">Email Cliente</label>
+                    <label htmlFor="emailCliente" className="form-label">emailCliente Cliente</label>
                     <div className="input-group">
                         <input
-                            id="Email"
-                            name="Email"
-                            value={nuevoCliente.Email}
+                            id="emailCliente"
+                            name="emailCliente"
+                            value={nuevoCliente.emailCliente}
                             onChange={handleAgregarCliente}
-                            placeholder="Ingrese el email del cliente"
+                            placeholder="Ingrese el emailCliente del cliente"
                             className="form-control"
                             type="text"
                             required
@@ -120,13 +120,13 @@ const FormClientes = () => {
                 <div className="row">
                     <div className="col-md-6">
                         <div className="mb-3">
-                            <label htmlFor="Domicilio" className="form-label">Direccion</label>
+                            <label htmlFor="domicilioCliente" className="form-label">Direccion</label>
                             <input
-                                id="Domicilio"
-                                name="Domicilio"
-                                value={nuevoCliente.Domicilio}
+                                id="domicilioCliente"
+                                name="domicilioCliente"
+                                value={nuevoCliente.domicilioCliente}
                                 onChange={handleAgregarCliente}
-                                placeholder="Domicilio del cliente"
+                                placeholder="domicilioCliente del cliente"
                                 className="form-control"
                                 type="text"
                                 required
