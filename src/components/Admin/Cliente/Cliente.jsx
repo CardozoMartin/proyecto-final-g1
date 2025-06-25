@@ -2,9 +2,17 @@ import React, { useState } from "react";
 import Busqueda from "./Busqueda";
 import Informacion from "./Informacion";
 import clientStore from "../../../store/clientStore";
+import useCustomCliente from "../../../CustomHooks/CustomCliente/useCustomCliente";
 
 
 const Cliente = () => {
+
+  //--------------Importaciones del useCliente
+  const { cliente,isLoading,isError } = useCustomCliente();
+
+ const resultado = cliente?.Clientes || cliente || [];
+
+  
   const { usuarios } = clientStore();
 
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
@@ -24,6 +32,21 @@ const Cliente = () => {
     setMostrarInfo(true);
   };
 
+  if(!usuarios || usuarios.length === 0) {
+    return (
+      <div className="text-center text-muted alert alert-info">
+        No hay clientes registrados aún.
+      </div>
+    );
+  }
+  
+  if(isLoading){
+    return <div className="text-center">Cargando clientes...</div>;
+  }
+
+  if(isError){
+    return <div className="text-center text-danger">Error al cargar los clientes.</div>;
+  }
   return (
     <>
       <Busqueda />
@@ -47,14 +70,16 @@ const Cliente = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {usuarios.map((usuario, index) => (
+                    {resultado.map((usuario,index) => (
                       <tr key={index}>
                         <td>
-                          <code>{usuario.id}</code>
+                          <code>{usuario.idClientes}</code>
                         </td>
-                        <td>{usuario.nombre}</td>
-                        <td>{usuario.apellido}</td>
-                        <td>{usuario.correo}</td>
+                        <td>{usuario.Nombre}</td>
+                        <td>{usuario.Apellido}</td>
+                        <td>{usuario.Email}</td>
+                        <td>{usuario.Telefono}</td>
+                        <td>{usuario.Domicilio}</td>
                         <td>
                           <span
                             className={`badge bg-${getStatusBadge("Activa")}`}

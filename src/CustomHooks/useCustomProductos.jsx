@@ -13,14 +13,15 @@ const useCustomProductos = () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await axios.get(`${API_URL}/api/productos/obtenerProductos`);
+            const response = await axios.get(`http://localhost:4000/api/productos/obtenerProductos`);
             setProductos(response.data)
-
+            
+            
 
         } catch (error) {
             console.error("Error al obtener los productos:", error);
             setError(error.message);
-            setProductos({ productos: [] }); // Siempre un objeto con array
+            setProductos({ productos: [] });
         } finally {
             setLoading(false);
         }

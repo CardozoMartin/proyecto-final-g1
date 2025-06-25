@@ -6,6 +6,9 @@ import Swal from "sweetalert2";
 const Productos = () => {
   // Destructuramos todos los valores del hook corregido
   const { productos, loading, error, eliminarProducto } = useCustomProductos();
+
+  const resultado = productos.productos;
+  console.log("Resultado de productos:", resultado);
   // Estado para el producto seleccionado (para editar)
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
@@ -107,13 +110,13 @@ const Productos = () => {
               </tr>
             </thead>
             <tbody>
-              {productos.productos.map((prod) => (
+              {resultado.map((prod) => (
                 <tr key={prod.idProductos}>
                   <td>
                     {prod.idProductos}
                   </td>
-                  <td>{prod.nombre_producto}</td>
-                  <td>{prod.descripcion}</td>
+                  <td>{prod.Nombre_producto}</td>
+                  <td>{prod.Descripcion}</td>
                   <td>
                     {prod.imagen ? (
                       <img
@@ -125,10 +128,10 @@ const Productos = () => {
                       'Sin imagen'
                     )}
                   </td>
-                  <td className="fw-bold">${prod.precio_venta}</td>
-                  <td className="fw-bold">${prod.precio_costo}</td>
-                  <td className="fw-bold">{prod.cantidad_producto}</td>
-                  <td className="fw-bold">{prod.nombre_categoria}</td>
+                  <td className="fw-bold">${prod.Precio_venta}</td>
+                  <td className="fw-bold">${prod.Precio_costo}</td>
+                  <td className="fw-bold">{prod.Cantidad_producto}</td>
+                  <td className="fw-bold">{prod.Nombre_categoria}</td>
                   <td>
                     <div className="btn-group" role="group">
                       {/* Al hacer click en Editar, guardamos el producto y abrimos el modal */}
