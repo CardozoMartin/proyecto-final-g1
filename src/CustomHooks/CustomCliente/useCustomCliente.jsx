@@ -14,14 +14,14 @@ const obtenerClientes = async ()=>{
         setLoading(true);
         setError(null);
         //hacemos la peticion al servidor
-        const respuesta = await axios.get(`http://localhost:4000/api/clientes/ObtenerTodosLosClientes`)
+        const respuesta = await axios.get(`http://localhost:3000/api/clientes/ObtenerTodosLosClientes`)
         setCliente(respuesta.data);
         console.log(respuesta.data);
         setLoading(false);
         
-    }catch{
-
-    }
+    }catch(error){
+        console.log(error);
+ }
 }
 const crearCliente = async (nuevoCliente)=>{
     try {
