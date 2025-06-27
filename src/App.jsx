@@ -12,6 +12,7 @@ import Navbar from './components/Common/Navbar'
 import Contact from './components/contacto/Contact';
 import { Toaster } from 'sonner';
 import ProductosPage from './pages/ProductosPage';
+import CartComponente from './components/Cart/CartComponente';
 
 
 
@@ -35,6 +36,7 @@ function App() {
         </Routes>
 
          <Toaster position="top-right" richColors />
+         <CartComponente></CartComponente>
       </BrowserRouter>
     </>
   )
