@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import useUserStore from "../../store/clientStore"; 
 import "../../css/Register/MainRegister.css";
 import useCustomCliente from "../../CustomHooks/CustomCliente/useCustomCliente";
 import { toast } from "sonner";
 
 const FormRegister = () => {
-  const {crearCliente,cliente,ObtenerClientes}= useCustomCliente();
+  const {crearCliente}= useCustomCliente();
   const [nuevoCliente, setNuevoCliente] = useState({
     nombreCliente: "",
     apellidoCliente: "",
