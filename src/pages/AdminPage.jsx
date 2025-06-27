@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Productos from '../components/Admin/Productos/Productos';
 import Pedidos from '../components/Admin/Pedidos/Pedidos';
 import Cliente from '../components/Admin/Cliente/Cliente';
+import Categorias from '../components/Admin/Categorias/categorias.jsx';
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -19,6 +20,7 @@ const AdminPage = () => {
     { id: 'overview', label: 'Resumen', icon: '📊' },
     { id: 'orders', label: 'Pedidos', icon: '📦' },
     { id: 'products', label: 'Productos', icon: '🛍️' },
+    { id: 'categories', label: 'Categorías', icon: '🏷️' },
     { id: 'customers', label: 'Clientes', icon: '👥' },
     { id: 'analytics', label: 'Análisis', icon: '📈' }
   ];
@@ -198,6 +200,12 @@ const AdminPage = () => {
                         >
                           <span className="me-2">🛍️</span>Ver Productos
                         </button>
+                        <button 
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => setActiveTab('categories')}
+                        >
+                          <span className="me-2">🏷️</span>Ver Categorías
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -220,6 +228,15 @@ const AdminPage = () => {
             <div className="card shadow-sm border-0">
               <div className="card-body p-0">
                 <Productos menuItems={menuItems} activeTab={activeTab} />
+              </div>
+            </div>
+          )}
+
+          {/* Categorias Component */}
+          {activeTab === 'categories' && (
+            <div className="card shadow-sm border-0">
+              <div className="card-body p-0">
+                <Categorias />
               </div>
             </div>
           )}
