@@ -22,6 +22,7 @@ const useCustomProveedores = () => {
   const eliminarProveedor = async (idProv) => {
     try {
       const response = await axios.delete(`${API_URL}/proveedores/eliminarProveedor/${idProv}`);
+      await obtenerProveedor();
       if (response.data) {
         setProveedor((prev) => prev.filter((prod) => prod.idProveedores !== idProv));
         return { success: true, data: response.data };
@@ -43,10 +44,12 @@ const useCustomProveedores = () => {
       } else {
         return { success: false, error: "No se recibió respuesta del servidor" };
       }
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error al agregar Proveedor:", error);
       return { success: false, error: error.response?.data?.message || error.message };
     }
+    
   };
 
   const actualizarProveedor = async (idProveedores, proveedorActualizado) => {
@@ -57,7 +60,7 @@ const useCustomProveedores = () => {
         EmailProveedores: proveedorActualizado.EmailProveedores,
         DomicilioProveedores: proveedorActualizado.DomicilioProveedores,
       });
-
+      await obtenerProveedor();
       const proveedorActualizadoData = response.data; // Ajusta si la respuesta tiene otra estructura
       setProveedor((prev) =>
         prev.map((prov) =>

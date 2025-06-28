@@ -7,13 +7,13 @@ import BusquedaProveedor from "./BusquedaProveedor";
 import { toast } from "sonner";
 
 const Proveedores = () => {
-  const { proveedor, eliminarProveedor } = useCustomProveedores();
+  const { proveedor, eliminarProveedor, obtenerProveedor } = useCustomProveedores();
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [proveedorEditar, setProveedorEditar] = useState(null);
   const [proveedorVer, setProveedorVer] = useState(null);
   const [busqueda, setBusqueda] = useState("");
 
-  // Función para filtrar proveedores según el término de búsqueda
+ 
   const filtrarProveedores = () => {
     if (!busqueda.trim()) return proveedor || [];
     const termino = busqueda.trim().toLowerCase();
@@ -48,6 +48,7 @@ const Proveedores = () => {
     setProveedorEditar(prov);
     setProveedorVer(null);
     setMostrarFormulario(true);
+    obtenerProveedor()
   };
 
   const handleNuevoClick = () => {
@@ -59,6 +60,7 @@ const Proveedores = () => {
   const handleCerrarFormulario = () => {
     setMostrarFormulario(false);
     setProveedorEditar(null);
+    obtenerProveedor()
   };
 
   const handleVerClick = (prov) => {
