@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import useCustomProveedores from "../../../CustomHooks/CustomProveedores/CustomProveedores";
 import { toast } from "sonner";
+import "../../../css/Proveedores/FormsProveedores.css";
+
 
 const FormEditar = ({ proveedor, onClose }) => {
   const { actualizarProveedor } = useCustomProveedores();
@@ -52,7 +54,7 @@ const FormEditar = ({ proveedor, onClose }) => {
   return (
     <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-modal="true">
       <div className="modal-dialog modal-dialog-centered" role="document">
-        <div className="modal-content shadow">
+        <div className="formulario shadow modal-content">
           <div className="modal-header">
             <h5 className="modal-title">Editar Datos del Proveedor</h5>
             <button

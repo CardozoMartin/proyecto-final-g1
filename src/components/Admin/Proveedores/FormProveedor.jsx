@@ -52,7 +52,7 @@ const FormProveedor = ({ onClose }) => {
   return (
     <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-modal="true" >
       <div className="modal-dialog modal-dialog-centered " role="document">
-        <div className="modal-content shadow formulario">
+        <div className="formulario modal-content shadow">
           <div className="modal-header">
             <h5 className="modal-title">Agregar Nuevo Proveedor</h5>
             <button
