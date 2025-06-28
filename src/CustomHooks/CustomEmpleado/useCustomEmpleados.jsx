@@ -15,7 +15,6 @@ const useCustomEmpleados = () => {
       const response = await axios.get(
         `http://localhost:3000/api/empleados/ObtenerEmpleados`
       );
-      // Guarda solo el array
       setEmpleados(response.data.empleados || []);
     } catch (error) {
       console.error("Error al obtener los Empleados:", error);
@@ -39,6 +38,7 @@ const useCustomEmpleados = () => {
         `http://localhost:3000/api/empleados/CrearEmpleados`,
         nuevoEmpleado
       );
+      // Refresca la lista después de crear
       await obtenerTodosEmpleados();
     } catch (error) {
       setError(error.message);
@@ -75,6 +75,7 @@ const useCustomEmpleados = () => {
         `http://localhost:3000/api/empleados/actualizarEmpleados/${id}`,
         empleadoActualizado
       );
+      // Refresca la lista después de editar
       await obtenerTodosEmpleados();
     } catch (error) {
       setError(error.message);

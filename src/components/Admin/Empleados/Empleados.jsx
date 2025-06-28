@@ -29,7 +29,7 @@ const Empleados = () => {
 
   // Estados para mensajes
   const [mensaje, setMensaje] = useState("");
-  const [tipoMensaje, setTipoMensaje] = useState(""); // "success" o "danger"
+  const [tipoMensaje, setTipoMensaje] = useState(""); 
 
   // Estados para modales
   const [openModalNuevo, setOpenModalNuevo] = useState(false);
@@ -52,7 +52,7 @@ const Empleados = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validación simple en frontend
+    // Validación simple
     if (
       !formEmpleado.nombreEmpleado.trim() ||
       !formEmpleado.apellidoEmpleado.trim() ||
@@ -234,7 +234,7 @@ const Empleados = () => {
   const closeModalNuevo = () => setOpenModalNuevo(false);
   const closeModalVer = () => setOpenModalVer(false);
 
-  // Filtro de empleados
+       // Filtrar empleados por nombre, apellido o DNI
   const resultado = (empleados || []).filter(emp => {
     if (!terminoBusqueda.trim()) return true;
     const texto = `${emp.nombreEmpleado} ${emp.apellidoEmpleado} ${emp.DNI}`.toLowerCase();
@@ -245,7 +245,7 @@ const Empleados = () => {
     <>
       <BusquedaEmpleado setTerminoBusqueda={setTerminoBusqueda} />
 
-      {/* Alertas de mensaje */}
+      // alertas de mensajes
       {mensaje && (
         <div className={`alert alert-${tipoMensaje} alert-dismissible fade show`} role="alert">
           {mensaje}
@@ -253,14 +253,14 @@ const Empleados = () => {
         </div>
       )}
 
-      {/* Mensaje de error global del hook */}
+      // mensaje de error global
       {error && (
         <div className="alert alert-danger" role="alert">
           Error: {error}
         </div>
       )}
 
-      {/* Spinner de carga */}
+      // spinner de carga
       {loading && (
         <div className="text-center my-3">
           <div className="spinner-border text-primary" role="status">
@@ -338,7 +338,7 @@ const Empleados = () => {
         </div>
       </div>
 
-      {/* Modal para agregar/editar empleado */}
+      // Modal para crear/editar empleado
       {openModalNuevo && (
         <div className="modal fade show d-block" tabIndex="-1" >
           <div className="modal-dialog">
@@ -357,7 +357,7 @@ const Empleados = () => {
                 </button>
               </div>
               <div className="modal-body bg-dark text-white">
-                {/* ALERTA SOLO EN EL MODAL */}
+                
                 {mensaje && (
                   <div className={`alert alert-${tipoMensaje} alert-dismissible fade show`} role="alert">
                     {mensaje}
@@ -464,7 +464,7 @@ const Empleados = () => {
         </div>
       )}
 
-      {/* Modal para ver empleado */}
+      // Modal para ver datos del empleado
       {openModalVer && (
         <div className="modal fade show d-block" tabIndex="-1">
           <div className="modal-dialog">
