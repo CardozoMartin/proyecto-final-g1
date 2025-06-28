@@ -12,11 +12,12 @@ const useCustomCategorias = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(`${API_URL}/api/categorias/obtenerCategorias`);
-      setCategorias(response.data);
+      const response = await axios.get(`${API_URL}/api/categorias/obtenerTodasLasCategorias`);
+      console.log('Datos recibidos:', response.data); // Log para depurar
+      setCategorias({ categorias: response.data.categorias || [] });
     } catch (error) {
-      console.error("Error al obtener las categorías:", error);
-      setError(error.message);
+      console.error('Error al obtener las categorías:', error);
+      setError(error.response?.data?.message || 'No se pudieron cargar las categorías');
       setCategorias({ categorias: [] });
     } finally {
       setLoading(false);
@@ -29,19 +30,23 @@ const useCustomCategorias = () => {
       const response = await axios.post(`${API_URL}/api/categorias/crearCategoria`, {
         nombreCategoriaProductos: nuevaCategoria.nombreCategoriaProductos
       });
-      if (response.data.categoria) {
-        setCategorias(prev => ({
-          ...prev,
-          categorias: [...(prev.categorias || []), response.data.categoria]
-        }));
-        console.log("Categoría agregada:", response.data.categoria);
-        return { success: true, data: response.data.categoria };
-      } else {
-        return { success: false, error: "No se recibió respuesta del servidor" };
-      }
+      const nuevaCategoriaData = {
+        idCat_productos: response.data.id,
+        nombreCategoriaProductos: response.data.nombreCategoriaProductos
+      };
+      setCategorias(prev => ({
+        categorias: [...(prev.categorias || []), nuevaCategoriaData]
+      }));
+      console.log('Categoría agregada:', nuevaCategoriaData);
+      return { success: true, data: nuevaCategoriaData };
     } catch (error) {
-      console.error("Error al agregar categoría:", error);
-      return { success: false, error: error.response?.data?.message || error.message };
+    console.error('Error al agregar categoría:', {
+    message: error.message,
+    status: error.response?.status,
+    data: error.response?.data,
+    url: error.config?.url
+  });
+  return { success: false, error: error.response?.data?.message || error.message };
     }
   };
 
@@ -51,17 +56,15 @@ const useCustomCategorias = () => {
       const response = await axios.put(`${API_URL}/api/categorias/actualizarCategoria/${id}`, {
         nombreCategoriaProductos: categoriaActualizada.nombreCategoriaProductos
       });
-      if (response.data.categoria) {
-        setCategorias(prev => ({
-          ...prev,
-          categorias: prev.categorias.map(cat => cat.idCat_productos === id ? response.data.categoria : cat)
-        }));
-        return { success: true, data: response.data.categoria };
-      } else {
-        return { success: false, error: "No se recibió respuesta del servidor" };
-      }
+      const categoriaActualizadaData = response.data.categoria;
+      setCategorias(prev => ({
+        categorias: prev.categorias.map(cat =>
+          cat.idCat_productos === id ? categoriaActualizadaData : cat
+        )
+      }));
+      return { success: true, data: categoriaActualizadaData };
     } catch (error) {
-      console.error("Error al editar categoría:", error);
+      console.error('Error al editar categoría:', error);
       return { success: false, error: error.response?.data?.message || error.message };
     }
   };
@@ -70,18 +73,13 @@ const useCustomCategorias = () => {
   const eliminarCategoria = async (id) => {
     try {
       const response = await axios.delete(`${API_URL}/api/categorias/eliminarCategoria/${id}`);
-      if (response.data) {
-        setCategorias(prev => ({
-          ...prev,
-          categorias: prev.categorias.filter(cat => cat.idCat_productos !== id)
-        }));
-        console.log("Categoría eliminada:", response.data);
-        return { success: true, data: response.data };
-      } else {
-        return { success: false, error: "No se recibió respuesta del servidor" };
-      }
+      setCategorias(prev => ({
+        categorias: prev.categorias.filter(cat => cat.idCat_productos !== id)
+      }));
+      console.log('Categoría eliminada:', response.data);
+      return { success: true, data: response.data };
     } catch (error) {
-      console.error("Error al eliminar categoría:", error);
+      console.error('Error al eliminar categoría:', error);
       return { success: false, error: error.response?.data?.message || error.message };
     }
   };
