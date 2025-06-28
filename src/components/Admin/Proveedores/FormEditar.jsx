@@ -3,7 +3,6 @@ import useCustomProveedores from "../../../CustomHooks/CustomProveedores/CustomP
 import { toast } from "sonner";
 import "../../../css/Proveedores/FormsProveedores.css";
 
-
 const FormEditar = ({ proveedor, onClose }) => {
   const { actualizarProveedor } = useCustomProveedores();
 
@@ -37,11 +36,20 @@ const FormEditar = ({ proveedor, onClose }) => {
     setLoading(true);
     try {
       const response = await actualizarProveedor(proveedor.idProveedores, nuevoProveedor);
+
       if (response.success) {
         toast.success("Proveedor actualizado correctamente");
         if (onClose) onClose();
       } else {
-        toast.error(`Error: ${response.error || "No se pudo actualizar el proveedor"}`);
+        if (response.error?.includes("email")) {
+          toast.error("El email ya está registrado.");
+        } else if (response.error?.includes("teléfono")) {
+          toast.error("El teléfono ya está registrado.");
+        } else if (response.error?.includes("domicilio")) {
+          toast.error("El domicilio ya está registrado.");
+        } else {
+          toast.error(`Error: ${response.error || "No se pudo actualizar el proveedor"}`);
+        }
       }
     } catch (error) {
       toast.error("Error inesperado al actualizar proveedor");

@@ -1,8 +1,7 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 import useCustomProveedores from "../../../CustomHooks/CustomProveedores/CustomProveedores";
 import "../../../css/Proveedores/FormsProveedores.css";
-
 
 const FormProveedor = ({ onClose }) => {
   const { insertarProveedor } = useCustomProveedores();
@@ -14,6 +13,7 @@ const FormProveedor = ({ onClose }) => {
     DomicilioProveedores: "",
   });
 
+  const [errores, setErrores] = useState({});
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -24,9 +24,46 @@ const FormProveedor = ({ onClose }) => {
     }));
   };
 
+  const validar = () => {
+    const errores = {};
+
+    if (!nuevoProveedor.nombreProveedores.trim()) {
+      errores.nombreProveedores = "El nombre es obligatorio.";
+    }
+
+    if (!nuevoProveedor.TelefonoProveedores.trim()) {
+      errores.TelefonoProveedores = "El teléfono es obligatorio.";
+    } else if (!/^\d{2,4}-?\d{3,4}-?\d{3,4}$/.test(nuevoProveedor.TelefonoProveedores)) {
+      errores.TelefonoProveedores = "Formato de teléfono inválido.";
+    }
+
+    if (!nuevoProveedor.EmailProveedores.trim()) {
+      errores.EmailProveedores = "El email es obligatorio.";
+    } else if (!/\S+@\S+\.\S+/.test(nuevoProveedor.EmailProveedores)) {
+      errores.EmailProveedores = "Email inválido.";
+    }
+
+    if (!nuevoProveedor.DomicilioProveedores.trim()) {
+      errores.DomicilioProveedores = "El domicilio es obligatorio.";
+    }
+
+    return errores;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    const erroresValidacion = validar();
+    if (Object.keys(erroresValidacion).length > 0) {
+      setErrores(erroresValidacion);
+      Object.values(erroresValidacion).forEach((msg) => toast.error(msg));
+      setLoading(false);
+      return;
+    }
+
+    setErrores({});
+
     try {
       const response = await insertarProveedor(nuevoProveedor);
       if (response.success) {
@@ -50,8 +87,8 @@ const FormProveedor = ({ onClose }) => {
   };
 
   return (
-    <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-modal="true" >
-      <div className="modal-dialog modal-dialog-centered " role="document">
+    <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-modal="true">
+      <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="formulario modal-content shadow">
           <div className="modal-header">
             <h5 className="modal-title">Agregar Nuevo Proveedor</h5>
@@ -65,7 +102,6 @@ const FormProveedor = ({ onClose }) => {
           </div>
           <div className="modal-body">
             <form className="formulario" onSubmit={handleSubmit}>
-
               <div className="mb-3">
                 <label htmlFor="nombreProveedores" className="form-label">
                   Nombre del Proveedor
@@ -80,6 +116,9 @@ const FormProveedor = ({ onClose }) => {
                   required
                   disabled={loading}
                 />
+                {errores.nombreProveedores && (
+                  <div className="text-danger">{errores.nombreProveedores}</div>
+                )}
               </div>
 
               <div className="mb-3">
@@ -97,6 +136,9 @@ const FormProveedor = ({ onClose }) => {
                   disabled={loading}
                   type="tel"
                 />
+                {errores.TelefonoProveedores && (
+                  <div className="text-danger">{errores.TelefonoProveedores}</div>
+                )}
               </div>
 
               <div className="mb-3">
@@ -114,7 +156,11 @@ const FormProveedor = ({ onClose }) => {
                   required
                   disabled={loading}
                 />
+                {errores.EmailProveedores && (
+                  <div className="text-danger">{errores.EmailProveedores}</div>
+                )}
               </div>
+
               <div className="mb-3">
                 <label htmlFor="DomicilioProveedores" className="form-label">
                   Domicilio
@@ -129,6 +175,9 @@ const FormProveedor = ({ onClose }) => {
                   required
                   disabled={loading}
                 />
+                {errores.DomicilioProveedores && (
+                  <div className="text-danger">{errores.DomicilioProveedores}</div>
+                )}
               </div>
 
               <div className="d-flex justify-content-end gap-2">
