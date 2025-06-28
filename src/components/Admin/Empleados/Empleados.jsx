@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Swal from "sweetalert2";
 import BusquedaEmpleado from "./BusquedaEmpleado";
 import useCustomEmpleados from "../../../CustomHooks/CustomEmpleado/useCustomEmpleados";
 
@@ -107,16 +108,52 @@ const [terminoBusqueda, setTerminoBusqueda] = useState("");
     }
   };
 
-  const handlerDeleteEmpleado = async (emp) => {
-    try {
-      await eliminarEmpleado(emp.idEmpleados);
-      await obtenerTodosEmpleados();
-      mostrarMensaje("Empleado eliminado correctamente.", "success");
-    } catch (error) {
-      console.log(error)
-      mostrarMensaje("Ocurrió un error al eliminar el empleado.", "danger");
+const handlerDeleteEmpleado = async (emp) => {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn btn-success",
+      cancelButton: "btn btn-danger"
+    },
+    buttonsStyling: false
+  });
+
+  swalWithBootstrapButtons.fire({
+    title: "¿Estás seguro?",
+    text: "¡No podrás revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "No, cancelar",
+    reverseButtons: true
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        await eliminarEmpleado(emp.idEmpleados);
+        await obtenerTodosEmpleados();
+        swalWithBootstrapButtons.fire({
+          title: "¡Eliminado!",
+          text: "El empleado ha sido eliminado.",
+          icon: "success"
+        });
+        mostrarMensaje("Empleado eliminado correctamente.", "success");
+      } catch (error) {
+        console.log(error)
+        swalWithBootstrapButtons.fire({
+          title: "Error",
+          text: "Ocurrió un error al eliminar el empleado.",
+          icon: "error"
+        });
+        mostrarMensaje("Ocurrió un error al eliminar el empleado.", "danger");
+      }
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      swalWithBootstrapButtons.fire({
+        title: "Cancelado",
+        text: "El empleado está a salvo :)",
+        icon: "error"
+      });
     }
-  };
+  });
+};
 
   const handleEditEmpleado = (emp) => {
     setFormEmpleado({
