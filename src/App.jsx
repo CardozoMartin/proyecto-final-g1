@@ -13,6 +13,8 @@ import Contact from './components/contacto/Contact';
 import { Toaster } from 'sonner';
 import ProductosPage from './pages/ProductosPage';
 import CartComponente from './components/Cart/CartComponente';
+import { useUser } from './store/useUser';
+
 
 
 
@@ -20,6 +22,8 @@ import CartComponente from './components/Cart/CartComponente';
 
 
 function App() {
+
+
 
   return (
     <>
@@ -36,7 +40,7 @@ function App() {
         </Routes>
 
          <Toaster position="top-right" richColors />
-         <CartComponente></CartComponente>
+       <CartComponente></CartComponente>
       </BrowserRouter>
     </>
   )

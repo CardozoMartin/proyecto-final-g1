@@ -1,11 +1,21 @@
 import React from 'react'
 import useCustomProductos from '../CustomHooks/useCustomProductos';
+import { useCartStore } from '../store/useCartStore';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, Toaster } from 'sonner';
 
 const ProductosPage = () => {
-
     const { productos } = useCustomProductos();
-
+    // Obtener solo la función agregarProductoAlCarrito del store
+    const agregarProductoAlCarrito = useCartStore((state) => state.agregarProductoAlCarrito);
     const resultadoProductos = productos.productos || [];
+
+
+    //creamos una funcion para menejar como agregamos el producto al carrito
+    const handleAgregarAlCarrito = (producto)=>{
+        agregarProductoAlCarrito(producto);
+        toast.success(`Producto ${producto.nombreProducto} agregado al carrito`)
+    }
     return (
         <div className="container-fluid py-4">
             <div className="row">
@@ -125,7 +135,7 @@ const ProductosPage = () => {
                                                         ${producto.precioVenta}
                                                     </span>
                                                 </div>
-                                                <button className="btn btn-primary btn-sm">
+                                                <button className="btn btn-primary btn-sm" onClick={() => handleAgregarAlCarrito(producto)}>
                                                     <i className="fas fa-cart-plus me-1"></i>
                                                     Agregar
                                                 </button>

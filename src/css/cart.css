@@ -1,0 +1,20 @@
+.btn-cart{
+    background-color: #b2f08a;
+    
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    ;
+}
+.btn-cart:hover {
+    background-color: #6ab33d;
+}
+.icon-btn {
+    font-size: 3rem;
+    width: 24px;
+    height: 24px;
+    fill: #333;
+}

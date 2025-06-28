@@ -1,54 +1,26 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Css/FormLogin.css";
+import useCustomLogin from "../../CustomHooks/CustomLogin/useCustomLogin";
 
 const FormLogin = () => {
-  const [datos, setDatos] = useState({ email: "", password: "" });
-  const [errorEmail, setErrorEmail] = useState("");
-  const [errorPassword, setErrorPassword] = useState("");
+  const { login } = useCustomLogin();
+  const [emailCliente, setEmailCliente] = useState("");
+  const [contraseña, setContraseña] = useState("");
 
-  const handleChange = (e) => {
-    setDatos({ ...datos, [e.target.name]: e.target.value });
-
-    if (e.target.name === "email" && e.target.value !== "") {
-      setErrorEmail("");
-    }
-
-    if (e.target.name === "password" && e.target.value !== "") {
-      setErrorPassword("");
-    }
-  };
-
-  const handleSubmit = (e) => {
+  const obtenerDatosDelForm= (e)=>{
     e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    setEmailCliente(email);
+    setContraseña(password);
+  }
 
-    let valid = true;
+  const handleSubmit = async (e)=>{
+    e.preventDefault()
 
-    if (datos.email.trim() === "") {
-      setErrorEmail("Por favor, ingresá un email.");
-      valid = false;
-    } else {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(datos.email)) {
-        setErrorEmail("El formato del email no es válido.");
-        valid = false;
-      } else {
-        setErrorEmail("");
-      }
-    }
-
-    if (datos.password.trim() === "") {
-      setErrorPassword("Por favor, ingresá una contraseña.");
-      valid = false;
-    } else {
-      setErrorPassword("");
-    }
-
-    if (!valid) return;
-
-    console.log("Formulario enviado:", datos);
-  };
-
+    await login(emailCliente, contraseña)
+  }
   return (
     <div className="container d-flex justify-content-center align-items-center min-vh-100">
       <div className="card p-4 login-card">
@@ -56,31 +28,31 @@ const FormLogin = () => {
           <h2 className="mb-4 text-white text-center">Iniciar sesión</h2>
 
           <div className="mb-3">
-            <label htmlFor="email" className="form-label text-white">Email</label>
+            <label htmlFor="emailCliente" className="form-label text-white">Email</label>
             <input
-              type="text"
+              type="email"
               className="form-control"
-              id="email"
-              name="email"
-              value={datos.email}
-              onChange={handleChange}
+              id="emailCliente"
+              name="emailCliente"
+              value={emailCliente}
+              onChange={(e) => setEmailCliente(e.target.value)}
               placeholder="Ingresá tu email"
             />
-            {errorEmail && <div className="text-danger mt-1">{errorEmail}</div>}
+           
           </div>
 
           <div className="mb-3">
-            <label htmlFor="password" className="form-label text-white">Contraseña</label>
+            <label htmlFor="contraseña" className="form-label text-white">Contraseña</label>
             <input
               type="password"
               className="form-control"
-              id="password"
-              name="password"
-              value={datos.password}
-              onChange={handleChange}
+              id="contraseña"
+              name="contraseña"
+              value={contraseña}
+              onChange={(e) => setContraseña(e.target.value)}
               placeholder="Ingresá tu contraseña"
             />
-            {errorPassword && <div className="text-danger mt-1">{errorPassword}</div>}
+            
           </div>
 
           <button type="submit" className="btn btn-item w-100 mt-3">Ingresar</button>
