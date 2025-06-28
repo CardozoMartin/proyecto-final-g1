@@ -1,6 +1,8 @@
 import React, { useState} from "react";
 import { toast } from "sonner";
 import useCustomProveedores from "../../../CustomHooks/CustomProveedores/CustomProveedores";
+import "../../../css/Proveedores/FormsProveedores.css";
+
 
 const FormProveedor = ({ onClose }) => {
   const { insertarProveedor } = useCustomProveedores();
@@ -48,9 +50,9 @@ const FormProveedor = ({ onClose }) => {
   };
 
   return (
-    <div className="modal fade show d-block bg-dark" tabIndex="-1" role="dialog" aria-modal="true" >
-      <div className="modal-dialog modal-dialog-centered" role="document">
-        <div className="modal-content shadow">
+    <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-modal="true" >
+      <div className="modal-dialog modal-dialog-centered " role="document">
+        <div className="modal-content shadow formulario">
           <div className="modal-header">
             <h5 className="modal-title">Agregar Nuevo Proveedor</h5>
             <button
@@ -62,7 +64,7 @@ const FormProveedor = ({ onClose }) => {
             ></button>
           </div>
           <div className="modal-body">
-            <form onSubmit={handleSubmit}>
+            <form className="formulario" onSubmit={handleSubmit}>
 
               <div className="mb-3">
                 <label htmlFor="nombreProveedores" className="form-label">

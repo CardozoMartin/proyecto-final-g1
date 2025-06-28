@@ -1,0 +1,32 @@
+.formulario{
+    background-color: #000000 !important;
+}
+.formint{
+    padding: 20px;
+}
+
+.form-label{
+    color: #f7ca0b;
+    font-weight: bold;
+}
+
+.btn{
+    background-color:#f7ca0b;
+    color: #000000;
+}
+
+.btn:hover{
+    background-color: #a0850c;
+    color:#000000;
+}
+
+.inputform:focus {
+    border-color: #f7ca0b !important;
+    outline: 0;
+    border-width: 2px;
+}
+
+.no-link-style {
+  color: inherit;
+  text-decoration: none;
+}

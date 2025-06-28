@@ -1,19 +1,17 @@
 import React, { useState } from "react";
 import FormProveedor from "./FormProveedor";
 import useCustomProveedores from "../../../CustomHooks/CustomProveedores/CustomProveedores";
+import FormEditar from "./FormEditar";
 
 const Proveedores = () => {
   const { proveedor, eliminarProveedor } = useCustomProveedores();
   const resultado = proveedor || [];
 
-  // Estado para mostrar/ocultar el formulario
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [proveedorEditar, setProveedorEditar] = useState(null); // Estado para proveedor a editar
 
   const handleEliminar = async (id) => {
-    const confirmacion = window.confirm(
-      "¿Estás seguro de eliminar este proveedor?"
-    );
-    if (confirmacion) {
+    if (window.confirm("¿Estás seguro de eliminar este proveedor?")) {
       const response = await eliminarProveedor(id);
       if (response.success) {
         alert("Proveedor eliminado correctamente.");
@@ -21,6 +19,16 @@ const Proveedores = () => {
         alert(`Error al eliminar proveedor: ${response.error}`);
       }
     }
+  };
+
+  const handleEditarClick = (prov) => {
+    setProveedorEditar(prov);
+    setMostrarFormulario(true);
+  };
+
+  const handleCerrarFormulario = () => {
+    setMostrarFormulario(false);
+    setProveedorEditar(null);
   };
 
   return (
@@ -38,7 +46,10 @@ const Proveedores = () => {
               />
               <button
                 className="btn btn-primary btn-sm"
-                onClick={() => setMostrarFormulario(true)}
+                onClick={() => {
+                  setProveedorEditar(null); // al crear nuevo no hay proveedor editar
+                  setMostrarFormulario(true);
+                }}
               >
                 Nuevo Proveedor
               </button>
@@ -46,18 +57,19 @@ const Proveedores = () => {
           </div>
 
           <div className="card-body">
-            {/* Mostrar el formulario si está activo */}
             {mostrarFormulario && (
-              <FormProveedor onClose={() => setMostrarFormulario(false)} />
+              proveedorEditar ? (
+                <FormEditar proveedor={proveedorEditar} onClose={handleCerrarFormulario} />
+              ) : (
+                <FormProveedor onClose={handleCerrarFormulario} />
+              )
             )}
 
             <div className="table-responsive mt-3">
               <table className="table table-hover">
                 <thead>
                   <tr>
-                    <th>
-                      <input type="checkbox" />
-                    </th>
+                    <th><input type="checkbox" /></th>
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Teléfono</th>
@@ -77,7 +89,10 @@ const Proveedores = () => {
                       <td>{p.DomicilioProveedores}</td>
                       <td>
                         <div className="btn-group" role="group">
-                          <button className="btn btn-outline-secondary btn-sm">
+                          <button
+                            className="btn btn-outline-secondary btn-sm"
+                            onClick={() => handleEditarClick(p)}
+                          >
                             Editar
                           </button>
                           <button
