@@ -3,12 +3,28 @@ import FormProveedor from "./FormProveedor";
 import useCustomProveedores from "../../../CustomHooks/CustomProveedores/CustomProveedores";
 
 const Proveedores = () => {
-  const { proveedor } = useCustomProveedores();
-  console.log(proveedor);
+  const { proveedor, eliminarProveedor } = useCustomProveedores();
   const resultado = proveedor || [];
+
+  // Estado para mostrar/ocultar el formulario
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+
+  const handleEliminar = async (id) => {
+    const confirmacion = window.confirm(
+      "¿Estás seguro de eliminar este proveedor?"
+    );
+    if (confirmacion) {
+      const response = await eliminarProveedor(id);
+      if (response.success) {
+        alert("Proveedor eliminado correctamente.");
+      } else {
+        alert(`Error al eliminar proveedor: ${response.error}`);
+      }
+    }
+  };
+
   return (
     <div className="row">
-      <FormProveedor />
       <div className="col-12">
         <div className="card shadow-sm border-0">
           <div className="card-header bg-white d-flex justify-content-between align-items-center">
@@ -20,20 +36,27 @@ const Proveedores = () => {
                 placeholder="Buscar proveedor..."
                 style={{ maxWidth: "200px" }}
               />
-              <button className="btn btn-primary btn-sm">
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={() => setMostrarFormulario(true)}
+              >
                 Nuevo Proveedor
               </button>
             </div>
           </div>
+
           <div className="card-body">
-            <div className="table-responsive">
+            {/* Mostrar el formulario si está activo */}
+            {mostrarFormulario && (
+              <FormProveedor onClose={() => setMostrarFormulario(false)} />
+            )}
+
+            <div className="table-responsive mt-3">
               <table className="table table-hover">
                 <thead>
                   <tr>
                     <th>
-                      <input
-                        type="checkbox"               
-                      />
+                      <input type="checkbox" />
                     </th>
                     <th>ID</th>
                     <th>Nombre</th>
@@ -45,9 +68,8 @@ const Proveedores = () => {
                 </thead>
                 <tbody>
                   {resultado.map((p) => (
-                    <tr key={p.id}>
-                      <td>
-                      </td>
+                    <tr key={p.idProveedores}>
+                      <td></td>
                       <td>{p.idProveedores}</td>
                       <td>{p.nombreProveedores}</td>
                       <td>{p.TelefonoProveedores}</td>
@@ -58,7 +80,10 @@ const Proveedores = () => {
                           <button className="btn btn-outline-secondary btn-sm">
                             Editar
                           </button>
-                          <button className="btn btn-outline-danger btn-sm">
+                          <button
+                            className="btn btn-outline-danger btn-sm"
+                            onClick={() => handleEliminar(p.idProveedores)}
+                          >
                             Borrar
                           </button>
                         </div>
