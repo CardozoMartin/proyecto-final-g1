@@ -1,11 +1,44 @@
 import React from 'react'
 import '../../css/cart.css'
 import { useCartStore } from '../../store/useCartStore';
+import { useUser } from '../../store/useUser';
+import useCustomCart from '../../CustomHooks/CustomCart/useCustomCart';
+import { toast } from 'sonner';
 const CartComponente = () => {
     const productosCarrito = useCartStore((state) => state.productosCarrito);
     const agregarProductoAlCarrito = useCartStore((state) => state.agregarProductoAlCarrito);
     const restarCantidadProducto = useCartStore((state) => state.restarCantidadProducto);
     const eliminarProductoDelCarrito = useCartStore((state) => state.eliminarProductoDelCarrito);
+    const { user } = useUser()
+    const { vaciarCarrito} = useCartStore()
+
+    console.log('Productos en el carrito:', productosCarrito); // Para depuración
+    const { postCarrito} = useCustomCart()
+
+    const terminarLaCompra = ()=>{
+        const carrito = {
+            idEmpleados: 1,
+            idClientes: user.cliente.idClientes,
+            productos: productosCarrito.map(producto => ({
+                idProducto: producto.id,
+                cantidad: producto.cantidad, // Cambiado a 'cantidad'
+                precioUnitario: Number(producto.precioVenta) // Asegúrate que sea número
+            })),
+        }
+        
+        postCarrito(carrito)
+
+        // Aquí puedes manejar la respuesta del servidor si es necesario
+        .then(response => {
+            toast.success("Carrito enviado correctamente");
+            // Vaciar el carrito después de enviar
+            vaciarCarrito();
+        })
+        .catch(error => {
+            toast.error("Error al enviar el carrito");
+        });
+
+    }
     return (
         <div>
             <div className=' fixed-bottom p-3 text-end'>
@@ -57,7 +90,7 @@ const CartComponente = () => {
                         )}
                     </div>
                 </div>
-                <button className='btn btn-success'>Finalizar Compra</button>
+                <button className='btn btn-success' onClick={terminarLaCompra}>Finalizar Compra</button>
             </div>
 
         </div>

@@ -1,86 +1,13 @@
 import React, { useState } from 'react'
+import useCustomCart from '../../../CustomHooks/CustomCart/useCustomCart';
 
 const Pedidos = () => {
-   const [recentOrders, setRecentOrders] = useState([
-      {
-         id: '#001',
-         cliente: 'Juan Pérez',
-         monto: '$1,299',
-         estado: 'Completado',
-         fecha: '2025-06-15',
-         provincia: 'Buenos Aires',
-         direccion: 'Av. Corrientes 1234',
-         codigoPostal: 'C1043',
-         metodoPago: 'Tarjeta de Crédito',
-         tipoEntrega: 'Retiro',
-         productos: [
-            { nombre: 'Taladro Eléctrico 500W', cantidad: 1, precioUnitario: 999, subtotal: 999 },
-            { nombre: 'Caja de Tornillos 3mm x 50', cantidad: 2, precioUnitario: 150, subtotal: 300 }
-         ]
-      },
-      {
-         id: '#002',
-         cliente: 'María García',
-         monto: '$699',
-         estado: 'En espera',
-         fecha: '2025-06-14',
-         provincia: 'Córdoba',
-         direccion: 'Calle San Martín 567',
-         codigoPostal: 'X5000',
-         metodoPago: 'Transferencia Bancaria',
-         tipoEntrega: 'Envio',
-         direccionEnvio: 'Av. Colón 789, Córdoba, X5000',
-         productos: [
-            { nombre: 'Lata de Pintura Acrílica 4L', cantidad: 1, precioUnitario: 699, subtotal: 699 }
-         ]
-      },
-      {
-         id: '#003',
-         cliente: 'Carlos López',
-         monto: '$399',
-         estado: 'Procesando',
-         fecha: '2025-06-13',
-         provincia: 'Santa Fe',
-         direccion: 'Bv. Pellegrini 890',
-         codigoPostal: 'S2000',
-         metodoPago: 'Tarjeta de Débito',
-         tipoEntrega: 'Retiro',
-         productos: [
-            { nombre: 'Llave Inglesa 8"', cantidad: 1, precioUnitario: 399, subtotal: 399 }
-         ]
-      },
-      {
-         id: '#004',
-         cliente: 'Ana Martínez',
-         monto: '$199',
-         estado: 'Completado',
-         fecha: '2025-06-12',
-         provincia: 'Mendoza',
-         direccion: 'Ruta 7 Km 432',
-         codigoPostal: 'M5500',
-         metodoPago: 'Efectivo',
-         tipoEntrega: 'Envio',
-         direccionEnvio: 'Calle San Juan 456, Mendoza, M5500',
-         productos: [
-            { nombre: 'Juego de Destornilladores 6 Piezas', cantidad: 1, precioUnitario: 199, subtotal: 199 }
-         ]
-      },
-      {
-         id: '#005',
-         cliente: 'Luis Rodríguez',
-         monto: '$299',
-         estado: 'Cancelado',
-         fecha: '2025-06-11',
-         provincia: 'Tucumán',
-         direccion: 'Av. Mate de Luna 345',
-         codigoPostal: 'T4000',
-         metodoPago: 'Tarjeta de Crédito',
-         tipoEntrega: 'Retiro',
-         productos: [
-            { nombre: 'Cinta Métrica 5m', cantidad: 1, precioUnitario: 299, subtotal: 299 }
-         ]
-      }
-   ]);
+
+   const { cart} = useCustomCart()
+   console.log(cart)
+
+   const resultadoPedidos = cart || [];
+  
 
    const getStatusBadge = (estado) => {
       const badges = {
@@ -93,55 +20,35 @@ const Pedidos = () => {
    };
 
    const [terminoBusqueda, setTerminoBusqueda] = useState('');
-   const [selectedOrders, setSelectedOrders] = useState([]);
    const [showModal, setShowModal] = useState(false);
    const [selectedPedido, setSelectedPedido] = useState(null);
 
    const handleSearch = (event) => {
       setTerminoBusqueda(event.target.value);
-      setSelectedOrders([]);
-   };
-
-   const filteredOrders = recentOrders.filter((pedido) =>
-      `${pedido.id} ${pedido.cliente} ${pedido.provincia} ${pedido.direccion} ${pedido.codigoPostal} ${pedido.metodoPago} ${pedido.tipoEntrega} ${pedido.direccionEnvio || ''} ${pedido.productos.map(p => p.nombre).join(' ')}`
-         .toLowerCase()
-         .includes(terminoBusqueda.toLowerCase())
-   );
-
-   const handleSelectOrder = (id) => {
-      if (selectedOrders.includes(id)) {
-         setSelectedOrders(selectedOrders.filter((orderId) => orderId !== id));
-      } else {
-         setSelectedOrders([...selectedOrders, id]);
-      }
-   };
-
-   const handleSelectAll = () => {
-      if (selectedOrders.length === filteredOrders.length) {
-         setSelectedOrders([]);
-      } else {
-         setSelectedOrders(filteredOrders.map((pedido) => pedido.id));
-      }
-   };
-
-   const handleTrash = () => {
-      if (window.confirm(`¿Confirmas que deseas enviar ${selectedOrders.length} pedido(s) a la papelera?`)) {
-         setRecentOrders(recentOrders.filter((pedido) => !selectedOrders.includes(pedido.id)));
-         setSelectedOrders([]);
-      }
-   };
-
-   const handleChangeStatus = (nuevoEstado) => {
-      setRecentOrders(
-         recentOrders.map((pedido) =>
-            selectedOrders.includes(pedido.id) ? { ...pedido, estado: nuevoEstado } : pedido
-         )
-      );
-      setSelectedOrders([]);
    };
 
    const handleView = (pedido) => {
-      setSelectedPedido(pedido);
+      // Mapea los campos del pedido a los que espera el modal
+      const pedidoDetalle = {
+         id: pedido.idVentas,
+         cliente: pedido.nombreCliente,
+         fecha: pedido.fechaVenta,
+         estado: pedido.estadoVentas,
+         monto: pedido.subtotal,
+         direccion: pedido.direccionCliente || pedido.direccion || "",
+         provincia: pedido.provinciaCliente || pedido.provincia || "",
+         codigoPostal: pedido.codigoPostalCliente || pedido.codigoPostal || "",
+         metodoPago: pedido.metodoPago || "No especificado",
+         tipoEntrega: pedido.tipoEntrega || "Retiro",
+         direccionEnvio: pedido.direccionEnvio || "",
+         productos: (pedido.productos || []).map(prod => ({
+            nombre: prod.nombreProducto || prod.nombre || "",
+            cantidad: prod.cantidad,
+            precioUnitario: prod.precioUnitario || prod.precioVenta || "",
+            subtotal: prod.subtotal || (prod.cantidad && prod.precioUnitario ? prod.cantidad * prod.precioUnitario : "")
+         }))
+      };
+      setSelectedPedido(pedidoDetalle);
       setShowModal(true);
    };
 
@@ -161,62 +68,10 @@ const Pedidos = () => {
                         type="text"
                         className="form-control form-control-sm me-2"
                         placeholder="Buscar pedido..."
-                        value={terminoBusqueda}
-                        onChange={handleSearch}
+                        
                         style={{ maxWidth: '200px' }}
                      />
-                     {selectedOrders.length > 0 && (
-                        <div className="dropdown me-2">
-                           <button
-                              className="btn btn-warning btn-sm dropdown-toggle"
-                              type="button"
-                              id="bulkActionsDropdown"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                           >
-                              Acciones ({selectedOrders.length})
-                           </button>
-                           <ul className="dropdown-menu" aria-labelledby="bulkActionsDropdown">
-                              <li>
-                                 <button className="dropdown-item" onClick={handleTrash}>
-                                    Enviar a papelera
-                                 </button>
-                              </li>
-                              <li>
-                                 <button
-                                    className="dropdown-item"
-                                    onClick={() => handleChangeStatus('Completado')}
-                                 >
-                                    Cambiar estado a Completado
-                                 </button>
-                              </li>
-                              <li>
-                                 <button
-                                    className="dropdown-item"
-                                    onClick={() => handleChangeStatus('En espera')}
-                                 >
-                                    Cambiar estado a En espera
-                                 </button>
-                              </li>
-                              <li>
-                                 <button
-                                    className="dropdown-item"
-                                    onClick={() => handleChangeStatus('Procesando')}
-                                 >
-                                    Cambiar estado a Procesando
-                                 </button>
-                              </li>
-                              <li>
-                                 <button
-                                    className="dropdown-item"
-                                    onClick={() => handleChangeStatus('Cancelado')}
-                                 >
-                                    Cambiar estado a Cancelado
-                                 </button>
-                              </li>
-                           </ul>
-                        </div>
-                     )}
+                    
                      <button className="btn btn-primary btn-sm">Nuevo Pedido</button>
                   </div>
                </div>
@@ -226,11 +81,7 @@ const Pedidos = () => {
                         <thead>
                            <tr>
                               <th>
-                                 <input
-                                    type="checkbox"
-                                    checked={selectedOrders.length === filteredOrders.length && filteredOrders.length > 0}
-                                    onChange={handleSelectAll}
-                                 />
+                                 
                               </th>
                               <th>Pedido</th>
                               <th>Fecha</th>
@@ -242,42 +93,29 @@ const Pedidos = () => {
                            </tr>
                         </thead>
                         <tbody>
-                           {filteredOrders.map((pedido) => (
-                              <tr key={pedido.id}>
+                           {resultadoPedidos.map((pedido) => (
+                              <tr key={pedido.idVentas}>
+                                 
                                  <td>
-                                    <input
-                                       type="checkbox"
-                                       checked={selectedOrders.includes(pedido.id)}
-                                       onChange={() => handleSelectOrder(pedido.id)}
-                                    />
+                                    <code>{pedido.idCliente}</code> {pedido.nombreCliente}
                                  </td>
+                                 <td>{pedido.fechaVenta}</td>
                                  <td>
-                                    <code>{pedido.id}</code> {pedido.cliente}
-                                 </td>
-                                 <td>{pedido.fecha}</td>
-                                 <td>
-                                    <span className={`badge bg-${getStatusBadge(pedido.estado)}`}>
-                                       {pedido.estado}
+                                    <span className={`badge bg-${(pedido.estado)}`}>
+                                       {pedido.estadoVentas}
                                     </span>
                                  </td>
-                                 <td className="fw-bold">{pedido.monto}</td>
+                                 <td className="fw-bold">{pedido.subtotal}</td>
                                  <td>
                                     <div>
-                                       <strong>{pedido.cliente}</strong><br />
-                                       {pedido.direccion}, {pedido.provincia}<br />
-                                       CP: {pedido.codigoPostal}<br />
-                                       Pago: {pedido.metodoPago}
+                                       <strong>{pedido.nombreCliente}</strong><br />
+                                       {pedido.emailCliente}, {pedido.telefonoCliente}<br />
+                                      
                                     </div>
                                  </td>
                                  <td>
                                     <div>
-                                       {pedido.tipoEntrega === 'Retiro' ? (
-                                          <span>Retiro en local</span>
-                                       ) : (
-                                          <span>
-                                             Envío: <br /> {pedido.direccionEnvio}
-                                          </span>
-                                       )}
+                                       
                                     </div>
                                  </td>
                                  <td>
@@ -305,10 +143,10 @@ const Pedidos = () => {
                <div className="modal-dialog modal-lg">
                   <div className="modal-content">
                      <div className="modal-header">
-                        <h5 className="modal-title" id="pedidoModalLabel">Detalles del Pedido {selectedPedido.id}</h5>
+                        <h5 className="modal-title text-dark" id="pedidoModalLabel">Detalles del Pedido {selectedPedido.id}</h5>
                         <button type="button" className="btn-close" onClick={handleCloseModal} aria-label="Close"></button>
                      </div>
-                     <div className="modal-body">
+                     <div className="modal-body text-dark">
                         <div className="row">
                            <div className="col-md-6">
                               <h6>Información General</h6>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import useCustomProductos from '../CustomHooks/useCustomProductos';
 import { useCartStore } from '../store/useCartStore';
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,6 +6,7 @@ import { toast, Toaster } from 'sonner';
 
 const ProductosPage = () => {
     const { productos } = useCustomProductos();
+    const { productosCarrito} = useCartStore();
     // Obtener solo la función agregarProductoAlCarrito del store
     const agregarProductoAlCarrito = useCartStore((state) => state.agregarProductoAlCarrito);
     const resultadoProductos = productos.productos || [];
@@ -13,9 +14,25 @@ const ProductosPage = () => {
 
     //creamos una funcion para menejar como agregamos el producto al carrito
     const handleAgregarAlCarrito = (producto)=>{
-        agregarProductoAlCarrito(producto);
-        toast.success(`Producto ${producto.nombreProducto} agregado al carrito`)
+        //creamos un modelo del producto que se va agregar al carrito
+        const productoQueSeAgrega = {
+            id: producto.idProductos,
+            nombreProducto: producto.nombreProducto,
+            descripcion: producto.descripcion,
+            precioVenta: producto.precioVenta,
+            imagenProducto: producto.imagenProducto,
+            cantidad: 1, 
+        }
+        //funcion pora agregar el producto al carrito
+        agregarProductoAlCarrito(productoQueSeAgrega);
+        //mostramos un toaste de exito para indicar que el producto se ha agregado al carrito
+        toast.success(`Producto ${productoQueSeAgrega.nombreProducto} agregado al carrito`)
     }
+
+    useEffect(() => {
+        console.log('Productos en el carrito:', productosCarrito);
+    }, [productosCarrito]);
+
     return (
         <div className="container-fluid py-4">
             <div className="row">

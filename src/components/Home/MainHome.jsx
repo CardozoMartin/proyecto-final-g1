@@ -7,34 +7,29 @@ const MainHome = () => {
   return (
     <div>
      
-      <div className="card text-white mb-5" style={{ border: "none", position: "relative", overflow: "hidden", height: "700px" }}>
-        <video
-          src="/portada.mp4"
-          className="card-img"
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "center 30%", // <-- Ajusta este valor para bajar el video
-            filter: "brightness(50%)",
-            zIndex: 1,
-          }}
-        />
-        <div className="card-img-overlay d-flex flex-column justify-content-center align-items-center" style={{ position: "relative", zIndex: 2 }}>
-          
-          
+      <div className="card text-white mb-5 border-0 position-relative overflow-hidden">
+        <div className="ratio ratio-16x9" style={{ minHeight: "300px" }}>
+          <video
+            src="/portada.mp4"
+            className="w-100 h-100"
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              objectFit: "cover",
+              objectPosition: "center 20%",
+              filter: "brightness(50%)",
+            }}
+          />
         </div>
+        {/* Aquí puedes agregar overlays o contenido adicional si lo necesitas */}
       </div>
       <CardHome categorias={categorias} />
     </div>
   );
 };
+
+
 
 export default MainHome;

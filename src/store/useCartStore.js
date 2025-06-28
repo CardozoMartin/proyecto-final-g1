@@ -5,7 +5,7 @@ export const useCartStore = create((set) => ({
   
   agregarProductoAlCarrito: (producto) =>
     set((state) => {
-      const productoExistente = state.productosCarrito.find(item => item.idProductos === producto.idProductos);
+      const productoExistente = state.productosCarrito.find(item => item.id === producto.id);
       
       if (productoExistente) {
         // Si existe, aumentar la cantidad y recalcular el total
@@ -13,11 +13,11 @@ export const useCartStore = create((set) => ({
         
         return {
           productosCarrito: state.productosCarrito.map(item =>
-            item.idProductos === producto.idProductos
+            item.id === producto.id
               ? { 
                   ...item, 
                   cantidad: item.cantidad + 1, 
-                  total: item.precioVenta * (item.cantidad + 1) // Recalcular total basado en cantidad
+                  total: item.precioVenta * (item.cantidad + 1) 
                 }
               : item
           ),
@@ -34,11 +34,11 @@ export const useCartStore = create((set) => ({
       };
     }),
 
-  restarCantidadProducto: (idProductos) =>
+  restarCantidadProducto: (id) =>
     set((state) => ({
       productosCarrito: state.productosCarrito
         .map(item =>
-          item.idProductos === idProductos && item.cantidad > 1
+          item.id === id && item.cantidad > 1
             ? { 
                 ...item, 
                 cantidad: item.cantidad - 1, 
@@ -49,9 +49,9 @@ export const useCartStore = create((set) => ({
         .filter(item => item.cantidad > 0),
     })),
 
-  eliminarProductoDelCarrito: (idProductos) =>
+  eliminarProductoDelCarrito: (id) =>
     set((state) => ({
-      productosCarrito: state.productosCarrito.filter(item => item.idProductos !== idProductos),
+      productosCarrito: state.productosCarrito.filter(item => item.id !== id),
     })),
 
   // Función para obtener el total del carrito
