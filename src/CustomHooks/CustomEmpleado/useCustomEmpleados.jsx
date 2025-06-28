@@ -42,7 +42,7 @@ const useCustomEmpleados = () => {
       await obtenerTodosEmpleados();
     } catch (error) {
       setError(error.message);
-      throw error; // <-- IMPORTANTE: Propaga el error al componente
+      throw error; 
     } finally {
       setLoading(false);
     }
@@ -78,7 +78,7 @@ const useCustomEmpleados = () => {
       await obtenerTodosEmpleados();
     } catch (error) {
       setError(error.message);
-      throw error; // <-- IMPORTANTE
+      throw error; 
     } finally {
       setLoading(false);
     }
