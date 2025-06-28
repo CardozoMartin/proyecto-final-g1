@@ -1,13 +1,25 @@
-import React from 'react'
+import React , {useState} from 'react'
 import useCustomProductos from '../CustomHooks/useCustomProductos';
 
 const ProductosPage = () => {
 
-    const { productos } = useCustomProductos();
-
+    const {productos} = useCustomProductos();
     const resultadoProductos = productos.productos || [];
+
+    // Estado para la búsqueda 
+    const [busqueda, setBusqueda] = useState("");   
+    // handler de búsqueda
+    const handleBusqueda = (e) => {
+        setBusqueda(e.target.value);
+    };
+    // Filtrar productos por nombre
+    const productosFiltrados = resultadoProductos.filter(producto => 
+        producto.nombreProducto.toLowerCase().includes(busqueda.toLowerCase())
+    );
     return (
+
         <div className="container-fluid py-4">
+
             <div className="row">
                 {/* Sidebar de Filtros */}
                 <div className="col-lg-3 col-md-4 mb-4">
@@ -87,12 +99,20 @@ const ProductosPage = () => {
                 {/* Área de Productos */}
                 <div className="col-lg-9 col-md-8">
                     {/* Header de productos */}
-                    
+                    {/* Barra de búsqueda */}
+                    <div className='mb-4'>
+                        <input 
+                        type="text" 
+                        className='form-control' 
+                        placeholder='Buscar' 
+                        value={busqueda} 
+                        onChange={handleBusqueda} />
+                    </div>
 
                     {/* Grid de Productos */}
                     <div className="row g-4">
 
-                        {resultadoProductos.map((producto, index) => (
+                        {productosFiltrados.map((producto, index) => (
 
                             <div className="col-xl-4 col-lg-6 col-md-6" key={index}>
                                 <div className="card h-100 shadow-sm">
@@ -135,8 +155,13 @@ const ProductosPage = () => {
                                 </div>
                             </div>))
                         }
-
-
+                        {productosFiltrados.length === 0 && (
+                            <div className="col-12">
+                                <div className="alert alert-warning text-center" role="alert">
+                                    No se encontraron productos que coincidan con la búsqueda.
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Paginación */}

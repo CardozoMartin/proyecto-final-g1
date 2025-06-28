@@ -26,6 +26,25 @@ const useCustomProductos = () => {
             setLoading(false);
         }
     };
+    // para buscar un producto por nombre
+    const buscarProducto= async (nombreProducto) => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response = await axios.get(`${API_URL}/api/productos/obtenerProductos/nombreProducto/${nombreProducto}`);
+            if (response.data) {
+                setProductos({ productos: response.data });
+            } else {
+                setProductos({ productos: [] });
+            }
+        } catch (error) {
+            console.error("Error al buscar el producto:", error);
+            setError(error.message);
+            setProductos({ productos: [] });
+        } finally {
+            setLoading(false);
+        }
+    }
     //para agregar un producto
     const agregarProducto = async (nuevoProducto) => {
         try {
@@ -96,7 +115,9 @@ const useCustomProductos = () => {
         error,
         obtenerProductos,
         agregarProducto,
-        editarProducto, eliminarProducto
+        editarProducto,
+        eliminarProducto,
+        buscarProducto
     }
 }
 
