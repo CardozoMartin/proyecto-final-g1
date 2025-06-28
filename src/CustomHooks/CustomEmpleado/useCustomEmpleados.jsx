@@ -6,7 +6,6 @@ const useCustomEmpleados = () => {
   const [empleados, setEmpleados] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [nombreEmpleado, setNombreEmpleado] = useState("");
 
   // Obtener todos los empleados
   const obtenerTodosEmpleados = async () => {
@@ -16,17 +15,17 @@ const useCustomEmpleados = () => {
       const response = await axios.get(
         `http://localhost:3000/api/empleados/ObtenerEmpleados`
       );
-      console.log(response);
-      setEmpleados(response.data);
-      console.log(empleados);
+      // Guarda solo el array
+      setEmpleados(response.data.empleados || []);
     } catch (error) {
       console.error("Error al obtener los Empleados:", error);
       setError(error.message);
-      setEmpleados({ empleados: [] });
+      setEmpleados([]);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     obtenerTodosEmpleados();
   }, []);
@@ -36,15 +35,14 @@ const useCustomEmpleados = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:3000/api/empleados/CrearEmpleados`,
         nuevoEmpleado
       );
-      console.log(response);
-      setEmpleados(response.data);
+      await obtenerTodosEmpleados();
     } catch (error) {
-      console.error("Error al crear el Empleado:", error);
       setError(error.message);
+      throw error; // <-- IMPORTANTE: Propaga el error al componente
     } finally {
       setLoading(false);
     }
@@ -55,11 +53,11 @@ const useCustomEmpleados = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.delete(
+      await axios.delete(
         `http://localhost:3000/api/empleados/EliminarEmpleados/${id}`
       );
-      console.log(response);
-      setEmpleados(empleados.filter((empleado) => empleado.idEmpleados !== id));
+      // Refresca la lista después de eliminar
+      await obtenerTodosEmpleados();
     } catch (error) {
       console.error("Error al eliminar el Empleado:", error);
       setError(error.message);
@@ -67,69 +65,36 @@ const useCustomEmpleados = () => {
       setLoading(false);
     }
   };
-  // editar empleado
+
+  // Editar empleado
   const editarEmpleado = async (id, empleadoActualizado) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.put(
+      await axios.put(
         `http://localhost:3000/api/empleados/actualizarEmpleados/${id}`,
         empleadoActualizado
       );
-      console.log(response);
-      setEmpleados(
-        empleados.map((empleado) =>
-          empleado.idEmpleados === id ? response.data : empleado
-        )
-      );
+      await obtenerTodosEmpleados();
     } catch (error) {
-      console.error("Error al editar el Empleado:", error);
       setError(error.message);
+      throw error; // <-- IMPORTANTE
     } finally {
       setLoading(false);
     }
   };
-  // Buscar empleados por nombre
-  const buscarEmpleadosNombre = async (nombre) => {
-    if (!nombre.trim()) return;
 
-    try {
-      setLoading(true);
-      setError(null);
-
-      const nombreUrl = encodeURIComponent(nombre);
-      const response = await axios.get(
-        `http://localhost:3000/api/empleados/ObtenerEmpleados/nombre/${nombreUrl}`
-      );
-      console.log(response.data);
-      setNombreEmpleado(response.data);
-    } catch (error) {
-      console.error("Error al buscar empleados:", error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-    
-  };
-
-
-    
-
-
-
-
+  
 
   return {
     empleados,
     loading,
     error,
-    nombreEmpleado,
     obtenerTodosEmpleados,
     crearEmpleado,
     eliminarEmpleado,
     editarEmpleado,
-    buscarEmpleadosNombre,
-   
+    
   };
 };
 

@@ -8,20 +8,13 @@ const Empleados = () => {
     empleados,
     loading,
     error,
-    nombreEmpleado,
     obtenerTodosEmpleados,
     crearEmpleado,
     eliminarEmpleado,
     editarEmpleado,
   } = useCustomEmpleados();
-  console.log(nombreEmpleado)
-const [terminoBusqueda, setTerminoBusqueda] = useState("");
-  const resultado = (empleados.empleados || []).filter(emp => {
-  if (!terminoBusqueda.trim()) return true;
 
-  const texto = `${emp.nombreEmpleado} ${emp.apellidoEmpleado} ${emp.DNI} ${emp.categoriaRol}`.toLowerCase();
-  return texto.includes(terminoBusqueda.toLowerCase());
-});
+  const [terminoBusqueda, setTerminoBusqueda] = useState("");
   const [formEmpleado, setFormEmpleado] = useState({
     nombreEmpleado: "",
     apellidoEmpleado: "",
@@ -32,7 +25,6 @@ const [terminoBusqueda, setTerminoBusqueda] = useState("");
     categoriaRol: "Empleado",
     estadoEmpleado: "Activo",
   });
-  // Nuevo nombre para el estado
   const [idEmpleadoEditar, setIdEmpleadoEditar] = useState(null);
 
   // Estados para mensajes
@@ -60,7 +52,7 @@ const [terminoBusqueda, setTerminoBusqueda] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validación simple
+    // Validación simple en frontend
     if (
       !formEmpleado.nombreEmpleado.trim() ||
       !formEmpleado.apellidoEmpleado.trim() ||
@@ -73,9 +65,39 @@ const [terminoBusqueda, setTerminoBusqueda] = useState("");
       return;
     }
 
+    // Validación frontend de DNI y email únicos
+    const existeDNI = (empleados || []).some(
+      (emp) =>
+        emp.DNI === formEmpleado.DNI &&
+        emp.idEmpleados !== idEmpleadoEditar
+    );
+    const existeEmail = (empleados || []).some(
+      (emp) =>
+        emp.emailEmpleado === formEmpleado.emailEmpleado &&
+        emp.idEmpleados !== idEmpleadoEditar
+    );
+    const existeTelefono = (empleados || []).some(
+      (emp) =>
+        emp.telefonoEmpleado === formEmpleado.telefonoEmpleado &&
+        emp.idEmpleados !== idEmpleadoEditar
+    );
+
+    if (existeDNI) {
+      mostrarMensaje("El DNI ya está registrado.", "danger");
+      return;
+    }
+    if (existeEmail) {
+      mostrarMensaje("El email ya está registrado.", "danger");
+      return;
+    }
+    if (existeTelefono) {
+      mostrarMensaje("El teléfono ya está registrado.", "danger");
+      return;
+    }
+
     const datosEmpleado = {
       ...formEmpleado,
-      idCat_empleados: 1, 
+      idCat_empleados: 1,
     };
 
     try {
@@ -100,60 +122,70 @@ const [terminoBusqueda, setTerminoBusqueda] = useState("");
         estadoEmpleado: "Activo",
       });
       setIdEmpleadoEditar(null);
-      setOpenModalNuevo(false); // Cierra el modal por estado
+      setOpenModalNuevo(false);
     } catch (error) {
-      console.log(error)
-      mostrarMensaje("Ocurrió un error al guardar el empleado.", "danger");
-      setOpenModalNuevo(false); // Opcional: cerrar también en error
+      const mensajeError =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "";
+      if (
+        mensajeError.toLowerCase().includes("dni") ||
+        mensajeError.toLowerCase().includes("email")
+      ) {
+        mostrarMensaje(mensajeError, "danger");
+      } else {
+        mostrarMensaje("Ocurrió un error al guardar el empleado.", "danger");
+      }
+      setOpenModalNuevo(false);
     }
   };
 
-const handlerDeleteEmpleado = async (emp) => {
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: "btn btn-success",
-      cancelButton: "btn btn-danger"
-    },
-    buttonsStyling: false
-  });
+  const handlerDeleteEmpleado = async (emp) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: false
+    });
 
-  swalWithBootstrapButtons.fire({
-    title: "¿Estás seguro?",
-    text: "¡No podrás revertir esto!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Sí, eliminar",
-    cancelButtonText: "No, cancelar",
-    reverseButtons: true
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        await eliminarEmpleado(emp.idEmpleados);
-        await obtenerTodosEmpleados();
+    swalWithBootstrapButtons.fire({
+      title: "¿Estás seguro?",
+      text: "¡No podrás revertir esto!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "No, cancelar",
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await eliminarEmpleado(emp.idEmpleados);
+          await obtenerTodosEmpleados();
+          swalWithBootstrapButtons.fire({
+            title: "¡Eliminado!",
+            text: "El empleado ha sido eliminado.",
+            icon: "success"
+          });
+          mostrarMensaje("Empleado eliminado correctamente.", "success");
+        } catch (error) {
+          console.log(error);
+          swalWithBootstrapButtons.fire({
+            title: "Error",
+            text: "Ocurrió un error al eliminar el empleado.",
+            icon: "error"
+          });
+          mostrarMensaje("Ocurrió un error al eliminar el empleado.", "danger");
+        }
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
         swalWithBootstrapButtons.fire({
-          title: "¡Eliminado!",
-          text: "El empleado ha sido eliminado.",
-          icon: "success"
-        });
-        mostrarMensaje("Empleado eliminado correctamente.", "success");
-      } catch (error) {
-        console.log(error)
-        swalWithBootstrapButtons.fire({
-          title: "Error",
-          text: "Ocurrió un error al eliminar el empleado.",
+          title: "Cancelado",
+          text: "El empleado está a salvo :)",
           icon: "error"
         });
-        mostrarMensaje("Ocurrió un error al eliminar el empleado.", "danger");
       }
-    } else if (result.dismiss === Swal.DismissReason.cancel) {
-      swalWithBootstrapButtons.fire({
-        title: "Cancelado",
-        text: "El empleado está a salvo :)",
-        icon: "error"
-      });
-    }
-  });
-};
+    });
+  };
 
   const handleEditEmpleado = (emp) => {
     setFormEmpleado({
@@ -202,11 +234,16 @@ const handlerDeleteEmpleado = async (emp) => {
   const closeModalNuevo = () => setOpenModalNuevo(false);
   const closeModalVer = () => setOpenModalVer(false);
 
-
+  // Filtro de empleados
+  const resultado = (empleados || []).filter(emp => {
+    if (!terminoBusqueda.trim()) return true;
+    const texto = `${emp.nombreEmpleado} ${emp.apellidoEmpleado} ${emp.DNI}`.toLowerCase();
+    return texto.includes(terminoBusqueda.toLowerCase());
+  });
 
   return (
     <>
-    <BusquedaEmpleado setTerminoBusqueda={setTerminoBusqueda} />
+      <BusquedaEmpleado setTerminoBusqueda={setTerminoBusqueda} />
 
       {/* Alertas de mensaje */}
       {mensaje && (
@@ -248,7 +285,7 @@ const handlerDeleteEmpleado = async (emp) => {
           <table className="table table-hover">
             <thead>
               <tr>
-                <th>SKU</th>
+                <th>ID</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>DNI</th>
@@ -303,10 +340,10 @@ const handlerDeleteEmpleado = async (emp) => {
 
       {/* Modal para agregar/editar empleado */}
       {openModalNuevo && (
-        <div className="modal fade show d-block" tabIndex="-1" style={{ background: "rgba(0,0,0,0.5)" }}>
+        <div className="modal fade show d-block" tabIndex="-1" >
           <div className="modal-dialog">
             <div className="modal-content bg-dark text-white">
-              <div className="modal-header bg-dark text-white" style={{ position: "relative" }}>
+              <div className="modal-header bg-dark text-white" >
                 <h5 className="modal-title">
                   {idEmpleadoEditar ? "Editar Empleado" : "Nuevo Empleado"}
                 </h5>
@@ -317,10 +354,16 @@ const handlerDeleteEmpleado = async (emp) => {
                   aria-label="Cerrar"
                   title="Cerrar"
                 >
-                  
                 </button>
               </div>
               <div className="modal-body bg-dark text-white">
+                {/* ALERTA SOLO EN EL MODAL */}
+                {mensaje && (
+                  <div className={`alert alert-${tipoMensaje} alert-dismissible fade show`} role="alert">
+                    {mensaje}
+                    <button type="button" className="btn-close" onClick={() => setMensaje("")}></button>
+                  </div>
+                )}
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
                     <label className="form-label">Nombre</label>
@@ -395,8 +438,7 @@ const handlerDeleteEmpleado = async (emp) => {
                       className="form-control"
                       name="categoriaRol"
                       value={formEmpleado.categoriaRol}
-                      onChange={handleChange}
-                      required
+                      disabled
                     />
                   </div>
                   <div className="mb-3">
@@ -424,10 +466,10 @@ const handlerDeleteEmpleado = async (emp) => {
 
       {/* Modal para ver empleado */}
       {openModalVer && (
-        <div className="modal fade show d-block" tabIndex="-1" style={{ background: "rgba(0,0,0,0.5)" }}>
+        <div className="modal fade show d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content bg-dark text-white">
-              <div className="modal-header bg-dark text-white" style={{ position: "relative" }}>
+              <div className="modal-header bg-dark text-white" >
                 <h5 className="modal-title">Datos del Empleado</h5>
                 <button
                   type="button"
@@ -436,7 +478,6 @@ const handlerDeleteEmpleado = async (emp) => {
                   aria-label="Cerrar"
                   title="Cerrar"
                 >
-                  
                 </button>
               </div>
               <div className="modal-body bg-dark text-white">

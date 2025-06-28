@@ -13,7 +13,7 @@ const BusquedaEmpleado = ({ setTerminoBusqueda }) => {
         <div className="col-md-6 col-sm-8">
           <input
             type="text"
-            placeholder="🔍 Buscar por nombre, apellido, DNI o rol"
+            placeholder="🔍 Buscar por nombre, apellido o DNI"
             className="form-control shadow-sm"
             onChange={handleChange}
             style={{
