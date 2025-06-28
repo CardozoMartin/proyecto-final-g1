@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Productos from '../components/Admin/Productos/Productos';
 import Pedidos from '../components/Admin/Pedidos/Pedidos';
 import Cliente from '../components/Admin/Cliente/Cliente';
+import Proveedores from '../components/Admin/Proveedores/Proveedores';
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -20,6 +21,7 @@ const AdminPage = () => {
     { id: 'orders', label: 'Pedidos', icon: '📦' },
     { id: 'products', label: 'Productos', icon: '🛍️' },
     { id: 'customers', label: 'Clientes', icon: '👥' },
+    { id: 'supplients', label: 'Proveedores', icon: '👥' },
     { id: 'analytics', label: 'Análisis', icon: '📈' }
   ];
 
@@ -229,6 +231,14 @@ const AdminPage = () => {
             <div className="card shadow-sm border-0">
               <div className="card-body p-0">
                 <Cliente />
+              </div>
+            </div>
+          )}
+          {/* Cliente Component */}
+          {activeTab === 'supplients' && (
+            <div className="card shadow-sm border-0">
+              <div className="card-body p-0">
+                <Proveedores/>
               </div>
             </div>
           )}
