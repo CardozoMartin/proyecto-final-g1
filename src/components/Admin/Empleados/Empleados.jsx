@@ -14,8 +14,13 @@ const Empleados = () => {
     editarEmpleado,
   } = useCustomEmpleados();
   console.log(nombreEmpleado)
+const [terminoBusqueda, setTerminoBusqueda] = useState("");
+  const resultado = (empleados.empleados || []).filter(emp => {
+  if (!terminoBusqueda.trim()) return true;
 
-  const resultado = empleados.empleados || [];
+  const texto = `${emp.nombreEmpleado} ${emp.apellidoEmpleado} ${emp.DNI} ${emp.categoriaRol}`.toLowerCase();
+  return texto.includes(terminoBusqueda.toLowerCase());
+});
   const [formEmpleado, setFormEmpleado] = useState({
     nombreEmpleado: "",
     apellidoEmpleado: "",
@@ -164,7 +169,7 @@ const Empleados = () => {
 
   return (
     <>
-      <BusquedaEmpleado />
+    <BusquedaEmpleado setTerminoBusqueda={setTerminoBusqueda} />
 
       {/* Alertas de mensaje */}
       {mensaje && (

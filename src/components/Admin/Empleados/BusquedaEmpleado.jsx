@@ -1,36 +1,29 @@
-import React, { useState } from 'react';
-import useCustomEmpleados from '../../../CustomHooks/CustomEmpleado/useCustomEmpleados';
+import React from 'react';
 
-const BusquedaEmpleado = () => {
-  const [nombre, setNombre] = useState('');
-  const { buscarEmpleadosNombre} = useCustomEmpleados();
 
- 
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    buscarEmpleadosNombre(nombre); 
+const BusquedaEmpleado = ({ setTerminoBusqueda }) => {
+  const handleChange = (e) => {
+    const valor = e.target.value;
+    setTerminoBusqueda(valor); 
   };
 
   return (
-    <div>
-      <nav className="navbar bg-body-tertiary">
-        <div className="container-fluid">
-          <form className="d-flex" role="search" onSubmit={handleSubmit}>
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder=""
-              aria-label="Search"
-              value={nombre}
-              onChange={e => setNombre(e.target.value)}
-            />
-            <button className="btn btn-outline-primary" type="submit">
-              <i className="bi bi-search"></i>
-            </button>
-          </form>
+    <div className="container my-3">
+      <div className="row justify-content-center">
+        <div className="col-md-6 col-sm-8">
+          <input
+            type="text"
+            placeholder="🔍 Buscar por nombre, apellido, DNI o rol"
+            className="form-control shadow-sm"
+            onChange={handleChange}
+            style={{
+              borderRadius: "0.5rem",
+              padding: "0.75rem",
+              fontSize: "1rem",
+            }}
+          />
         </div>
-      </nav>
+      </div>
     </div>
   );
 };
