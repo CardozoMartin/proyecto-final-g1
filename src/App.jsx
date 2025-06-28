@@ -9,9 +9,7 @@ import AdminPage from './pages/AdminPage'
 import ErrorPage from './pages/ErrorPage'
 import Navbar from './components/Common/Navbar'
 import Contact from './components/contacto/Contact';
-import { Toaster } from 'sonner';
 import ProductosPage from './pages/ProductosPage';
-import CartComponente from './components/Cart/CartComponente';
 import { useUser } from './store/useUser';
 
 
@@ -40,9 +38,6 @@ function App() {
           <Route path="/Contact" element={<Contact></Contact>}></Route>
           <Route path="/productos" element={<ProductosPage></ProductosPage>}></Route>
         </Routes>
-
-         <Toaster position="top-right" richColors />
-       <CartComponente></CartComponente>
       </BrowserRouter>
     </>
   )
