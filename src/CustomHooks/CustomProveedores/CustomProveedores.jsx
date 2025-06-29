@@ -9,7 +9,7 @@ const useCustomProveedores = () => {
 
   const obtenerProveedor = async () => {
     try {
-      const response = await axios.get(`${API_URL}/proveedores/obtenerProveedor`);
+      const response = await axios.get(`${API_URL}/api/proveedores/obtenerProveedor`);
       setProveedor(response.data);
       setLoading(false);
     } catch (error) {
@@ -21,7 +21,7 @@ const useCustomProveedores = () => {
 
   const eliminarProveedor = async (idProv) => {
     try {
-      const response = await axios.delete(`${API_URL}/proveedores/eliminarProveedor/${idProv}`);
+      const response = await axios.delete(`${API_URL}/api/proveedores/eliminarProveedor/${idProv}`);
       await obtenerProveedor();
       if (response.data) {
         setProveedor((prev) => prev.filter((prod) => prod.idProveedores !== idProv));
@@ -37,7 +37,7 @@ const useCustomProveedores = () => {
 
   const insertarProveedor = async (nuevoProveedor) => {
     try {
-      const respuesta = await axios.post(`${API_URL}/proveedores/insertarProveedor`, nuevoProveedor);
+      const respuesta = await axios.post(`${API_URL}/api/proveedores/insertarProveedor`, nuevoProveedor);
       if (respuesta.data) {
         setProveedor((prev) => [...prev, respuesta.data]);
         return { success: true, data: respuesta.data };
@@ -54,7 +54,7 @@ const useCustomProveedores = () => {
 
   const actualizarProveedor = async (idProveedores, proveedorActualizado) => {
     try {
-      const response = await axios.put(`${API_URL}/proveedores/actualizarProveedor/${idProveedores}`, {
+      const response = await axios.put(`${API_URL}/api/proveedores/actualizarProveedor/${idProveedores}`, {
         nombreProveedores: proveedorActualizado.nombreProveedores,
         TelefonoProveedores: proveedorActualizado.TelefonoProveedores,
         EmailProveedores: proveedorActualizado.EmailProveedores,

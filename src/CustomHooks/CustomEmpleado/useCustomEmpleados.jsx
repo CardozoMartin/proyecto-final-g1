@@ -13,7 +13,7 @@ const useCustomEmpleados = () => {
       setLoading(true);
       setError(null);
       const response = await axios.get(
-        `http://localhost:3000/api/empleados/ObtenerEmpleados`
+        `${API_URL}/api/empleados/ObtenerEmpleados`
       );
       setEmpleados(response.data.empleados || []);
     } catch (error) {
@@ -35,7 +35,7 @@ const useCustomEmpleados = () => {
       setLoading(true);
       setError(null);
       await axios.post(
-        `http://localhost:3000/api/empleados/CrearEmpleados`,
+        `${API_URL}/api/empleados/CrearEmpleados`,
         nuevoEmpleado
       );
       // Refresca la lista después de crear
@@ -54,7 +54,7 @@ const useCustomEmpleados = () => {
       setLoading(true);
       setError(null);
       await axios.delete(
-        `http://localhost:3000/api/empleados/EliminarEmpleados/${id}`
+        `${API_URL}/api/empleados/EliminarEmpleados/${id}`
       );
       // Refresca la lista después de eliminar
       await obtenerTodosEmpleados();
@@ -72,7 +72,7 @@ const useCustomEmpleados = () => {
       setLoading(true);
       setError(null);
       await axios.put(
-        `http://localhost:3000/api/empleados/actualizarEmpleados/${id}`,
+        `${API_URL}/api/empleados/actualizarEmpleados/${id}`,
         empleadoActualizado
       );
       // Refresca la lista después de editar

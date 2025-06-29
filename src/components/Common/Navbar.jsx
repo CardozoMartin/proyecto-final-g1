@@ -10,7 +10,7 @@ import Swal from 'sweetalert2'
 const Navbar = () => {
 
     const { user, logout} = useUser()
-
+    console.log(user)
     const handleEliminarSesion = () => {
          const swalWithBootstrapButtons = Swal.mixin({
               customClass: {
@@ -48,7 +48,7 @@ const Navbar = () => {
               }
             });
     }
-    console.log(user)
+   
     return (
         <nav className="navbar bg-navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
@@ -61,47 +61,54 @@ const Navbar = () => {
                         <li className="nav-item">
                             <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Home}>Home</Link>
                         </li>
-                        {
-                            !user && (
-                                
-                        <li className="nav-item">
-                            <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Register}>Registro</Link>
-                        </li>
-                            )
-                        }
-                        {
-                            !user && (
-
-                        <li className="nav-item">
-                            <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Login}>Login</Link>
-
-                        </li>
-                            )
-                        }
-                        {
-                            user && user.rol === "ADMIN" && (
-
-                        <li className="nav-item">
-                            <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Admin}>Admin</Link>
-                        </li>
-                            )
-                        }
-
-                        <li className="nav-item">
-                            <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Contact}>Contacto</Link>
-                        </li>
-                         <li className="nav-item">
-                            <Link className="nav-link nav-item active fw-bolder" aria-current="page" to="/productos">Productos</Link>
-                        </li>
-                         <li className="nav-item">
-
-                            {
-                                user ? (
-                                    <button className='btn btn-danger' onClick={handleEliminarSesion}>Cerrar sesion</button>) : (
-                                        <button className='btn btn-primary'>Iniciar sesion</button>
-                                    )
-                            }
-                        </li>
+                        {/* Mostrar solo para ADMIN */}
+                        {user && user.cliente.rol === "ADMIN" && (
+                            <>
+                                <li className="nav-item">
+                                    <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Admin}>Admin</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Contact}>Contacto</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link nav-item active fw-bolder" aria-current="page" to="/productos">Productos</Link>
+                                </li>
+                            </>
+                        )}
+                        {/* Mostrar solo para CLIENTE */}
+                        {user && user.cliente.rol === "CLIENTE" && (
+                            <>
+                                <li className="nav-item">
+                                    <Link className="nav-link nav-item active fw-bolder" aria-current="page" to="/productos">Productos</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Contact}>Contacto</Link>
+                                </li>
+                            </>
+                        )}
+                        {/* Si no hay usuario, mostrar registro y login */}
+                        {!user && (
+                            <>
+                                <li className="nav-item">
+                                    <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Register}>Registro</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Login}>Login</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link nav-item active fw-bolder" aria-current="page" to="/productos">Productos</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Contact}>Contacto</Link>
+                                </li>
+                            </>
+                        )}
+                        {/* Botón de cerrar sesión solo si hay usuario */}
+                        {user && (
+                            <li className="nav-item">
+                                <button className='btn btn-danger' onClick={handleEliminarSesion}>Cerrar sesión</button>
+                            </li>
+                        )}
                     </ul>
                 </div>
             </div>

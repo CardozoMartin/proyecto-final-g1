@@ -3,7 +3,7 @@ import MainRegister from '../components/register/MainRegister'
 
 const RegisterPage = () => {
   return (
-    <div>
+    <div className='mt-5 mb-5'>
       <MainRegister/>
     </div>
   )

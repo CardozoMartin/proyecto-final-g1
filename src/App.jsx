@@ -11,6 +11,8 @@ import Navbar from './components/Common/Navbar'
 import Contact from './components/contacto/Contact';
 import ProductosPage from './pages/ProductosPage';
 import { useUser } from './store/useUser';
+import CartComponente from './components/Cart/CartComponente';
+import Footer from './components/Common/Footer';
 
 
 
@@ -38,6 +40,9 @@ function App() {
           <Route path="/Contact" element={<Contact></Contact>}></Route>
           <Route path="/productos" element={<ProductosPage></ProductosPage>}></Route>
         </Routes>
+
+        <CartComponente></CartComponente>
+        <Footer></Footer>
       </BrowserRouter>
     </>
   )

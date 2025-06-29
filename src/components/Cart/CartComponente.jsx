@@ -17,12 +17,12 @@ const CartComponente = () => {
 
     const terminarLaCompra = ()=>{
         const carrito = {
-            idEmpleados: 1,
+            idEmpleados: 24,
             idClientes: user.cliente.idClientes,
             productos: productosCarrito.map(producto => ({
                 idProducto: producto.id,
-                cantidad: producto.cantidad, // Cambiado a 'cantidad'
-                precioUnitario: Number(producto.precioVenta) // Asegúrate que sea número
+                cantidad: producto.cantidad, 
+                precioUnitario: Number(producto.precioVenta)
             })),
         }
         

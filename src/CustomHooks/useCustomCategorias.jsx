@@ -40,13 +40,7 @@ const useCustomCategorias = () => {
       console.log('Categoría agregada:', nuevaCategoriaData);
       return { success: true, data: nuevaCategoriaData };
     } catch (error) {
-    console.error('Error al agregar categoría:', {
-    message: error.message,
-    status: error.response?.status,
-    data: error.response?.data,
-    url: error.config?.url
-  });
-  return { success: false, error: error.response?.data?.message || error.message };
+      console.error('Error al agregar categoría:', error);
     }
   };
 

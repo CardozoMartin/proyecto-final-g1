@@ -2,10 +2,16 @@ import React, { useState, useEffect } from 'react'
 import useCustomProductos from '../../../CustomHooks/useCustomProductos';
 
 import { toast } from 'sonner';
+import useCustomCategorias from '../../../CustomHooks/useCustomCategorias';
 
 // Ahora recibimos la prop producto para edición
 const FormProductos = ({ producto }) => {
   const { agregarProducto,editarProducto,obtenerProductos } = useCustomProductos();
+  const { categorias} = useCustomCategorias();
+ 
+
+  const categoriasAMostrar = categorias.categorias || [];
+  console.log('Categorias a mostrar:', categoriasAMostrar);
 
   // Estado para el formulario, inicializa vacío
   const [nuevoProducto, setNuevoProducto] = useState({
@@ -14,7 +20,8 @@ const FormProductos = ({ producto }) => {
     descripcion: '',
     precioVenta: '',
     cantidadProducto: '',
-    nombreCategoria: ''
+    nombreCategoria: '',
+    imagenProducto: '' 
   });
 
   // Si recibimos un producto para editar, llenamos el formulario con sus datos
@@ -26,7 +33,8 @@ const FormProductos = ({ producto }) => {
         descripcion: producto.descripcion || '',
         precioVenta: producto.precioVenta || '',
         cantidadProducto: producto.cantidadProducto || '',
-        nombreCategoria: producto.nombreCategoria || ''
+        nombreCategoria: producto.nombreCategoria || '',
+        imagenProducto: producto.imagenProducto || '' 
       });
     } else {
       // Si no hay producto (modo agregar), limpiamos el formulario
@@ -36,7 +44,8 @@ const FormProductos = ({ producto }) => {
         descripcion: '',
         precioVenta: '',
         cantidadProducto: '',
-        nombreCategoria: ''
+        nombreCategoria: '',
+        imagenProducto: '' 
       });
     }
   }, [producto]);
@@ -68,7 +77,9 @@ const FormProductos = ({ producto }) => {
           descripcion: '',
           precioVenta: '',
           cantidadProducto: '',
-          nombreCategoria: ''
+          nombreCategoria: '',
+          imagenProducto:''
+
         });
         // Solo refrescamos la lista si la edición fue exitosa
         await obtenerProductos();
@@ -200,16 +211,24 @@ const FormProductos = ({ producto }) => {
           <div className="col-md-6">
             <div className="mb-3">
               <label htmlFor="nombreCategoria" className="form-label">Categoría</label>
-              <input 
+              <select
                 id="nombreCategoria"
-                name="nombreCategoria" 
-                value={nuevoProducto.nombreCategoria} 
-                onChange={handleAgregarProducto} 
-                placeholder="Nombre de la categoría" 
-                className="form-control"
-                type="text"
+                name="nombreCategoria"
+                value={nuevoProducto.nombreCategoria}
+                onChange={handleAgregarProducto}
+                className="form-select"
                 required
-              />
+              >
+                <option value="">Seleccione una categoría</option>
+                {categoriasAMostrar.map(categoria => (
+                  <option key={categoria.idCat_productos} value={categoria.nombreCategoriaProductos}>
+                    {categoria.nombreCategoriaProductos}
+                  </option>
+                ))}
+              </select>
+              <div className="invalid-feedback">
+                Seleccione una categoría válida.
+              </div>
             </div>
           </div>
         </div>

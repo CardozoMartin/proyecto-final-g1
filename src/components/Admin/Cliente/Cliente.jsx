@@ -5,9 +5,7 @@ import clientStore from "../../../store/clientStore";
 import useCustomCliente from "../../../CustomHooks/CustomCliente/useCustomCliente";
 import FormClientes from "./FormClientes";
 
-
 const Cliente = () => {
-
   //--------------Importaciones del useCliente
   const { cliente, isLoading, isError } = useCustomCliente();
 
@@ -32,39 +30,29 @@ const Cliente = () => {
 
   if (!resultado || resultado.length === 0) {
     return (
-      <div>
+      <>
         <button
           type="button"
           className="btn btn-primary"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
-
         >
           Agregar Clientes
         </button>
         <div className="text-center text-muted alert alert-info">
           No hay clientes registrados aún.
         </div>
-      </div>
+      </>
     );
   }
 
-  
   return (
     <>
-    <div className="d-flex justify-content-between align-items-center mb-3">
-      <Busqueda />
+      <div className="d-flex justify-content-between align-items-center mb-3">
+       
 
-         <button
-          type="button"
-          className="btn btn-primary mt-2 mb-3 col-12 col-md-3"
-          data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
-
-        >
-          Agregar Clientes
-        </button>
-    </div>
+       
+      </div>
       <div className="row">
         <div className="col-12">
           <div className="card shadow-sm border-0">
@@ -94,10 +82,12 @@ const Cliente = () => {
                         <td>{usuario.nombreCliente}</td>
                         <td>{usuario.apellidoCliente}</td>
                         <td>{usuario.DNI}</td>
-                        
+
                         <td>{usuario.telefonoCliente}</td>
-                        
-                        <td><span>{usuario.estadoCliente}</span> </td>
+
+                        <td>
+                          <span>{usuario.estadoCliente}</span>{" "}
+                        </td>
                         <td>
                           <div className="btn-group" role="group">
                             <button
@@ -165,5 +155,6 @@ const Cliente = () => {
     </>
   );
 };
+
 
 export default Cliente;
