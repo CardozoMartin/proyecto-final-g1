@@ -13,7 +13,7 @@ const useCustomProductos = () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await axios.get(`http://localhost:4000/api/productos/obtenerProductos`);
+            const response = await axios.get(`${API_URL}/api/productos/obtenerProductos`);
             setProductos(response.data)
             
             
@@ -70,7 +70,7 @@ const useCustomProductos = () => {
     //para eliminar un producto
     const eliminarProducto = async (id) => {
         try {
-            const response = await axios.delete(`${API_URL}/api/productos/eliminarProducto/${id}`);
+            const response = await axios.delete(`${API_URL}/api/productos/cambiarEstado/${id}`);
             if (response.data) {
                 // Actualizamos la lista de productos eliminando el producto del array dentro del objeto
                 setProductos(prev => ({
@@ -101,3 +101,4 @@ const useCustomProductos = () => {
 }
 
 export default useCustomProductos
+
