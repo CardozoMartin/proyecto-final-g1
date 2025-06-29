@@ -1,9 +1,10 @@
 
-import React, { useState } from "react";
-import Productos from "../components/Admin/Productos/Productos";
-import Pedidos from "../components/Admin/Pedidos/Pedidos";
-import Cliente from "../components/Admin/Cliente/Cliente";
-import Empleados from "../components/Admin/Empleados/Empleados";
+import React, { useState } from 'react'
+import Productos from '../components/Admin/Productos/Productos';
+import Pedidos from '../components/Admin/Pedidos/Pedidos';
+import Cliente from '../components/Admin/Cliente/Cliente';
+import Proveedores from '../components/Admin/Proveedores/Proveedores';
+
 
 
 
@@ -45,13 +46,16 @@ const AdminPage = () => {
 
   const menuItems = [
 
-    { id: "orders", label: "Pedidos", icon: "📦" },
-    { id: "products", label: "Productos", icon: "🛍️" },
-    { id: "customers", label: "Cliente", icon: "👥" },
-    { id: "cualquier", label: "otra categoria", icon: "👥" }, // Corregido: mantenemos 'customers' como ID
-    // Corregido: mantenemos 'customers' como ID
-    { id: "empleados", label: "Empleados", icon: "👥" },
+    { id: 'overview', label: 'Resumen', icon: '📊' },
+    { id: 'orders', label: 'Pedidos', icon: '📦' },
+    { id: 'products', label: 'Productos', icon: '🛍️' },
+    { id: 'customers', label: 'Clientes', icon: '👥' },
+    { id: 'supplients', label: 'Proveedores', icon: '👥' },
+    { id: 'analytics', label: 'Análisis', icon: '📈' }
   ];
+
+
+   
 
   return (
     <>
@@ -252,24 +256,57 @@ const AdminPage = () => {
               </div>
             </>
           )}
-            {/* Pedidos Component */}
-            {activeTab === "orders" && <Pedidos />}
-            {/* Productos Component */}
-            {activeTab === "products" && (
-              <Productos menuItems={menuItems} activeTab={activeTab} />
-            )}
-            {/* Cliente Component */}
-            {activeTab === "customers" && (
-              <Cliente menuItems={menuItems} activeTab={activeTab} />
-            )}
-            {activeTab === "cualquier" && (
-              <Cliente menuItems={menuItems} activeTab={activeTab} />
-            )}
-            {/* Empleado Component */}
-            {activeTab === "empleados" && (
-              <Empleados menuItems={menuItems} activeTab={activeTab} />
-            )}
-          </div>
+
+
+          {/* Pedidos Component */}
+          {activeTab === 'orders' && (
+            <div className="card shadow-sm border-0">
+              <div className="card-body p-0">
+                <Pedidos />
+              </div>
+            </div>
+          )}
+
+          {/* Productos Component */}
+          {activeTab === 'products' && (
+            <div className="card shadow-sm border-0">
+              <div className="card-body p-0">
+                <Productos menuItems={menuItems} activeTab={activeTab} />
+              </div>
+            </div>
+          )}
+
+          {/* Cliente Component */}
+          {activeTab === 'customers' && (
+            <div className="card shadow-sm border-0">
+              <div className="card-body p-0">
+                <Cliente />
+              </div>
+            </div>
+          )}
+          {/* Cliente Component */}
+          {activeTab === 'supplients' && (
+            <div className="card shadow-sm border-0">
+              <div className="card-body p-0">
+                <Proveedores/>
+              </div>
+            </div>
+          )}
+
+          {/* Analytics Component */}
+          {activeTab === 'analytics' && (
+            <div className="card shadow-sm border-0">
+              <div className="card-header bg-white">
+                <h5 className="card-title mb-0">Análisis y Reportes</h5>
+              </div>
+              <div className="card-body">
+                <div className="text-center text-muted py-5">
+                  <span style={{ fontSize: '3rem' }}>📈</span>
+                  <p className="mt-2">Sección de análisis en desarrollo</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

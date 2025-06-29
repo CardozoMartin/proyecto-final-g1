@@ -1,0 +1,49 @@
+.formulario {
+  background-color: #000000 !important;
+  color: #ffffff;
+  border-radius: 10px;
+}
+
+.formulario .modal-title,
+.formulario .form-label,
+.formulario .form-control,
+.formulario .btn {
+  text-align: center;
+}
+
+.formulario .form-control {
+  background-color: #1c1c1c;
+  border: 1px solid #444;
+  color: #fff;
+}
+
+.formulario .form-control::placeholder {
+  color: #bbbbbb;
+}
+
+.form-label {
+  color: #f7ca0b;
+  font-weight: bold;
+}
+
+.btn-close {
+  filter: invert(1); 
+}
+
+.btn {
+  background-color: #f7ca0b;
+  color: #000000;
+}
+
+.btn:hover {
+  background-color: #a0850c;
+  color: #000000;
+}
+
+.inputform:focus,
+.form-control:focus {
+  border-color: #f7ca0b !important;
+  outline: 0;
+  border-width: 2px;
+  box-shadow: none;
+}
