@@ -1,7 +1,15 @@
+
 import React , {useState} from 'react'
+
+import React, { useEffect } from 'react'
+
 import useCustomProductos from '../CustomHooks/useCustomProductos';
+import { useCartStore } from '../store/useCartStore';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, Toaster } from 'sonner';
 
 const ProductosPage = () => {
+
 
     const {productos} = useCustomProductos();
     const resultadoProductos = productos.productos || [];
@@ -16,6 +24,8 @@ const ProductosPage = () => {
     const productosFiltrados = resultadoProductos.filter(producto => 
         producto.nombreProducto.toLowerCase().includes(busqueda.toLowerCase())
     );
+
+
     return (
 
         <div className="container-fluid py-4">
@@ -145,7 +155,7 @@ const ProductosPage = () => {
                                                         ${producto.precioVenta}
                                                     </span>
                                                 </div>
-                                                <button className="btn btn-primary btn-sm">
+                                                <button className="btn btn-primary btn-sm" onClick={() => handleAgregarAlCarrito(producto)}>
                                                     <i className="fas fa-cart-plus me-1"></i>
                                                     Agregar
                                                 </button>
