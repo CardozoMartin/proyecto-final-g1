@@ -1,12 +1,12 @@
 import React from "react";
-import { Card } from "react-bootstrap";
 import CardHome from "./CardHome";
-import { categorias } from "../../Data/categorias";
+import useCustomCategorias from "../../CustomHooks/useCustomCategorias";
 
 const MainHome = () => {
+  const { categorias, loading, error } = useCustomCategorias();
+
   return (
     <div>
-     
       <div className="card text-white mb-5 border-0 position-relative overflow-hidden">
         <div className="ratio ratio-16x9" style={{ minHeight: "300px" }}>
           <video
@@ -23,13 +23,16 @@ const MainHome = () => {
             }}
           />
         </div>
-        {/* Aquí puedes agregar overlays o contenido adicional si lo necesitas */}
       </div>
-      <CardHome categorias={categorias} />
+
+      {loading && <p>Cargando categorías...</p>}
+      {error && <p>Error al cargar categorías: {error}</p>}
+
+      {!loading && !error && (
+        <CardHome categorias={categorias.categorias} />
+      )}
     </div>
   );
 };
-
-
 
 export default MainHome;

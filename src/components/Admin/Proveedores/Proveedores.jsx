@@ -76,7 +76,6 @@ const Proveedores = () => {
     <div className="row">
       <div className="col-12">
         <div className="card shadow-sm border-0">
-          {/* Buscador arriba */}
           <BusquedaProveedor valorBusqueda={busqueda} onBuscar={setBusqueda} />
 
           <div className="card-header bg-white d-flex justify-content-between align-items-center">
