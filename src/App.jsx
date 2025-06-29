@@ -1,7 +1,6 @@
-
 import './App.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import { Admin, Home, Login, Register } from './routes/Path'
 import HomePage from './pages/HomePage'
 import RegisterPage from './pages/RegisterPage'
@@ -10,7 +9,9 @@ import AdminPage from './pages/AdminPage'
 import ErrorPage from './pages/ErrorPage'
 import Navbar from './components/Common/Navbar'
 import Contact from './components/contacto/Contact';
-import { Toaster } from 'sonner';
+import ProductosPage from './pages/ProductosPage';
+import { useUser } from './store/useUser';
+
 
 
 
@@ -19,6 +20,9 @@ import { Toaster } from 'sonner';
 
 function App() {
 
+  const { user, estaLogueado} = useUser()
+  console.log('¿Está logueado?', estaLogueado)
+
   return (
     <>
       <BrowserRouter>
@@ -26,16 +30,18 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage></HomePage>}></Route>
           <Route path="/Register" element={<RegisterPage></RegisterPage>}></Route>
-          <Route path="/Login" element={<LoginPage></LoginPage>}></Route>
+
+          <Route path="/Login" element={estaLogueado ? <Navigate to="/" /> : <LoginPage></LoginPage>}></Route>
+
           <Route path="/Admin" element={<AdminPage></AdminPage>}></Route>
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
           <Route path="/Contact" element={<Contact></Contact>}></Route>
+          <Route path="/productos" element={<ProductosPage></ProductosPage>}></Route>
         </Routes>
-
-         <Toaster position="top-right" richColors />
       </BrowserRouter>
     </>
   )
 }
 
 export default App
+

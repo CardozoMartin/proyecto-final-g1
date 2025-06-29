@@ -1,8 +1,11 @@
+
 import React, { useState } from "react";
 import Productos from "../components/Admin/Productos/Productos";
 import Pedidos from "../components/Admin/Pedidos/Pedidos";
 import Cliente from "../components/Admin/Cliente/Cliente";
 import Empleados from "../components/Admin/Empleados/Empleados";
+
+
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -41,6 +44,7 @@ const AdminPage = () => {
   ];
 
   const menuItems = [
+
     { id: "orders", label: "Pedidos", icon: "📦" },
     { id: "products", label: "Productos", icon: "🛍️" },
     { id: "customers", label: "Cliente", icon: "👥" },
@@ -84,6 +88,7 @@ const AdminPage = () => {
               </button>
             </div>
           </div>
+        </div>
 
           {/* Menu Items */}
           <nav className="nav flex-column p-3">
@@ -128,9 +133,7 @@ const AdminPage = () => {
                     <p className="mb-0">Usuario Admin</p>
                   </div>
                   <small className="text-muted">admin@empresa.com</small>
-                </div>
-              </div>
-            </div>
+
           )}
         </div>
 
@@ -143,9 +146,13 @@ const AdminPage = () => {
                 <h4 className="mb-0"></h4>
                 <small className="text-muted">Bienvenido de vuelta</small>
               </div>
+
+          </div>
+        )}
+      </div>
             </div>
           </div>
-
+        </div>
           {/* Content Area */}
           <div className="p-4">
             {activeTab === "overview" && (
@@ -181,15 +188,70 @@ const AdminPage = () => {
                                 {stat.icon}
                               </span>
                             </div>
+
                           </div>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </>
-            )}
+                  </div>
+                ))}
+              </div>
 
+              {/* Dashboard Overview Content */}
+              <div className="row">
+                <div className="col-lg-8 mb-4">
+                  <div className="card shadow-sm border-0">
+                    <div className="card-header bg-white">
+                      <h5 className="card-title mb-0">Actividad Reciente</h5>
+                    </div>
+                    <div className="card-body">
+                      <div className="d-flex align-items-center justify-content-center py-5">
+                        <div className="text-center text-muted">
+                          <span style={{ fontSize: '3rem' }}>📊</span>
+                          <p className="mt-2">Gráfico de actividad aquí</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-4 mb-4">
+                  <div className="card shadow-sm border-0">
+                    <div className="card-header bg-white">
+                      <h5 className="card-title mb-0">Acciones Rápidas</h5>
+                    </div>
+                    <div className="card-body">
+                      <div className="d-grid gap-2">
+                        <button 
+                          className="btn btn-primary btn-sm"
+                          onClick={() => setActiveTab('customers')}
+                        >
+                          <span className="me-2">👥</span>Ver Clientes
+                        </button>
+                        <button 
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => setActiveTab('orders')}
+                        >
+                          <span className="me-2">📦</span>Ver Pedidos
+                        </button>
+                        <button 
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => setActiveTab('products')}
+                        >
+                          <span className="me-2">🛍️</span>Ver Productos
+                        </button>
+                        <button 
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => setActiveTab('categories')}
+                        >
+                          <span className="me-2">🏷️</span>Ver Categorías
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
             {/* Pedidos Component */}
             {activeTab === "orders" && <Pedidos />}
             {/* Productos Component */}

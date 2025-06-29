@@ -13,7 +13,7 @@ const useCustomProductos = () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await axios.get(`http://localhost:4000/api/productos/obtenerProductos`);
+            const response = await axios.get(`${API_URL}/api/productos/obtenerProductos`);
             setProductos(response.data)
             
             
@@ -101,3 +101,4 @@ const useCustomProductos = () => {
 }
 
 export default useCustomProductos
+

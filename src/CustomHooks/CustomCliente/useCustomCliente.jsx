@@ -14,21 +14,39 @@ const obtenerClientes = async ()=>{
         setLoading(true);
         setError(null);
         //hacemos la peticion al servidor
-        const respuesta = await axios.get(`http://localhost:4000/api/clientes/ObtenerTodosLosClientes`)
+        const respuesta = await axios.get(`${API_URL}/api/clientes/ObtenerTodosLosClientes`)
         setCliente(respuesta.data);
         console.log(respuesta.data);
         setLoading(false);
         
-    }catch{
-
+    }catch(error){
+        console.log(error);
+ }
+}
+const crearCliente = async (nuevoCliente)=>{
+    try {
+        const respuesta = await axios.post(`${API_URL}/api/clientes/CrearCliente`, nuevoCliente);
+        if (respuesta.data) {
+            // Actualizamos la lista de clientes agregando el nuevo al array dentro del objeto
+            setCliente(prev => ({
+                    ...prev,
+                    cliente: [...(prev.cliente || []), respuesta.data]}));
+           
+            console.log("Cliente agregado:", respuesta.data);
+            return { success: true, data: respuesta.data };
+        } else {
+            return { success: false, error: "No se recibió respuesta del servidor" };
+        }
+    } catch (error) {
+        console.error("Error al agregar cliente:", error);
+        return { success: false, error: error.response?.data?.message || error.message };
     }
 }
-
 useEffect(() => {
     obtenerClientes();
 }, []);
     
-  return {cliente,loading, error}
+  return {cliente,loading, error,crearCliente,obtenerClientes}
 }
 
 export default useCustomCliente
