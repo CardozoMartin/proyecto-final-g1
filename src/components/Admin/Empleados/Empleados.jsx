@@ -245,7 +245,7 @@ const Empleados = () => {
     <>
       <BusquedaEmpleado setTerminoBusqueda={setTerminoBusqueda} />
 
-      // alertas de mensajes
+      
       {mensaje && (
         <div className={`alert alert-${tipoMensaje} alert-dismissible fade show`} role="alert">
           {mensaje}
@@ -253,14 +253,14 @@ const Empleados = () => {
         </div>
       )}
 
-      // mensaje de error global
+      
       {error && (
         <div className="alert alert-danger" role="alert">
           Error: {error}
         </div>
       )}
 
-      // spinner de carga
+      
       {loading && (
         <div className="text-center my-3">
           <div className="spinner-border text-primary" role="status">
@@ -298,47 +298,55 @@ const Empleados = () => {
               </tr>
             </thead>
             <tbody>
-              {resultado.map((emp) => (
-                <tr key={emp.idEmpleados}>
-                  <td>{emp.idEmpleados}</td>
-                  <td>{emp.nombreEmpleado}</td>
-                  <td>{emp.apellidoEmpleado}</td>
-                  <td>{emp.DNI}</td>
-                  <td>{emp.telefonoEmpleado}</td>
-                  <td>{emp.emailEmpleado}</td>
-                  <td>{emp.domicilioEmpleado}</td>
-                  <td>{emp.categoriaRol}</td>
-                  <td>{emp.estadoEmpleado}</td>
-                  <td>
-                    <div className="btn-group" role="group">
-                      <button
-                        className="btn btn-outline-primary btn-sm"
-                        onClick={() => handleEditEmpleado(emp)}
-                      >
-                        Editar
-                      </button>
-                      <button
-                        className="btn btn-outline-primary btn-sm"
-                        onClick={() => handleVerEmpleado(emp)}
-                      >
-                        Ver
-                      </button>
-                      <button
-                        onClick={() => handlerDeleteEmpleado(emp)}
-                        className="btn btn-outline-danger btn-sm"
-                      >
-                        Eliminar
-                      </button>
-                    </div>
+              {resultado.length === 0 && !loading ? (
+                <tr>
+                  <td colSpan={10} className="text-center text-secondary">
+                    No hay empleados registrados
                   </td>
                 </tr>
-              ))}
+              ) : (
+                resultado.map((emp) => (
+                  <tr key={emp.idEmpleados}>
+                    <td>{emp.idEmpleados}</td>
+                    <td>{emp.nombreEmpleado}</td>
+                    <td>{emp.apellidoEmpleado}</td>
+                    <td>{emp.DNI}</td>
+                    <td>{emp.telefonoEmpleado}</td>
+                    <td>{emp.emailEmpleado}</td>
+                    <td>{emp.domicilioEmpleado}</td>
+                    <td>{emp.categoriaRol}</td>
+                    <td>{emp.estadoEmpleado}</td>
+                    <td>
+                      <div className="btn-group" role="group">
+                        <button
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => handleEditEmpleado(emp)}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => handleVerEmpleado(emp)}
+                        >
+                          Ver
+                        </button>
+                        <button
+                          onClick={() => handlerDeleteEmpleado(emp)}
+                          className="btn btn-outline-danger btn-sm"
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
-      // Modal para crear/editar empleado
+     
       {openModalNuevo && (
         <div className="modal fade show d-block" tabIndex="-1" >
           <div className="modal-dialog">
@@ -464,7 +472,7 @@ const Empleados = () => {
         </div>
       )}
 
-      // Modal para ver datos del empleado
+     
       {openModalVer && (
         <div className="modal fade show d-block" tabIndex="-1">
           <div className="modal-dialog">
