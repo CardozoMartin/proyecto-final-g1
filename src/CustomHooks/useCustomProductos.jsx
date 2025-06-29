@@ -70,7 +70,7 @@ const useCustomProductos = () => {
     //para eliminar un producto
     const eliminarProducto = async (id) => {
         try {
-            const response = await axios.delete(`${API_URL}/api/productos/eliminarProducto/${id}`);
+            const response = await axios.delete(`${API_URL}/api/productos/cambiarEstado/${id}`);
             if (response.data) {
                 // Actualizamos la lista de productos eliminando el producto del array dentro del objeto
                 setProductos(prev => ({
