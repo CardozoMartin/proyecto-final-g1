@@ -20,8 +20,10 @@ const obtenerClientes = async ()=>{
         setLoading(false);
         
     }catch(error){
+
         console.log(error);
  }
+
 }
 const crearCliente = async (nuevoCliente)=>{
     try {
