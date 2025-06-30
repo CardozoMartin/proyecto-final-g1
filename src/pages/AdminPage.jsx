@@ -5,6 +5,7 @@ import Cliente from "../components/Admin/Cliente/Cliente";
 import Empleados from "../components/Admin/Empleados/Empleados";
 import Proveedores from "../components/Admin/Proveedores/Proveedores";
 import Categorias from "../components/Admin/Categorias/categorias";
+import Mensajes from "../components/Admin/Mensajes/Mensajes";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -48,6 +49,7 @@ const AdminPage = () => {
     { id: 'supplients', label: 'Proveedores', icon: '👥' },
   
     { id: "empleados", label: "Empleados", icon: "👥" },
+    { id: "mensajes", label: "Mensajes", icon: "👥" }
   ];
 
   return (
@@ -259,10 +261,16 @@ const AdminPage = () => {
              {activeTab === "categoria" && (
               <Categorias menuItems={menuItems} activeTab={activeTab} />
             )}
+            {activeTab === "mensajes" && (
+              <Mensajes menuItems={menuItems} activeTab={activeTab} />
+            )}
              {activeTab === 'supplients' && (
             <div className="card shadow-sm border-0">
               <div className="card-body p-0">
                 <Proveedores/>
+              </div>
+              <div className="card-body p-0">
+  
               </div>
             </div>
           )}

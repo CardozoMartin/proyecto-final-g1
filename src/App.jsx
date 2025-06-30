@@ -38,6 +38,7 @@ function App() {
           <Route path="/Admin" element={<AdminPage></AdminPage>}></Route>
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
           <Route path="/Contact" element={<Contact></Contact>}></Route>
+          <Route path="/productos" element={<ProductosPage />} />
           <Route path="/productos/categoria/:nombreCategoria" element={<ProductosPage />} />
         </Routes>
 
