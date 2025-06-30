@@ -1,9 +1,21 @@
+.titRegister{
+    color: #f7ca0b;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
 .formulario{
     background-color: #000000;
+}
+.formint{
+    padding: 20px;
 }
 
 .form-label{
     color: #f7ca0b;
+    font-weight: bold;
 }
 
 .btn{
@@ -14,4 +26,15 @@
 .btn:hover{
     background-color: #a0850c;
     color:#000000;
+}
+
+.inputform:focus {
+    border-color: #f7ca0b !important;
+    outline: 0;
+    border-width: 2px;
+}
+
+.no-link-style {
+  color: inherit;
+  text-decoration: none;
 }

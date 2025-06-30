@@ -1,0 +1,14 @@
+.modal-content,
+.modal-header,
+.modal-body,
+.modal-footer,
+.modal-title,
+.form-label,
+input {
+  text-align: center;
+}
+
+.modal-content {
+  
+  color: #fff !important;
+}

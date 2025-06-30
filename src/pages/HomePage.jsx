@@ -1,9 +1,12 @@
-import React from 'react'
+import "bootstrap/dist/css/bootstrap.min.css";
+import MainHome from "../components/Home/MainHome";
 
 const HomePage = () => {
   return (
-    <div>HomePage</div>
-  )
-}
+    <div>
+      <MainHome />
+    </div>
+  );
+};
 
-export default HomePage
+export default HomePage;
