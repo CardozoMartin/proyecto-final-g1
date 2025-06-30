@@ -39,6 +39,7 @@ function App() {
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
           <Route path="/Contact" element={<Contact></Contact>}></Route>
           <Route path="/productos/categoria/:nombreCategoria" element={<ProductosPage />} />
+          <Route path="/productos" element={<ProductosPage/>}/>
         </Routes>
 
         <CartComponente></CartComponente>
