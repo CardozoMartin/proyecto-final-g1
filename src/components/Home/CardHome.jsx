@@ -1,4 +1,5 @@
 import "../../css/CardHome.css";
+import { Link } from "react-router-dom";
 
 const CardHome = ({ categorias }) => {
   return (
@@ -7,9 +8,9 @@ const CardHome = ({ categorias }) => {
         {categorias.map((cat) => (
           <div key={cat.idCat_productos} className="col-md-4 mb-4">
             <div className="card h-100 bg-dark text-white shadow-sm">
-              {cat.imagen && (
+              {cat.imagenCategoriaProductos && (
                 <img
-                  src={cat.imagen}
+                  src={cat.imagenCategoriaProductos}
                   alt={cat.nombreCategoriaProductos}
                   className="card-img-top"
                   style={{ height: "200px", objectFit: "cover" }}
@@ -17,10 +18,17 @@ const CardHome = ({ categorias }) => {
               )}
               <div className="card-body">
                 <h5 className="card-title">{cat.nombreCategoriaProductos}</h5>
-                <p className="card-text">{cat.descripcion || "Sin descripción disponible."}</p>
-                <a href="#" className="btn btn-item">
+                <p className="card-text">
+                  {cat.descripcion || "Sin descripción disponible."}
+                </p>
+                <Link
+                  to={`/productos/categoria/${encodeURIComponent(
+                    cat.nombreCategoriaProductos
+                  )}`}
+                  className="btn btn-item"
+                >
                   Ver más
-                </a>
+                </Link>
               </div>
             </div>
           </div>
