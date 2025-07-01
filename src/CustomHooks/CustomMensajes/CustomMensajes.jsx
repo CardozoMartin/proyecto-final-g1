@@ -24,16 +24,42 @@ const useCustomMensajes = () => {
 
   const enviarMensaje = async (nuevoMensaje) => {
     try {
-      const respuesta = await axios.post(`${API_URL}/api/mensajes/enviarmensaje`, nuevoMensaje);
+      const respuesta = await axios.post(
+        `${API_URL}/api/mensajes/enviarmensaje`,
+        nuevoMensaje
+      );
       if (respuesta.data) {
         setMensajes((prev) => [...prev, respuesta.data]);
         return { success: true, data: respuesta.data };
       } else {
-        return { success: false, error: "No se recibió respuesta del servidor" };
+        return {
+          success: false,
+          error: "No se recibió respuesta del servidor",
+        };
       }
     } catch (error) {
       console.error("Error al enviarMensaje:", error);
-      return { success: false, error: error.response?.data?.message || error.message };
+      return {
+        success: false,
+        error: error.response?.data?.message || error.message,
+      };
+    }
+  };
+
+  const marcarComoVisto = async (idMensaje) => {
+    try {
+      await axios.put(`${API_URL}/api/mensajes/visto/${idMensaje}`);
+      setMensajes((prev) =>
+        prev.map((m) =>
+          m.idMensaje === idMensaje ? { ...m, estadoMensaje: "VISTO" } : m
+        )
+      );
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data?.message || "Error al actualizar estado",
+      };
     }
   };
 
@@ -43,6 +69,7 @@ const useCustomMensajes = () => {
     enviarMensaje,
     loading,
     error,
+    marcarComoVisto,
   };
 };
 
