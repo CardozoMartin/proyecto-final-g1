@@ -15,7 +15,7 @@ const obtenerClientes = async ()=>{
         setError(null);
         //hacemos la peticion al servidor
         const respuesta = await axios.get(`${API_URL}/api/clientes/ObtenerTodosLosClientes`)
-        setCliente(respuesta.data);
+        setCliente(respuesta.data.Clientes);
         console.log(respuesta.data);
         setLoading(false);
         
@@ -45,12 +45,29 @@ const crearCliente = async (nuevoCliente)=>{
     }
 }
 
+const nuevoEstado = async (usuario) => {
+    setLoading(true);
+    setError(null);
+     try {
+    const nuevoEstado = usuario.estadoCliente === "Activo" ? "Inactivo" : "Activo";
+    const respuesta= await axios.put(
+      `http://localhost:3000/api/clientes/estadoCliente/${usuario.idClientes}`,
+      { estadoCliente: nuevoEstado }
+    );
+    await obtenerClientes()
+    setLoading(false);
+    
+  }
+   catch (error) {
+    console.error("error", error);
+  }
+  };
 
 useEffect(() => {
     obtenerClientes();
 }, []);
     
-  return {cliente,loading, error,crearCliente,obtenerClientes}
+  return {cliente,loading, error,crearCliente,obtenerClientes, nuevoEstado}
 }
 
 export default useCustomCliente
