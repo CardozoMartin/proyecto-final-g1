@@ -1,57 +1,49 @@
 import React, { useState } from "react";
-import Busqueda from "./Busqueda";
 import Informacion from "./Informacion";
-import clientStore from "../../../store/clientStore";
 import useCustomCliente from "../../../CustomHooks/CustomCliente/useCustomCliente";
 import FormClientes from "./FormClientes";
 
+
+
 const Cliente = () => {
   //--------------Importaciones del useCliente
-  const { cliente, isLoading, isError } = useCustomCliente();
-
+  const { cliente, nuevoEstado, loading} = useCustomCliente();
+  console.log(cliente);
   const resultado = cliente?.Clientes || cliente || [];
 
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [mostrarInfo, setMostrarInfo] = useState(false);
+  const [infoUser, setInfoUser]= useState({})
+  const [openModal, setOpenModal]=useState(false)
 
   const getStatusBadge = (status) => {
     const badges = {
-      Activa: "success",
-      Inactiva: "warning",
-      Bloqueada: "danger",
+      Activo: "success",
+      Inactivo: "warning",
+      Bloqueado: "danger",
     };
     return badges[status] || "secondary";
   };
 
   const handleVer = (usuario) => {
-    setUsuarioSeleccionado(usuario);
-    setMostrarInfo(true);
+    setOpenModal(true);
+    setInfoUser(usuario)
   };
-
-  if (!resultado || resultado.length === 0) {
-    return (
-      <>
-        <button
-          type="button"
-          className="btn btn-primary"
-          data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
-        >
-          Agregar Clientes
-        </button>
-        <div className="text-center text-muted alert alert-info">
-          No hay clientes registrados aún.
-        </div>
-      </>
-    );
+// Nueva función para cambiar el estado en el backend
+  const handleToggleEstado =  (usuario) => {
+    nuevoEstado(usuario);
+  };
+  if (
+    loading
+  ){
+    return(<div>
+      cargando
+    </div>)
   }
 
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-3">
-       
-
-       
       </div>
       <div className="row">
         <div className="col-12">
@@ -74,7 +66,7 @@ const Cliente = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {resultado.map((usuario, index) => (
+                    {cliente.map((usuario, index) => (
                       <tr key={index}>
                         <td>
                           <code>{usuario.idClientes}</code>
@@ -86,18 +78,14 @@ const Cliente = () => {
                         <td>{usuario.telefonoCliente}</td>
 
                         <td>
-                          <span>{usuario.estadoCliente}</span>{" "}
+                          <span className={`badge bg-${getStatusBadge(usuario.estadoCliente)}`}>{usuario.estadoCliente}</span>
                         </td>
                         <td>
                           <div className="btn-group" role="group">
-                            <button
-                              className="btn btn-outline-primary btn-sm"
-                              onClick={() => handleVer(usuario)}
-                            >
-                              Ver
-                            </button>
-                            <button className="btn btn-outline-secondary btn-sm">
-                              Eliminar
+                            <button className="btn btn-outline-primary btn-sm" onClick={() => handleVer(usuario)}>Ver</button>
+                            <br />
+                            <button className={`btn btn-sm ${usuario.estadoCliente === "Activo"? "btn-warning" : "btn-success" }`} onClick={() => handleToggleEstado(usuario)}>
+                              {usuario.estadoCliente === "Activo" ? "Desactivar" : "Activar"}
                             </button>
                           </div>
                         </td>
@@ -152,6 +140,52 @@ const Cliente = () => {
           </div>
         </div>
       </div>
+      {openModal && (
+  <div
+    className={`modal fade ${openModal ? 'show' : ''}`}
+    style={{ display: openModal ? 'block' : 'none' }}
+    id="modalCompra"
+    tabIndex="-1"
+    aria-labelledby="modalCompraLabel"
+    aria-hidden={!openModal}
+  >
+    <div className="modal-dialog modal-lg">
+      <div className="modal-content">
+        <div className="modal-header">
+          <button type="button" className="btn-close" aria-label="Close" onClick={() => setOpenModal(false)}></button>
+        </div>
+        <div className="modal-body text-dark">
+          <div className="mt-4 text-dark">
+            <h5>Datos Personales</h5>
+            <div className="card p-3 mb-2 shadow-sm">
+              <div className="row">
+                <div className="col-md-6 mb-2">
+                  <strong>Nombre:</strong> {infoUser?.nombreCliente}
+                </div>
+                <div className="col-md-6 mb-2">
+                  <strong>Apellido:</strong> {infoUser?.apellidoCliente}
+                </div>
+                <div className="col-md-6 mb-2">
+                  <strong>Email:</strong> {infoUser?.emailCliente}
+                </div>
+                <div className="col-md-6 mb-2">
+                  <strong>Teléfono:</strong> {infoUser?.telefonoCliente}
+                </div>
+                <div className="col-12 mb-2">
+                  <strong>Dirección:</strong> {infoUser?.domicilioCliente}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="modal-footer">
+          <button type="button" className="btn btn-secondary" onClick={() => setOpenModal(false)}>Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
     </>
   );
 };
