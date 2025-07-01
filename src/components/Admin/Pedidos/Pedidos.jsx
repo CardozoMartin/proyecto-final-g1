@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import useCustomCart from '../../../CustomHooks/CustomCart/useCustomCart';
 
-
 const Pedidos = () => {
    const { cart, obtenerVentas } = useCustomCart();
+   const [openModal, setOpenModal] = useState(false);
    console.log('Pedidos:', cart);
-  
+
    const resultadoPedidos = cart || [];
 
    const getStatusBadge = (estado) => {
@@ -19,7 +19,6 @@ const Pedidos = () => {
    };
 
    const [terminoBusqueda, setTerminoBusqueda] = useState('');
-   const [showModal, setShowModal] = useState(false);
    const [selectedPedido, setSelectedPedido] = useState(null);
 
    const handleSearch = (event) => {
@@ -27,33 +26,62 @@ const Pedidos = () => {
    };
 
    const handleView = (pedido) => {
+      console.log('Ver pedido:', pedido);
       const pedidoDetalle = {
-         id: pedido.idVentas,
-         cliente: pedido.nombreCliente,
-         fecha: pedido.fechaVenta,
-         estado: pedido.estadoVentas,
-         monto: pedido.subtotal,
-         direccion: pedido.direccionCliente || pedido.direccion || "",
-         provincia: pedido.provinciaCliente || pedido.provincia || "",
-         codigoPostal: pedido.codigoPostalCliente || pedido.codigoPostal || "",
-         metodoPago: pedido.metodoPago || "No especificado",
-         tipoEntrega: pedido.tipoEntrega || "Retiro",
-         direccionEnvio: pedido.direccionEnvio || "",
+         // Datos del pedido
+         idVentas: pedido.idVentas,
+         fechaVenta: pedido.fechaVenta,
+         estadoVentas: pedido.estadoVentas,
+         totalVenta: pedido.subtotal,
+         subtotal: pedido.subtotal,
+         
+         // Datos del cliente
+         idCliente: pedido.idCliente,
+         nombreCliente: pedido.nombreCliente,
+         apellidoCliente: pedido.apellidoCliente || "",
+         emailCliente: pedido.emailCliente,
+         telefonoCliente: pedido.telefonoCliente,
+         domicilioCliente: pedido.direccionCliente || pedido.direccion || "",
+         
+         // Datos del empleado
+         nombreEmpleado: pedido.nombreEmpleado || "",
+         apellidoEmpleado: pedido.apellidoEmpleado || "",
+         
+         // Datos del producto principal (si es un producto único)
+         nombreProducto: pedido.nombreProducto || "",
+         descripcion: pedido.descripcion || "",
+         cantidad: pedido.cantidad || 0,
+         precioUnitario: pedido.precioUnitario || 0,
+         precioVenta: pedido.precioVenta || 0,
+         precioCosto: pedido.precioCosto || 0,
+         
+         // Array de productos si hay múltiples
          productos: (pedido.productos || []).map(prod => ({
             nombre: prod.nombreProducto || prod.nombre || "",
-            cantidad: prod.cantidad,
-            precioUnitario: prod.precioUnitario || prod.precioVenta || "",
-            subtotal: prod.subtotal || (prod.cantidad && prod.precioUnitario ? prod.cantidad * prod.precioUnitario : "")
+            descripcion: prod.descripcion || "",
+            cantidad: prod.cantidad || 0,
+            precioUnitario: prod.precioUnitario || prod.precioVenta || 0,
+            precioVenta: prod.precioVenta || 0,
+            precioCosto: prod.precioCosto || 0,
+            subtotal: prod.subtotal || (prod.cantidad && prod.precioUnitario ? prod.cantidad * prod.precioUnitario : 0)
          }))
       };
       setSelectedPedido(pedidoDetalle);
-      setShowModal(true);
+      setOpenModal(true);
+      console.log('Pedido seleccionado:', pedidoDetalle);
    };
 
    const handleCloseModal = () => {
-      setShowModal(false);
+      setOpenModal(false);
       setSelectedPedido(null);
    };
+
+   // Filtrar pedidos basado en el término de búsqueda
+   const pedidosFiltrados = resultadoPedidos.filter(pedido => 
+      pedido.nombreCliente?.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+      pedido.idVentas?.toString().includes(terminoBusqueda) ||
+      pedido.estadoVentas?.toLowerCase().includes(terminoBusqueda.toLowerCase())
+   );
 
    return (
       <div className="row">
@@ -74,140 +102,163 @@ const Pedidos = () => {
                   </div>
                </div>
                <div className="card-body">
-                  <div className="table-responsive">
-                     <table className="table table-hover">
-                        <thead>
-                           <tr>
-                              <th></th>
-                              <th>Pedido</th>
-                              <th>Fecha</th>
-                              <th>Estado</th>
-                              <th>Monto</th>
-                              <th>Facturación</th>
-                              <th>Entrega</th>
-                              <th>Acciones</th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           {resultadoPedidos.map((pedido) => (
-                              <tr key={pedido.idVentas}>
-                                 <td>
-                                    <code>{pedido.idCliente}</code> {pedido.nombreCliente}
-                                 </td>
-                                 <td>{pedido.fechaVenta}</td>
-                                 <td>
-                                    <span className={`badge bg-${getStatusBadge(pedido.estadoVentas)}`}>
-                                       {pedido.estadoVentas}
-                                    </span>
-                                 </td>
-                                 <td className="fw-bold">{pedido.subtotal}</td>
-                                 <td>
-                                    <div>
-                                       <strong>{pedido.nombreCliente}</strong><br />
-                                       {pedido.emailCliente}, {pedido.telefonoCliente}
-                                    </div>
-                                 </td>
-                                 <td>
-                                    <div>
-                                       {/* Puedes agregar info de entrega aquí */}
-                                    </div>
-                                 </td>
-                                 <td>
-                                    <div className="btn-group" role="group">
-                                       <button
-                                          className="btn btn-outline-primary btn-sm"
-                                          onClick={() => handleView(pedido)}
-                                       >
-                                          Ver
-                                       </button>
-                                       <button className="btn btn-outline-secondary btn-sm">Editar</button>
-                                       <button className="btn btn-outline-danger btn-sm">Borrar</button>
-                                    </div>
-                                 </td>
+                  {pedidosFiltrados.length === 0 ? (
+                     <div className="text-center text-muted py-4">
+                        No se encontraron pedidos.
+                     </div>
+                  ) : (
+                     <div className="table-responsive">
+                        <table className="table table-hover">
+                           <thead>
+                              <tr>
+                                 <th>Cliente</th>
+                                 <th>Pedido</th>
+                                 <th>Fecha</th>
+                                 <th>Estado</th>
+                                 <th>Monto</th>
+                                 <th>Facturación</th>
+                                 <th>Entrega</th>
+                                 <th>Acciones</th>
                               </tr>
-                           ))}
-                        </tbody>
-                     </table>
-                  </div>
+                           </thead>
+                           <tbody>
+                              {pedidosFiltrados.map((pedido) => (
+                                 <tr key={pedido.idVentas}>
+                                    <td>
+                                       <code>{pedido.idCliente}</code> {pedido.nombreCliente}
+                                    </td>
+                                    <td>#{pedido.idVentas}</td>
+                                    <td>{new Date(pedido.fechaVenta).toLocaleDateString()}</td>
+                                    <td>
+                                       <span className={`badge bg-${getStatusBadge(pedido.estadoVentas)}`}>
+                                          {pedido.estadoVentas}
+                                       </span>
+                                    </td>
+                                    <td className="fw-bold">${pedido.subtotal}</td>
+                                    <td>
+                                       <div>
+                                          <strong>{pedido.nombreCliente}</strong><br />
+                                          <small className="text-muted">
+                                             {pedido.emailCliente}, {pedido.telefonoCliente}
+                                          </small>
+                                       </div>
+                                    </td>
+                                    <td>
+                                       <div>
+                                          <small className="text-muted">
+                                             {pedido.tipoEntrega || "Retiro"}
+                                          </small>
+                                       </div>
+                                    </td>
+                                    <td>
+                                       <div className="btn-group" role="group">
+                                          <button
+                                             className="btn btn-outline-primary btn-sm"
+                                             onClick={() => handleView(pedido)}
+                                          >
+                                             Ver
+                                          </button>
+                                          <button className="btn btn-outline-secondary btn-sm">Editar</button>
+                                          <button className="btn btn-outline-danger btn-sm">Borrar</button>
+                                       </div>
+                                    </td>
+                                 </tr>
+                              ))}
+                           </tbody>
+                        </table>
+                     </div>
+                  )}
                </div>
             </div>
          </div>
-         {selectedPedido && (
-            <div className={`modal fade ${showModal ? 'show d-block' : ''}`} tabIndex="-1" aria-labelledby="pedidoModalLabel" aria-hidden={!showModal}>
-               <div className="modal-dialog modal-lg">
-                  <div className="modal-content">
-                     <div className="modal-header">
-                        <h5 className="modal-title text-dark" id="pedidoModalLabel">Detalles del Pedido {selectedPedido.id}</h5>
-                        <button type="button" className="btn-close" onClick={handleCloseModal} aria-label="Close"></button>
-                     </div>
-                     <div className="modal-body text-dark">
-                        <div className="row">
-                           <div className="col-md-6">
-                              <h6>Información General</h6>
-                              <p><strong>ID:</strong> {selectedPedido.id}</p>
-                              <p><strong>Cliente:</strong> {selectedPedido.cliente}</p>
-                              <p><strong>Fecha:</strong> {selectedPedido.fecha}</p>
-                              <p>
-                                 <strong>Estado:</strong>
-                                 <span className={`badge bg-${getStatusBadge(selectedPedido.estado)} ms-2`}>
-                                    {selectedPedido.estado}
-                                 </span>
-                              </p>
-                              <p><strong>Monto Total:</strong> {selectedPedido.monto}</p>
-                           </div>
-                           <div className="col-md-6">
-                              <h6>Facturación</h6>
-                              <p><strong>Dirección:</strong> {selectedPedido.direccion}, {selectedPedido.provincia}</p>
-                              <p><strong>Código Postal:</strong> {selectedPedido.codigoPostal}</p>
-                              <p><strong>Método de Pago:</strong> {selectedPedido.metodoPago}</p>
-                           </div>
+
+         {/* Modal para ver detalles del pedido */}
+         {openModal && selectedPedido && (
+            <>
+               <div className={`modal fade ${openModal ? 'show d-block' : ''}`} tabIndex="-1" aria-labelledby="pedidoModalLabel" aria-hidden={!openModal}>
+                  <div className="modal-dialog modal-lg">
+                     <div className="modal-content">
+                        <div className="modal-header">
+                           <h5 className="modal-title text-dark" id="pedidoModalLabel">
+                              Detalles del Pedido #{selectedPedido.idVentas}
+                           </h5>
+                           <button type="button" className="btn-close" onClick={handleCloseModal} aria-label="Close"></button>
                         </div>
-                        <div className="row mt-3">
-                           <div className="col-12">
-                              <h6>Entrega</h6>
-                              <p>
-                                 <strong>Tipo:</strong> {selectedPedido.tipoEntrega === 'Retiro' ? 'Retiro en local' : `Envío a ${selectedPedido.direccionEnvio}`}
-                              </p>
+                        <div className="modal-body text-dark">
+                           {/* Detalles del comprador */}
+                           <h6 className="mb-2 border-bottom pb-1">Detalles del comprador</h6>
+                           <div className="mb-3">
+                              <strong>Nombre:</strong> {selectedPedido.nombreCliente} {selectedPedido.apellidoCliente}<br />
+                              <strong>Email:</strong> {selectedPedido.emailCliente}<br />
+                              <strong>Teléfono:</strong> {selectedPedido.telefonoCliente}<br />
+                              <strong>Dirección:</strong> {selectedPedido.domicilioCliente}
                            </div>
-                        </div>
-                        <div className="row mt-3">
-                           <div className="col-12">
-                              <h6>Productos</h6>
-                              <table className="table table-bordered">
+
+                           {/* Detalles de la venta */}
+                           <h6 className="mb-2 border-bottom pb-1">Detalles de la venta</h6>
+                           <div className="mb-3">
+                              <strong>ID Venta:</strong> {selectedPedido.idVentas}<br />
+                              <strong>Fecha:</strong> {selectedPedido.fechaVenta ? new Date(selectedPedido.fechaVenta).toLocaleDateString() : ''}<br />
+                              <strong>Empleado:</strong> {selectedPedido.nombreEmpleado} {selectedPedido.apellidoEmpleado}<br />
+                              <strong>Estado:</strong> <span className={`badge bg-${getStatusBadge(selectedPedido.estadoVentas)}`}>{selectedPedido.estadoVentas}</span><br />
+                              <strong>Total Venta:</strong> ${selectedPedido.totalVenta}
+                           </div>
+
+                           {/* Detalles de productos */}
+                           <h6 className="mb-2 border-bottom pb-1">Detalles de productos</h6>
+                           <div>
+                              <table className="table table-sm">
                                  <thead>
                                     <tr>
                                        <th>Producto</th>
+                                       <th>Descripción</th>
                                        <th>Cantidad</th>
                                        <th>Precio Unitario</th>
+                                       <th>Precio Venta</th>
+                                       <th>Precio Costo</th>
                                        <th>Subtotal</th>
                                     </tr>
                                  </thead>
                                  <tbody>
-                                    {selectedPedido.productos.map((producto, index) => (
-                                       <tr key={index}>
-                                          <td>{producto.nombre}</td>
-                                          <td>{producto.cantidad}</td>
-                                          <td>${producto.precioUnitario}</td>
-                                          <td>${producto.subtotal}</td>
+                                    {selectedPedido.productos && selectedPedido.productos.length > 0 ? (
+                                       // Si hay múltiples productos
+                                       selectedPedido.productos.map((producto, index) => (
+                                          <tr key={index}>
+                                             <td>{producto.nombre}</td>
+                                             <td>{producto.descripcion}</td>
+                                             <td>{producto.cantidad}</td>
+                                             <td>${producto.precioUnitario}</td>
+                                             <td>${producto.precioVenta}</td>
+                                             <td>${producto.precioCosto}</td>
+                                             <td>${producto.subtotal}</td>
+                                          </tr>
+                                       ))
+                                    ) : (
+                                       // Si es un producto único
+                                       <tr>
+                                          <td>{selectedPedido.nombreProducto}</td>
+                                          <td>{selectedPedido.descripcion}</td>
+                                          <td>{selectedPedido.cantidad}</td>
+                                          <td>${selectedPedido.precioUnitario}</td>
+                                          <td>${selectedPedido.precioVenta}</td>
+                                          <td>${selectedPedido.precioCosto}</td>
+                                          <td>${selectedPedido.cantidad * selectedPedido.precioUnitario}</td>
                                        </tr>
-                                    ))}
-                                    <tr>
-                                       <td colSpan="3" className="text-end"><strong>Total</strong></td>
-                                       <td><strong>{selectedPedido.monto}</strong></td>
-                                    </tr>
+                                    )}
                                  </tbody>
                               </table>
                            </div>
                         </div>
-                     </div>
-                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>Cerrar</button>
+                        <div className="modal-footer">
+                           <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>Cerrar</button>
+                           <button type="button" className="btn btn-primary">Imprimir</button>
+                        </div>
                      </div>
                   </div>
                </div>
-            </div>
+               <div className="modal-backdrop fade show"></div>
+            </>
          )}
-         {showModal && <div className="modal-backdrop fade show"></div>}
       </div>
    );
 };
