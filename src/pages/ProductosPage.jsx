@@ -12,6 +12,7 @@ const ProductosPage = () => {
   const { productosCarrito, agregarProductoAlCarrito } = useCartStore();
   const { productos } = useCustomProductos();
   const resultadoProductos = productos.productos || [];
+
   console.log("Productos obtenidos:", resultadoProductos);
 
   // vamos a renderizar los productos que esten activos
@@ -128,7 +129,9 @@ const ProductosPage = () => {
                             </span>
                           </div>
                           <button
-                            className="btn btn-primary btn-sm z-1"
+
+                            className="btn btn-primary btn-sm"
+
                             onClick={() => handleAgregarAlCarrito(producto)}
                           >
                             <i className="fas fa-cart-plus me-1"></i>
