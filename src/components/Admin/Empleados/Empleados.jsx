@@ -10,7 +10,6 @@ const Empleados = () => {
     error,
     obtenerTodosEmpleados,
     crearEmpleado,
-    eliminarEmpleado,
     editarEmpleado,
   } = useCustomEmpleados();
 
@@ -29,7 +28,7 @@ const Empleados = () => {
 
   // Estados para mensajes
   const [mensaje, setMensaje] = useState("");
-  const [tipoMensaje, setTipoMensaje] = useState(""); 
+  const [tipoMensaje, setTipoMensaje] = useState("");
 
   // Estados para modales
   const [openModalNuevo, setOpenModalNuevo] = useState(false);
@@ -68,8 +67,7 @@ const Empleados = () => {
     // Validación frontend de DNI y email únicos
     const existeDNI = (empleados || []).some(
       (emp) =>
-        emp.DNI === formEmpleado.DNI &&
-        emp.idEmpleados !== idEmpleadoEditar
+        emp.DNI === formEmpleado.DNI && emp.idEmpleados !== idEmpleadoEditar
     );
     const existeEmail = (empleados || []).some(
       (emp) =>
@@ -92,6 +90,24 @@ const Empleados = () => {
     }
     if (existeTelefono) {
       mostrarMensaje("El teléfono ya está registrado.", "danger");
+      return;
+    }
+    const result = await Swal.fire({
+      title: idEmpleadoEditar
+        ? "¿Guardar cambios del empleado?"
+        : "¿Crear nuevo empleado?",
+      text: idEmpleadoEditar
+        ? "¿Estás seguro de que deseas guardar los cambios?"
+        : "¿Estás seguro de que deseas crear este empleado?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, confirmar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    });
+
+    if (!result.isConfirmed) {
+      mostrarMensaje("Operación cancelada.", "info");
       return;
     }
 
@@ -125,9 +141,7 @@ const Empleados = () => {
       setOpenModalNuevo(false);
     } catch (error) {
       const mensajeError =
-        error.response?.data?.message ||
-        error.response?.data?.error ||
-        "";
+        error.response?.data?.message || error.response?.data?.error || "";
       if (
         mensajeError.toLowerCase().includes("dni") ||
         mensajeError.toLowerCase().includes("email")
@@ -140,66 +154,79 @@ const Empleados = () => {
     }
   };
 
-  const handlerDeleteEmpleado = async (emp) => {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: "btn btn-success",
-        cancelButton: "btn btn-danger"
-      },
-      buttonsStyling: false
-    });
+  // const handlerDeleteEmpleado = async (emp) => {
+  //   const swalWithBootstrapButtons = Swal.mixin({
+  //     customClass: {
+  //       confirmButton: "btn btn-success",
+  //       cancelButton: "btn btn-danger"
+  //     },
+  //     buttonsStyling: false
+  //   });
 
-    swalWithBootstrapButtons.fire({
-      title: "¿Estás seguro?",
-      text: "¡No podrás revertir esto!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí, eliminar",
-      cancelButtonText: "No, cancelar",
-      reverseButtons: true
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await eliminarEmpleado(emp.idEmpleados);
-          await obtenerTodosEmpleados();
-          swalWithBootstrapButtons.fire({
-            title: "¡Eliminado!",
-            text: "El empleado ha sido eliminado.",
-            icon: "success"
-          });
-          mostrarMensaje("Empleado eliminado correctamente.", "success");
-        } catch (error) {
-          console.log(error);
-          swalWithBootstrapButtons.fire({
-            title: "Error",
-            text: "Ocurrió un error al eliminar el empleado.",
-            icon: "error"
-          });
-          mostrarMensaje("Ocurrió un error al eliminar el empleado.", "danger");
-        }
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        swalWithBootstrapButtons.fire({
-          title: "Cancelado",
-          text: "El empleado está a salvo :)",
-          icon: "error"
-        });
-      }
-    });
-  };
+  //   swalWithBootstrapButtons.fire({
+  //     title: "¿Estás seguro?",
+  //     text: "¡No podrás revertir esto!",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonText: "Sí, eliminar",
+  //     cancelButtonText: "No, cancelar",
+  //     reverseButtons: true
+  //   }).then(async (result) => {
+  //     if (result.isConfirmed) {
+  //       try {
+  //         await eliminarEmpleado(emp.idEmpleados);
+  //         await obtenerTodosEmpleados();
+  //         swalWithBootstrapButtons.fire({
+  //           title: "¡Eliminado!",
+  //           text: "El empleado ha sido eliminado.",
+  //           icon: "success"
+  //         });
+  //         mostrarMensaje("Empleado eliminado correctamente.", "success");
+  //       } catch (error) {
+  //         console.log(error);
+  //         swalWithBootstrapButtons.fire({
+  //           title: "Error",
+  //           text: "Ocurrió un error al eliminar el empleado.",
+  //           icon: "error"
+  //         });
+  //         mostrarMensaje("Ocurrió un error al eliminar el empleado.", "danger");
+  //       }
+  //     } else if (result.dismiss === Swal.DismissReason.cancel) {
+  //       swalWithBootstrapButtons.fire({
+  //         title: "Cancelado",
+  //         text: "El empleado está a salvo :)",
+  //         icon: "error"
+  //       });
+  //     }
+  //   });
+  // };
 
   const handleEditEmpleado = (emp) => {
-    setFormEmpleado({
-      nombreEmpleado: emp.nombreEmpleado || "",
-      apellidoEmpleado: emp.apellidoEmpleado || "",
-      DNI: emp.DNI || "",
-      telefonoEmpleado: emp.telefonoEmpleado || "",
-      emailEmpleado: emp.emailEmpleado || "",
-      domicilioEmpleado: emp.domicilioEmpleado || "",
-      categoriaRol: emp.categoriaRol || "Empleado",
-      estadoEmpleado: emp.estadoEmpleado || "Activo",
+    Swal.fire({
+      title: "¿Deseas editar este empleado?",
+      text: `Empleado: ${emp.nombreEmpleado} ${emp.apellidoEmpleado}`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, editar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setFormEmpleado({
+          nombreEmpleado: emp.nombreEmpleado || "",
+          apellidoEmpleado: emp.apellidoEmpleado || "",
+          DNI: emp.DNI || "",
+          telefonoEmpleado: emp.telefonoEmpleado || "",
+          emailEmpleado: emp.emailEmpleado || "",
+          domicilioEmpleado: emp.domicilioEmpleado || "",
+          categoriaRol: emp.categoriaRol || "Empleado",
+          estadoEmpleado: emp.estadoEmpleado || "Activo",
+        });
+        setIdEmpleadoEditar(emp.idEmpleados);
+        setOpenModalNuevo(true);
+        mostrarMensaje("Modo edición activado.", "info");
+      }
     });
-    setIdEmpleadoEditar(emp.idEmpleados);
-    setOpenModalNuevo(true);
   };
 
   const handleNuevoEmpleado = () => {
@@ -234,33 +261,50 @@ const Empleados = () => {
   const closeModalNuevo = () => setOpenModalNuevo(false);
   const closeModalVer = () => setOpenModalVer(false);
 
-       // Filtrar empleados por nombre, apellido o DNI
-  const resultado = (empleados || []).filter(emp => {
-    if (!terminoBusqueda.trim()) return true;
-    const texto = `${emp.nombreEmpleado} ${emp.apellidoEmpleado} ${emp.DNI}`.toLowerCase();
-    return texto.includes(terminoBusqueda.toLowerCase());
-  });
 
+  const resultado = (empleados || []).filter((emp) => {
+    if (!terminoBusqueda.trim()) return true;
+    const termino = terminoBusqueda.toLowerCase();
+
+    // Filtrado inteligente por estado
+    if ("activo".startsWith(termino)) {
+      return emp.estadoEmpleado.toLowerCase() === "activo";
+    }
+    if ("inactivo".startsWith(termino)) {
+      return emp.estadoEmpleado.toLowerCase() === "inactivo";
+    }
+
+    // Filtrado general
+    return (
+      emp.nombreEmpleado.toLowerCase().includes(termino) ||
+      emp.apellidoEmpleado.toLowerCase().includes(termino) ||
+      emp.DNI.toLowerCase().includes(termino)
+    );
+  });
   return (
     <>
       <BusquedaEmpleado setTerminoBusqueda={setTerminoBusqueda} />
 
-      
       {mensaje && (
-        <div className={`alert alert-${tipoMensaje} alert-dismissible fade show`} role="alert">
+        <div
+          className={`alert alert-${tipoMensaje} alert-dismissible fade show`}
+          role="alert"
+        >
           {mensaje}
-          <button type="button" className="btn-close" onClick={() => setMensaje("")}></button>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setMensaje("")}
+          ></button>
         </div>
       )}
 
-      
       {error && (
         <div className="alert alert-danger" role="alert">
           Error: {error}
         </div>
       )}
 
-      
       {loading && (
         <div className="text-center my-3">
           <div className="spinner-border text-primary" role="status">
@@ -330,12 +374,12 @@ const Empleados = () => {
                         >
                           Ver
                         </button>
-                        <button
-                          onClick={() => handlerDeleteEmpleado(emp)}
+                        {/* <button
+                          onClick={() => handlerCambiarEstado(emp)}
                           className="btn btn-outline-danger btn-sm"
                         >
-                          Eliminar
-                        </button>
+                          Estado
+                        </button> */}
                       </div>
                     </td>
                   </tr>
@@ -346,12 +390,11 @@ const Empleados = () => {
         </div>
       </div>
 
-     
       {openModalNuevo && (
-        <div className="modal fade show d-block" tabIndex="-1" >
+        <div className="modal fade show d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content bg-dark text-white">
-              <div className="modal-header bg-dark text-white" >
+              <div className="modal-header bg-dark text-white">
                 <h5 className="modal-title">
                   {idEmpleadoEditar ? "Editar Empleado" : "Nuevo Empleado"}
                 </h5>
@@ -361,15 +404,20 @@ const Empleados = () => {
                   onClick={closeModalNuevo}
                   aria-label="Cerrar"
                   title="Cerrar"
-                >
-                </button>
+                ></button>
               </div>
               <div className="modal-body bg-dark text-white">
-                
                 {mensaje && (
-                  <div className={`alert alert-${tipoMensaje} alert-dismissible fade show`} role="alert">
+                  <div
+                    className={`alert alert-${tipoMensaje} alert-dismissible fade show`}
+                    role="alert"
+                  >
                     {mensaje}
-                    <button type="button" className="btn-close" onClick={() => setMensaje("")}></button>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={() => setMensaje("")}
+                    ></button>
                   </div>
                 )}
                 <form onSubmit={handleSubmit}>
@@ -382,6 +430,7 @@ const Empleados = () => {
                       value={formEmpleado.nombreEmpleado}
                       onChange={handleChange}
                       required
+                      placeholder="Ej: Juan"
                     />
                   </div>
                   <div className="mb-3">
@@ -393,6 +442,7 @@ const Empleados = () => {
                       value={formEmpleado.apellidoEmpleado}
                       onChange={handleChange}
                       required
+                      placeholder="Ej: Pérez"
                     />
                   </div>
                   <div className="mb-3">
@@ -404,6 +454,7 @@ const Empleados = () => {
                       value={formEmpleado.DNI}
                       onChange={handleChange}
                       required
+                      placeholder="Ej: 12345678"
                     />
                   </div>
                   <div className="mb-3">
@@ -415,6 +466,7 @@ const Empleados = () => {
                       value={formEmpleado.telefonoEmpleado}
                       onChange={handleChange}
                       required
+                      placeholder="Ej: 1122334455"
                     />
                   </div>
                   <div className="mb-3">
@@ -426,6 +478,7 @@ const Empleados = () => {
                       value={formEmpleado.emailEmpleado}
                       onChange={handleChange}
                       required
+                      placeholder="Ej: juan@email.com"
                     />
                   </div>
                   <div className="mb-3">
@@ -437,6 +490,7 @@ const Empleados = () => {
                       value={formEmpleado.domicilioEmpleado}
                       onChange={handleChange}
                       required
+                      placeholder="Ej: Calle Falsa 123"
                     />
                   </div>
                   <div className="mb-3">
@@ -447,6 +501,7 @@ const Empleados = () => {
                       name="categoriaRol"
                       value={formEmpleado.categoriaRol}
                       disabled
+                      placeholder="Empleado"
                     />
                   </div>
                   <div className="mb-3">
@@ -472,12 +527,11 @@ const Empleados = () => {
         </div>
       )}
 
-     
       {openModalVer && (
         <div className="modal fade show d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content bg-dark text-white">
-              <div className="modal-header bg-dark text-white" >
+              <div className="modal-header bg-dark text-white">
                 <h5 className="modal-title">Datos del Empleado</h5>
                 <button
                   type="button"
@@ -485,18 +539,33 @@ const Empleados = () => {
                   onClick={closeModalVer}
                   aria-label="Cerrar"
                   title="Cerrar"
-                >
-                </button>
+                ></button>
               </div>
               <div className="modal-body bg-dark text-white">
-                <div className="mb-2"><b>Nombre:</b> {formEmpleado.nombreEmpleado}</div>
-                <div className="mb-2"><b>Apellido:</b> {formEmpleado.apellidoEmpleado}</div>
-                <div className="mb-2"><b>DNI:</b> {formEmpleado.DNI}</div>
-                <div className="mb-2"><b>Teléfono:</b> {formEmpleado.telefonoEmpleado}</div>
-                <div className="mb-2"><b>Email:</b> {formEmpleado.emailEmpleado}</div>
-                <div className="mb-2"><b>Dirección:</b> {formEmpleado.domicilioEmpleado}</div>
-                <div className="mb-2"><b>Rol:</b> {formEmpleado.categoriaRol}</div>
-                <div className="mb-2"><b>Estado:</b> {formEmpleado.estadoEmpleado}</div>
+                <div className="mb-2">
+                  <b>Nombre:</b> {formEmpleado.nombreEmpleado}
+                </div>
+                <div className="mb-2">
+                  <b>Apellido:</b> {formEmpleado.apellidoEmpleado}
+                </div>
+                <div className="mb-2">
+                  <b>DNI:</b> {formEmpleado.DNI}
+                </div>
+                <div className="mb-2">
+                  <b>Teléfono:</b> {formEmpleado.telefonoEmpleado}
+                </div>
+                <div className="mb-2">
+                  <b>Email:</b> {formEmpleado.emailEmpleado}
+                </div>
+                <div className="mb-2">
+                  <b>Dirección:</b> {formEmpleado.domicilioEmpleado}
+                </div>
+                <div className="mb-2">
+                  <b>Rol:</b> {formEmpleado.categoriaRol}
+                </div>
+                <div className="mb-2">
+                  <b>Estado:</b> {formEmpleado.estadoEmpleado}
+                </div>
               </div>
             </div>
           </div>
