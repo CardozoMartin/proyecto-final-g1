@@ -12,6 +12,11 @@ const ProductosPage = () => {
   const { productosCarrito, agregarProductoAlCarrito } = useCartStore();
   const { productos } = useCustomProductos();
   const resultadoProductos = productos.productos || [];
+  console.log("Productos obtenidos:", resultadoProductos);
+
+  // vamos a renderizar los productos que esten activos
+  const productosActivos = resultadoProductos.filter(producto => producto.estadoProductoNuevo === 'ACTIVO');
+
   const { user } = useUser();
   
   // Estado para la búsqueda
@@ -21,7 +26,7 @@ const ProductosPage = () => {
     setBusqueda(e.target.value);
   };
   // Filtrar productos por nombre
-  const productosFiltrados = resultadoProductos.filter((producto) => {
+  const productosFiltrados = productosActivos.filter((producto) => {
     const coincideBusqueda = producto.nombreProducto
       .toLowerCase()
       .includes(busqueda.toLowerCase());
@@ -57,13 +62,6 @@ const ProductosPage = () => {
     //mostramos un toaste de exito para indicar que el producto se ha agregado al carrito
   };
 
-  useEffect(() => {
-    console.log("Productos en el carrito:", productosCarrito);
-  }, [productosCarrito]);
-
-  useEffect(() => {
-    console.log("Todos los productos:", resultadoProductos);
-  }, [resultadoProductos]);
 
   return (
     <div className="container-fluid py-4">
@@ -130,7 +128,7 @@ const ProductosPage = () => {
                             </span>
                           </div>
                           <button
-                            className="btn btn-primary btn-sm"
+                            className="btn btn-primary btn-sm z-1"
                             onClick={() => handleAgregarAlCarrito(producto)}
                           >
                             <i className="fas fa-cart-plus me-1"></i>

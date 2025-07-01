@@ -21,7 +21,8 @@ const FormProductos = ({ producto }) => {
     precioVenta: '',
     cantidadProducto: '',
     nombreCategoria: '',
-    imagenProducto: '' 
+    imagenProducto: '' ,
+    estadoProductoNuevo: ''
   });
 
   // Si recibimos un producto para editar, llenamos el formulario con sus datos
@@ -34,7 +35,9 @@ const FormProductos = ({ producto }) => {
         precioVenta: producto.precioVenta || '',
         cantidadProducto: producto.cantidadProducto || '',
         nombreCategoria: producto.nombreCategoria || '',
-        imagenProducto: producto.imagenProducto || '' 
+        imagenProducto: producto.imagenProducto || '' ,
+        estadoProducto: producto.estadoProductoNuevo || ''
+        
       });
     } else {
       // Si no hay producto (modo agregar), limpiamos el formulario
@@ -45,13 +48,11 @@ const FormProductos = ({ producto }) => {
         precioVenta: '',
         cantidadProducto: '',
         nombreCategoria: '',
-        imagenProducto: '' 
+        imagenProducto: '' ,
+        estadoProductoNuevo: ''
       });
     }
   }, [producto]);
-
-
-
 
   //-----------------------Handlers---------------------
   // Maneja los cambios en los campos del formulario
@@ -70,6 +71,7 @@ const FormProductos = ({ producto }) => {
       // Esperamos a que termine la edición antes de refrescar la lista
       const resultado = await editarProducto(producto.idProductos, nuevoProducto);
       if (resultado.success) {
+        
         toast.success('Producto editado correctamente');
         setNuevoProducto({
           nombreProducto: '',
@@ -78,11 +80,11 @@ const FormProductos = ({ producto }) => {
           precioVenta: '',
           cantidadProducto: '',
           nombreCategoria: '',
-          imagenProducto:''
+          imagenProducto: '',
+          estadoProductoNuevo: ''
 
         });
         // Solo refrescamos la lista si la edición fue exitosa
-        await obtenerProductos();
       } else {
         toast.error(`Error al editar producto: ${resultado.error}`);
       }
@@ -97,7 +99,8 @@ const FormProductos = ({ producto }) => {
           precioVenta: '',
           cantidadProducto: '',
           nombreCategoria: '',
-          imagenProducto:''
+          imagenProducto:'',
+          estadoProductoNuevo: ''
 
         });
         toast.success('Producto agregado correctamente');
@@ -225,6 +228,26 @@ const FormProductos = ({ producto }) => {
                     {categoria.nombreCategoriaProductos}
                   </option>
                 ))}
+              </select>
+              <div className="invalid-feedback">
+                Seleccione una categoría válida.
+              </div>
+            </div>
+          </div>
+           <div className="col-md-6">
+            <div className="mb-3">
+              <label htmlFor="estadoProductoNuevo" className="form-label">Estado</label>
+              <select
+                id="estadoProductoNuevo"
+                name="estadoProductoNuevo"
+                value={nuevoProducto.estadoProductoNuevo}
+                onChange={handleAgregarProducto}
+                className="form-select"
+                required
+              >
+                <option value="">Seleccione una categoría</option>
+                <option value="ACTIVO">Activo</option>
+                <option value="INACTIVO">Inactivo</option>
               </select>
               <div className="invalid-feedback">
                 Seleccione una categoría válida.
