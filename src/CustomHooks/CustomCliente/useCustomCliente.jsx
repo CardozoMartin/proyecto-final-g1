@@ -44,6 +44,8 @@ const crearCliente = async (nuevoCliente)=>{
         return { success: false, error: error.response?.data?.message || error.message };
     }
 }
+
+
 useEffect(() => {
     obtenerClientes();
 }, []);

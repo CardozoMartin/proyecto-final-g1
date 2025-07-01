@@ -34,7 +34,7 @@ function App() {
           <Route path="/Register" element={<RegisterPage></RegisterPage>}></Route>
 
           <Route path="/Login" element={estaLogueado ? <Navigate to="/" /> : <LoginPage></LoginPage>}></Route>
-
+        <Route path="/productos" element={<ProductosPage></ProductosPage>}></Route>
           <Route path="/Admin" element={<AdminPage></AdminPage>}></Route>
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
           <Route path="/Contact" element={<Contact></Contact>}></Route>
