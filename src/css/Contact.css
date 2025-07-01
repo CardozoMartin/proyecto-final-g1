@@ -4,16 +4,15 @@
   width: 100%;
   max-width: 500px;
   min-height: 520px;
-  font-family: "fira-code", monospace;
 }
 
 .btn-item {
-  background-color: #a0850c !important;
+  background-color: #f7ca0b !important;
   color: white !important;
 }
 
 .btn-item:hover {
-  background-color: #f7ca0b !important;
+  background-color: #a0850c !important;
   color: black !important;
 }
 
