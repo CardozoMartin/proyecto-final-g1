@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 const Productos = () => {
   // Destructuramos todos los valores del hook corregido
   const { productos, loading, error, eliminarProducto } = useCustomProductos();
+  const [ openModal, setOpenModal ] = useState(false);
 
   const resultado = productos.productos;
   console.log("Resultado de productos:", resultado);
@@ -14,42 +15,9 @@ const Productos = () => {
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
   //---------------------Handlers---------------------
-  const handlerDeleteProducto = (prod) => {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: "btn btn-success",
-        cancelButton: "btn btn-danger"
-      },
-      buttonsStyling: false
-    });
-    swalWithBootstrapButtons.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "No, cancel!",
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        swalWithBootstrapButtons.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success"
-        });
-        // eliminamos el producto
-        eliminarProducto(prod.idProductos)
-      } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire({
-          title: "Cancelled",
-          text: "Your imaginary file is safe :)",
-          icon: "error"
-        });
-      }
-    });
+  const verProducto = (producto)=>{
+    setProductoSeleccionado(producto);
+    setOpenModal(true);
   }
 
 
@@ -163,12 +131,14 @@ const Productos = () => {
                                 >
                                   Editar
                                 </button>
-                                <button className="btn btn-outline-primary btn-sm">
+                                <button className="btn btn-outline-primary btn-sm"
+                                onClick={() => {
+                                  verProducto(prod);
+                                }}
+                                >
                                   Ver
                                 </button>
-                                <button onClick={() => handlerDeleteProducto(prod)} className="btn btn-outline-danger btn-sm">
-                                  Eliminar
-                                </button>
+                               
                               </div>
                             </td>
                           </tr>
@@ -212,6 +182,47 @@ const Productos = () => {
           </div>
         </div>
       </div>
+      {/* Modal para ver producto */}
+      {openModal && (
+        <div
+          className="modal fade show"
+          style={{ display: "block" }}
+          tabIndex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-lg text-dark">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title text-dark" id="exampleModalLabel">
+                  {productoSeleccionado?.nombreProducto}
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close text-dark"
+                  onClick={() => setOpenModal(false)}
+                  aria-label="Close"
+                >X</button>
+              </div>
+              <div className="modal-body">
+                {/* Aquí puedes mostrar los detalles del producto */}
+                <img
+                  src={productoSeleccionado?.imagenProducto}
+                  alt={productoSeleccionado?.nombreProducto}
+                  className="img-fluid mb-3" style={{ maxHeight: '300px', objectFit: 'cover' }}
+                />
+                <p className="text-dark">{productoSeleccionado?.descripcion}</p>
+                <p className="text-dark">
+                  <strong>Precio:</strong> ${productoSeleccionado?.precioVenta}
+                </p>
+                <p className="text-dark">
+                  <strong>Categoría:</strong> {productoSeleccionado?.nombreCategoriaProductos}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

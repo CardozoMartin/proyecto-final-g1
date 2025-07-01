@@ -44,6 +44,7 @@ const crearCliente = async (nuevoCliente)=>{
         return { success: false, error: error.response?.data?.message || error.message };
     }
 }
+
 const nuevoEstado = async (usuario) => {
     setLoading(true);
     setError(null);
@@ -61,6 +62,7 @@ const nuevoEstado = async (usuario) => {
     console.error("error", error);
   }
   };
+
 useEffect(() => {
     obtenerClientes();
 }, []);

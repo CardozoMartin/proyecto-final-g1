@@ -13,7 +13,7 @@ const useCustomCategorias = () => {
       setLoading(true);
       setError(null);
       const response = await axios.get(`${API_URL}/api/categorias/obtenerTodasLasCategorias`);
-      console.log('Datos recibidos:', response.data); // Log para depurar
+      console.log('Datos recibidos:', response.data);
       setCategorias({ categorias: response.data.categorias || [] });
     } catch (error) {
       console.error('Error al obtener las categorías:', error);
@@ -28,11 +28,15 @@ const useCustomCategorias = () => {
   const agregarCategoria = async (nuevaCategoria) => {
     try {
       const response = await axios.post(`${API_URL}/api/categorias/crearCategoria`, {
-        nombreCategoriaProductos: nuevaCategoria.nombreCategoriaProductos
+        nombreCategoriaProductos: nuevaCategoria.nombreCategoriaProductos,
+        imagenCategoriaProductos: nuevaCategoria.imagenCategoriaProductos,
+        estado: nuevaCategoria.estado
       });
       const nuevaCategoriaData = {
         idCat_productos: response.data.id,
-        nombreCategoriaProductos: response.data.nombreCategoriaProductos
+        nombreCategoriaProductos: response.data.nombreCategoriaProductos,
+        imagenCategoriaProductos: response.data.imagenCategoriaProductos,
+        estado: response.data.estado
       };
       setCategorias(prev => ({
         categorias: [...(prev.categorias || []), nuevaCategoriaData]
@@ -41,6 +45,7 @@ const useCustomCategorias = () => {
       return { success: true, data: nuevaCategoriaData };
     } catch (error) {
       console.error('Error al agregar categoría:', error);
+      return { success: false, error: error.response?.data?.message || error.message };
     }
   };
 
@@ -48,7 +53,9 @@ const useCustomCategorias = () => {
   const editarCategoria = async (id, categoriaActualizada) => {
     try {
       const response = await axios.put(`${API_URL}/api/categorias/actualizarCategoria/${id}`, {
-        nombreCategoriaProductos: categoriaActualizada.nombreCategoriaProductos
+        nombreCategoriaProductos: categoriaActualizada.nombreCategoriaProductos,
+        imagenCategoriaProductos: categoriaActualizada.imagenCategoriaProductos,
+        estado: categoriaActualizada.estado
       });
       const categoriaActualizadaData = response.data.categoria;
       setCategorias(prev => ({
@@ -63,17 +70,16 @@ const useCustomCategorias = () => {
     }
   };
 
-  // Para eliminar una categoría
-  const eliminarCategoria = async (id) => {
+  // Para actualizar el estado de múltiples categorías
+  const actualizarEstadoCategoria = async (ids, estado) => {
     try {
-      const response = await axios.delete(`${API_URL}/api/categorias/eliminarCategoria/${id}`);
-      setCategorias(prev => ({
-        categorias: prev.categorias.filter(cat => cat.idCat_productos !== id)
-      }));
-      console.log('Categoría eliminada:', response.data);
-      return { success: true, data: response.data };
+      const updatePromises = ids.map((id) =>
+        axios.patch(`${API_URL}/api/categorias/actualizarCategoria/${id}`, { estado })
+      );
+      const responses = await Promise.all(updatePromises);
+      return { success: true, data: responses.map(res => res.data) };
     } catch (error) {
-      console.error('Error al eliminar categoría:', error);
+      console.error('Error al actualizar estados:', error);
       return { success: false, error: error.response?.data?.message || error.message };
     }
   };
@@ -89,7 +95,7 @@ const useCustomCategorias = () => {
     obtenerCategorias,
     agregarCategoria,
     editarCategoria,
-    eliminarCategoria
+    actualizarEstadoCategoria
   };
 };
 
