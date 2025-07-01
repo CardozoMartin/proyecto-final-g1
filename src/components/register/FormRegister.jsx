@@ -89,8 +89,12 @@ const FormRegister = () => {
     }
 
     try {
-      await crearCliente(nuevoCliente);
-      toast.success("Cliente registrado correctamente");
+      await crearCliente(nuevoCliente).then(()=>{
+        toast.success("Cliente registrado correctamente");
+      }).catch((err) => {
+        setErrorGeneral("Error al registrar cliente");
+        toast.error("Error al registrar cliente",err);
+      });
       setNuevoCliente({
         nombreCliente: "",
         apellidoCliente: "",
