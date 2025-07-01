@@ -22,7 +22,7 @@ import Footer from './components/Common/Footer';
 
 function App() {
 
-  const { user, estaLogueado} = useUser()
+  const {user, estaLogueado} = useUser()
   console.log('¿Está logueado?', estaLogueado)
 
   return (
@@ -35,10 +35,12 @@ function App() {
 
           <Route path="/Login" element={estaLogueado ? <Navigate to="/" /> : <LoginPage></LoginPage>}></Route>
 
+        <Route path="/productos" element={<ProductosPage></ProductosPage>}></Route>
           <Route path="/Admin" element={<AdminPage></AdminPage>}></Route>
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
           <Route path="/Contact" element={<Contact></Contact>}></Route>
           <Route path="/productos/categoria/:nombreCategoria" element={<ProductosPage />} />
+          <Route path="/productos" element={<ProductosPage/>}/>
         </Routes>
 
         <CartComponente></CartComponente>
