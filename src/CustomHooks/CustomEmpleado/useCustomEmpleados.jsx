@@ -49,22 +49,24 @@ const useCustomEmpleados = () => {
   };
 
   // Eliminar un empleado
-  const eliminarEmpleado = async (id) => {
-    try {
-      setLoading(true);
-      setError(null);
-      await axios.delete(
-        `${API_URL}/api/empleados/EliminarEmpleados/${id}`
-      );
-      // Refresca la lista después de eliminar
-      await obtenerTodosEmpleados();
-    } catch (error) {
-      console.error("Error al eliminar el Empleado:", error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const eliminarEmpleado = async (id) => {
+  //   try {
+  //     setLoading(true);
+  //     setError(null);
+  //     await axios.delete(
+  //       `${API_URL}/api/empleados/EliminarEmpleados/${id}`
+  //     );
+  //     // Refresca la lista después de eliminar
+  //     await obtenerTodosEmpleados();
+  //   } catch (error) {
+  //     console.error("Error al eliminar el Empleado:", error);
+  //     setError(error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  
 
   // Editar empleado
   const editarEmpleado = async (id, empleadoActualizado) => {
@@ -93,7 +95,6 @@ const useCustomEmpleados = () => {
     error,
     obtenerTodosEmpleados,
     crearEmpleado,
-    eliminarEmpleado,
     editarEmpleado,
     
   };

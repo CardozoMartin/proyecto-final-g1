@@ -1,42 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../../css/cart.css'
 import { useCartStore } from '../../store/useCartStore';
 import { useUser } from '../../store/useUser';
 import useCustomCart from '../../CustomHooks/CustomCart/useCustomCart';
 import { toast } from 'sonner';
+import ModalFinalizarCompra from './ModalFinalizarCompra';
 const CartComponente = () => {
-    const productosCarrito = useCartStore((state) => state.productosCarrito);
-    const agregarProductoAlCarrito = useCartStore((state) => state.agregarProductoAlCarrito);
-    const restarCantidadProducto = useCartStore((state) => state.restarCantidadProducto);
-    const eliminarProductoDelCarrito = useCartStore((state) => state.eliminarProductoDelCarrito);
+    const { productosCarrito, agregarProductoAlCarrito, restarCantidadProducto, eliminarProductoDelCarrito } = useCartStore();
     const { user } = useUser()
-    const { vaciarCarrito} = useCartStore()
+    const { vaciarCarrito } = useCartStore()
+    const [openModal, setOpenModal] = useState(false)
 
-    console.log('Productos en el carrito:', productosCarrito); // Para depuración
-    const { postCarrito} = useCustomCart()
+    
+    
 
-    const terminarLaCompra = ()=>{
-        const carrito = {
-            idEmpleados: 24,
-            idClientes: user.cliente.idClientes,
-            productos: productosCarrito.map(producto => ({
-                idProducto: producto.id,
-                cantidad: producto.cantidad, 
-                precioUnitario: Number(producto.precioVenta)
-            })),
+  
+    const terminarLaCompra = () => {
+
+        //abriamos un modal para ver todos los detalles de la compra
+        if (productosCarrito.length === 0) {
+            toast.error('No hay productos en el carrito para finalizar la compra.');
+            return;
         }
-        
-        postCarrito(carrito)
-
-        // Aquí puedes manejar la respuesta del servidor si es necesario
-        .then(response => {
-            toast.success("Carrito enviado correctamente");
-            // Vaciar el carrito después de enviar
-            vaciarCarrito();
-        })
-        .catch(error => {
-            toast.error("Error al enviar el carrito");
-        });
+        setOpenModal(true);
 
     }
     return (
@@ -51,7 +37,7 @@ const CartComponente = () => {
             <div className="offcanvas offcanvas-start" data-bs-backdrop="static" tabIndex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
                 <div className="offcanvas-header">
                     <h5 className="offcanvas-title" id="staticBackdropLabel">Carrito</h5>
-                    <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    <button type="button" className="btn-close text-dark" data-bs-dismiss="offcanvas" aria-label="Close">X</button>
                 </div>
                 <div className="offcanvas-body">
                     <div>
@@ -90,9 +76,16 @@ const CartComponente = () => {
                         )}
                     </div>
                 </div>
-                <button className='btn btn-success' onClick={terminarLaCompra}>Finalizar Compra</button>
+                {
+                    user ? (
+                        <button className='btn btn-success' onClick={terminarLaCompra}>Finalizar Compra</button>
+                    ) : (
+                        <div className="alert alert-warning mt-3" role="alert">Por favor, inicia sesión para continuar con la compra.</div>
+                    )
+                }
             </div>
-
+            {/* Modal para ver los detalles de la compra */}
+          <ModalFinalizarCompra openModal={openModal} setOpenModal={setOpenModal}></ModalFinalizarCompra>
         </div>
     )
 }
