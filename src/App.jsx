@@ -23,10 +23,10 @@ import { useEffect } from 'react';
 
 function App() {
 
-  const {user, estaLogueado, initializeAuth} = useUser()
+  const {usuario, estaLogueado, inicializar} = useUser()
   console.log('¿Está logueado?', estaLogueado)
 useEffect(() => {
-    initializeAuth();
+    inicializar();
   }, []);
   return (
     <>
@@ -39,7 +39,7 @@ useEffect(() => {
           <Route path="/Login" element={estaLogueado ? <Navigate to="/" /> : <LoginPage></LoginPage>}></Route>
 
         <Route path="/productos" element={<ProductosPage></ProductosPage>}></Route>
-          <Route path="/Admin" element={user?.cliente.rol === "ADMIN" ? <AdminPage></AdminPage> : <Navigate to="/login" />}></Route>
+          <Route path="/Admin" element={usuario?.cliente.rol === "ADMIN" ? <AdminPage></AdminPage> : <Navigate to="/login" />}></Route>
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
           <Route path="/Contact" element={<Contact></Contact>}></Route>
           <Route path="/productos/categoria/:nombreCategoria" element={<ProductosPage />} />

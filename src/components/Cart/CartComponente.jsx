@@ -10,6 +10,7 @@ const CartComponente = () => {
     const { user } = useUser()
     const { vaciarCarrito } = useCartStore()
     const [openModal, setOpenModal] = useState(false)
+    console.log("Productos en el carrito:", productosCarrito);
 
     
     
