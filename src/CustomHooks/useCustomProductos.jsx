@@ -3,11 +3,9 @@ import React, { useEffect, useState } from 'react'
 const API_URL = import.meta.env.VITE_API_URL;
 const useCustomProductos = () => {
 
-
     const [productos, setProductos] = useState({ productos: [] });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
     //para mostrar todos los productos
     const obtenerProductos = async () => {
         try {
@@ -15,8 +13,6 @@ const useCustomProductos = () => {
             setError(null);
             const response = await axios.get(`${API_URL}/api/productos/obtenerProductos`);
             setProductos(response.data)
-            
-            
 
         } catch (error) {
             console.error("Error al obtener los productos:", error);

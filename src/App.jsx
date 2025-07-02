@@ -13,6 +13,7 @@ import ProductosPage from './pages/ProductosPage';
 import { useUser } from './store/useUser';
 import CartComponente from './components/Cart/CartComponente';
 import Footer from './components/Common/Footer';
+import { useEffect } from 'react';
 
 
 
@@ -22,9 +23,11 @@ import Footer from './components/Common/Footer';
 
 function App() {
 
-  const {user, estaLogueado} = useUser()
+  const {user, estaLogueado, initializeAuth} = useUser()
   console.log('¿Está logueado?', estaLogueado)
-
+useEffect(() => {
+    initializeAuth();
+  }, []);
   return (
     <>
       <BrowserRouter>
