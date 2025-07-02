@@ -15,12 +15,6 @@ import CartComponente from './components/Cart/CartComponente';
 import Footer from './components/Common/Footer';
 import { useEffect } from 'react';
 
-
-
-
-
-
-
 function App() {
 
   const {usuario, estaLogueado, inicializar} = useUser()
@@ -33,17 +27,30 @@ useEffect(() => {
       <BrowserRouter>
       <Navbar></Navbar>
         <Routes>
-          <Route path="/" element={<HomePage></HomePage>}></Route>
-          <Route path="/Register" element={<RegisterPage></RegisterPage>}></Route>
+          <Route path="/" element={<HomePage />} />
+          
+          {/* Proteger rutas de registro y login */}
+          <Route
+            path="/Register"
+            element={estaLogueado ? <Navigate to="/" replace /> : <RegisterPage />}
+          />
+          <Route
+            path="/Login"
+            element={estaLogueado ? <Navigate to="/" replace /> : <LoginPage />}
+          />
 
-          <Route path="/Login" element={estaLogueado ? <Navigate to="/" /> : <LoginPage></LoginPage>}></Route>
-
-        <Route path="/productos" element={<ProductosPage></ProductosPage>}></Route>
-          <Route path="/Admin" element={usuario?.cliente.rol === "ADMIN" ? <AdminPage></AdminPage> : <Navigate to="/login" />}></Route>
-          <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
-          <Route path="/Contact" element={<Contact></Contact>}></Route>
+          <Route path="/productos" element={<ProductosPage />} />
+          <Route
+            path="/Admin"
+            element={
+              usuario?.cliente?.rol === "ADMIN"
+                ? <AdminPage />
+                : <Navigate to="/login" replace />
+            }
+          />
+          <Route path="/Error" element={<ErrorPage />} />
+          <Route path="/Contact" element={<Contact />} />
           <Route path="/productos/categoria/:nombreCategoria" element={<ProductosPage />} />
-          <Route path="/productos" element={<ProductosPage/>}/>
         </Routes>
 
         <CartComponente></CartComponente>

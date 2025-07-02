@@ -53,6 +53,7 @@ const useCustomProductos = () => {
                     productos: [...(prev.productos || []), response.data]
                 }));
                 console.log("Producto agregado:", response.data);
+                obtenerProductos(); // Actualizamos la lista de productos
                 return { success: true, data: response.data };
             } else {
                 return { success: false, error: "No se recibió respuesta del servidor" };
