@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Admin, Home, Login, Register, Contact } from '../../routes/Path'
 import "../../css/Navbar.css"
 import { AlignJustify } from 'lucide-react'
@@ -11,6 +11,7 @@ const Navbar = () => {
 
     const { user, logout} = useUser()
     console.log(user)
+    const navigate = useNavigate()
     const handleEliminarSesion = () => {
          const swalWithBootstrapButtons = Swal.mixin({
               customClass: {
@@ -36,6 +37,7 @@ const Navbar = () => {
                 });
                 // eliminamos la sesion
                 logout()
+                navigate('/login')
               } else if (
                 /* Read more about handling dismissals below */
                 result.dismiss === Swal.DismissReason.cancel

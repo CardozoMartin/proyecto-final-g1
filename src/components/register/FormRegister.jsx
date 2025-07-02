@@ -43,72 +43,87 @@ const FormRegister = () => {
 
     // Validar campos vacíos
     Object.entries(nuevoCliente).forEach(([key, value]) => {
-      if (!value.trim()) {
-        newError[key] = "Este campo es obligatorio";
-        valid = false;
-      }
+        if (!value.trim()) {
+            newError[key] = "Este campo es obligatorio";
+            valid = false;
+        }
     });
 
     // Validar DNI y teléfono
     if (nuevoCliente.DNI && !/^\d+$/.test(nuevoCliente.DNI.trim())) {
-      newError.DNI = "El DNI debe contener solo números y sin espacios.";
-      valid = false;
+        newError.DNI = "El DNI debe contener solo números y sin espacios.";
+        valid = false;
     }
     if (nuevoCliente.telefonoCliente && !/^\d+$/.test(nuevoCliente.telefonoCliente.trim())) {
-      newError.telefonoCliente = "El teléfono debe contener solo números y sin espacios.";
-      valid = false;
+        newError.telefonoCliente = "El teléfono debe contener solo números y sin espacios.";
+        valid = false;
     }
 
     // Validar email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (nuevoCliente.emailCliente && !emailRegex.test(nuevoCliente.emailCliente.trim())) {
-      newError.emailCliente = "Por favor, ingresa un correo electrónico válido.";
-      valid = false;
+        newError.emailCliente = "Por favor, ingresa un correo electrónico válido.";
+        valid = false;
     }
 
-    // Validar unicidad
-    if (clientes.some((cliente) => cliente.DNI === nuevoCliente.DNI.trim())) {
-      newError.DNI = "El DNI ingresado ya está registrado.";
-      valid = false;
-    }
-    if (clientes.some((cliente) => cliente.telefonoCliente === nuevoCliente.telefonoCliente.trim())) {
-      newError.telefonoCliente = "El teléfono ingresado ya está registrado.";
-      valid = false;
-    }
-    if (clientes.some((cliente) => cliente.emailCliente === nuevoCliente.emailCliente.trim())) {
-      newError.emailCliente = "El correo electrónico ingresado ya está registrado.";
-      valid = false;
+    // OPCIONAL: Validar unicidad en el frontend (aunque el backend ya lo valida)
+    if (Array.isArray(clientes)) {
+        if (clientes.some((cliente) => cliente.DNI === nuevoCliente.DNI.trim())) {
+            newError.DNI = "El DNI ingresado ya está registrado.";
+            valid = false;
+        }
+        if (clientes.some((cliente) => cliente.telefonoCliente === nuevoCliente.telefonoCliente.trim())) {
+            newError.telefonoCliente = "El teléfono ingresado ya está registrado.";
+            valid = false;
+        }
+        if (clientes.some((cliente) => cliente.emailCliente === nuevoCliente.emailCliente.trim())) {
+            newError.emailCliente = "El correo electrónico ingresado ya está registrado.";
+            valid = false;
+        }
     }
 
     setError(newError);
 
     if (!valid) {
-      setErrorGeneral("Por favor, corrige los errores antes de continuar.");
-      toast.error("Por favor, corrige los errores antes de continuar.");
-      return;
+        setErrorGeneral("Por favor, corrige los errores antes de continuar.");
+        toast.error("Por favor, corrige los errores antes de continuar.");
+        return;
     }
 
     try {
-      await crearCliente(nuevoCliente);
-      toast.success("Cliente registrado correctamente");
-      setNuevoCliente({
-        nombreCliente: "",
-        apellidoCliente: "",
-        DNI: "",
-        telefonoCliente: "",
-        emailCliente: "",
-        domicilioCliente: "",
-        contraseña: "",
-      });
-      setClientes(await obtenerClientes() || []);
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
-    } catch (err) {
-      setErrorGeneral("Error al registrar cliente");
-      toast.error("Error al registrar cliente");
+        // CORREGIDO: Manejo simplificado del resultado
+        await crearCliente(nuevoCliente);
+        
+        // Si llegamos aquí, el cliente se creó exitosamente
+        toast.success("Cliente registrado correctamente");
+        
+        // Limpiar formulario
+        setNuevoCliente({
+            nombreCliente: "",
+            apellidoCliente: "",
+            DNI: "",
+            telefonoCliente: "",
+            emailCliente: "",
+            domicilioCliente: "",
+            contraseña: "",
+        });
+        
+        // Actualizar lista de clientes
+        const clientesActualizados = await obtenerClientes();
+        setClientes(clientesActualizados || []);
+        
+        // Navegar después de 2 segundos
+        setTimeout(() => {
+            navigate("/login");
+        }, 2000);
+        
+    } catch (error) {
+        // El error viene del custom hook
+        setErrorGeneral(error.message);
+        toast.error(error.message);
+        console.error("Error en handleSubmit:", error);
     }
-  };
+};
 
   return (
     <div className="container mt-5">

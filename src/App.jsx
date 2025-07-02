@@ -13,6 +13,7 @@ import ProductosPage from './pages/ProductosPage';
 import { useUser } from './store/useUser';
 import CartComponente from './components/Cart/CartComponente';
 import Footer from './components/Common/Footer';
+import { useEffect } from 'react';
 
 
 
@@ -22,9 +23,11 @@ import Footer from './components/Common/Footer';
 
 function App() {
 
-  const {user, estaLogueado} = useUser()
+  const {user, estaLogueado, initializeAuth} = useUser()
   console.log('¿Está logueado?', estaLogueado)
-
+useEffect(() => {
+    initializeAuth();
+  }, []);
   return (
     <>
       <BrowserRouter>
@@ -36,7 +39,7 @@ function App() {
           <Route path="/Login" element={estaLogueado ? <Navigate to="/" /> : <LoginPage></LoginPage>}></Route>
 
         <Route path="/productos" element={<ProductosPage></ProductosPage>}></Route>
-          <Route path="/Admin" element={<AdminPage></AdminPage>}></Route>
+          <Route path="/Admin" element={user?.cliente.rol === "ADMIN" ? <AdminPage></AdminPage> : <Navigate to="/login" />}></Route>
           <Route path="/Error" element={<ErrorPage></ErrorPage>}></Route>
           <Route path="/Contact" element={<Contact></Contact>}></Route>
           <Route path="/productos/categoria/:nombreCategoria" element={<ProductosPage />} />
