@@ -5,6 +5,10 @@ import useCustomCategorias from "../../CustomHooks/useCustomCategorias";
 const MainHome = () => {
   const { categorias, loading, error } = useCustomCategorias();
 
+  const categoriasActivas = categorias.categorias?.filter(
+    (categoria) => categoria.estado === "activo"
+  );
+
   return (
     <div>
       <div className="card text-white mb-5 border-0 position-relative overflow-hidden">
@@ -29,7 +33,7 @@ const MainHome = () => {
       {error && <p>Error al cargar categorías: {error}</p>}
 
       {!loading && !error && (
-        <CardHome categorias={categorias.categorias} />
+        <CardHome categorias={categoriasActivas} />
       )}
     </div>
   );
