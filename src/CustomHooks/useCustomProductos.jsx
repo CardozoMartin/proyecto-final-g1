@@ -1,19 +1,19 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 const API_URL = import.meta.env.VITE_API_URL;
-const useCustomProductos = () => {
 
+const useCustomProductos = () => {
     const [productos, setProductos] = useState({ productos: [] });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    //para mostrar todos los productos
+
+    // Para mostrar todos los productos
     const obtenerProductos = async () => {
         try {
             setLoading(true);
             setError(null);
             const response = await axios.get(`${API_URL}/api/productos/obtenerProductos`);
-            setProductos(response.data)
-
+            setProductos(response.data);
         } catch (error) {
             console.error("Error al obtener los productos:", error);
             setError(error.message);
@@ -22,8 +22,9 @@ const useCustomProductos = () => {
             setLoading(false);
         }
     };
-    // para buscar un producto por nombre
-    const buscarProducto= async (nombreProducto) => {
+
+    // Para buscar un producto por nombre
+    const buscarProducto = async (nombreProducto) => {
         try {
             setLoading(true);
             setError(null);
@@ -41,19 +42,17 @@ const useCustomProductos = () => {
             setLoading(false);
         }
     }
-    //para agregar un producto
+
+    // Para agregar un producto
     const agregarProducto = async (nuevoProducto) => {
         try {
             const response = await axios.post(`${API_URL}/api/productos/crearProducto`, nuevoProducto);
 
             if (response.data) {
-                // Actualizamos la lista de productos agregando el nuevo al array dentro del objeto
-                setProductos(prev => ({
-                    ...prev,
-                    productos: [...(prev.productos || []), response.data]
-                }));
                 console.log("Producto agregado:", response.data);
-                obtenerProductos(); // Actualizamos la lista de productos
+                // REMOVIDO: La actualización manual del estado
+                // Ya no actualizamos manualmente aquí, solo llamamos obtenerProductos
+                // desde el componente después de esta función
                 return { success: true, data: response.data };
             } else {
                 return { success: false, error: "No se recibió respuesta del servidor" };
@@ -63,17 +62,16 @@ const useCustomProductos = () => {
             return { success: false, error: error.response?.data?.message || error.message };
         }
     };
-    //pra editar un producto
+
+    // Para editar un producto
     const editarProducto = async (id, productoActualizado) => {
         try {
             const response = await axios.put(`${API_URL}/api/productos/actualizarProducto/${id}`, productoActualizado);
             if (response.data) {
-                // Actualizamos el producto en el estado
-                setProductos(prev => ({
-                    ...prev,
-                    productos: prev.productos.map(prod => prod.id === id ? response.data : prod)
-                }));
-
+                console.log("Producto editado:", response.data);
+                // REMOVIDO: La actualización manual del estado
+                // El problema era que estabas comparando prod.id === id
+                // pero tu producto usa idProductos, no id
                 return { success: true, data: response.data };
             } else {
                 return { success: false, error: "No se recibió respuesta del servidor" };
@@ -83,17 +81,15 @@ const useCustomProductos = () => {
             return { success: false, error: error.response?.data?.message || error.message };
         }
     };
-    //para eliminar un producto
+
+    // Para eliminar un producto
     const eliminarProducto = async (id) => {
         try {
             const response = await axios.delete(`${API_URL}/api/productos/cambiarEstado/${id}`);
             if (response.data) {
-                // Actualizamos la lista de productos eliminando el producto del array dentro del objeto
-                setProductos(prev => ({
-                    ...prev,
-                    productos: prev.productos.filter(prod => prod.id !== id)
-                }));
                 console.log("Producto eliminado:", response.data);
+                // REMOVIDO: La actualización manual del estado
+                // Mismo problema: comparabas prod.id pero debería ser idProductos
                 return { success: true, data: response.data };
             } else {
                 return { success: false, error: "No se recibió respuesta del servidor" };
@@ -103,9 +99,11 @@ const useCustomProductos = () => {
             return { success: false, error: error.response?.data?.message || error.message };
         }
     };
+
     useEffect(() => {
         obtenerProductos();
     }, []);
+
     return {
         productos,
         loading,
@@ -119,4 +117,3 @@ const useCustomProductos = () => {
 }
 
 export default useCustomProductos
-

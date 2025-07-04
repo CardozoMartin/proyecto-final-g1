@@ -10,7 +10,8 @@ const useCustomLogin = () => {
     const [error, setError] = useState(null);
     
     // Obtener la función login del store de Zustand
-    const { login: loginToStore } = useUser();
+    //y la nombramos guardarEnSesionStore para que sea más descriptivo
+    const { login: guardarEnSesionStore } = useUser();
 
     const login = async (emailCliente, contraseña) => {
         setLoading(true);
@@ -25,8 +26,8 @@ const useCustomLogin = () => {
             const resultado = response.data;
             
             // Usar la función login del store de Zustand
-            loginToStore(resultado);
-            
+            guardarEnSesionStore(resultado);
+
             return resultado;
         } catch (error) {
             console.error("Error en el login:", error);

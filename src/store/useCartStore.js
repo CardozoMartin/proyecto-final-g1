@@ -1,65 +1,75 @@
-import { create } from 'zustand'; // Importamos zustand
+import { create } from 'zustand';
+
+// Utilidad para sincronizar con localStorage
+const guardarDatosEnLocalStorage = (carrito) => {
+  localStorage.setItem('productosCarrito', JSON.stringify(carrito));
+};
+
+// Cargar carrito desde localStorage al iniciar
+const initialCarrito = JSON.parse(localStorage.getItem('productosCarrito')) || [];
 
 export const useCartStore = create((set, get) => ({
-  
-  productosCarrito: [], // Array para guardar los productos del carrito
+  productosCarrito: initialCarrito,
 
   agregarProductoAlCarrito: (producto) => {
-    const carrito = get().productosCarrito; // Obtenemos los productos actuales
-    const existe = carrito.find(p => p.id === producto.id); // Buscamos si ya existe el producto
-    
+    const carrito = get().productosCarrito;
+    const existe = carrito.find(p => p.id === producto.id);
+
     if (existe) {
-      existe.cantidad = existe.cantidad + 1; // Si existe, le sumamos 1 a la cantidad
-      existe.total = existe.cantidad * existe.precioVenta; // Calculamos el total del producto
+      existe.cantidad = existe.cantidad + 1;
+      existe.total = existe.cantidad * existe.precioVenta;
     } else {
-      carrito.push({ ...producto, cantidad: 1, total: producto.precioVenta }); // Si no existe, lo agregamos con cantidad 1 y total
+      carrito.push({ ...producto, cantidad: 1, total: producto.precioVenta });
     }
-    
-    set({ productosCarrito: [...carrito] }); // Actualizamos el estado
+
+    guardarDatosEnLocalStorage(carrito);
+    set({ productosCarrito: [...carrito] });
   },
 
   restarCantidadProducto: (id) => {
-    const carrito = get().productosCarrito; // Obtenemos los productos
-    const producto = carrito.find(p => p.id === id); // Buscamos el producto por ID
-    
+    const carrito = get().productosCarrito;
+    const producto = carrito.find(p => p.id === id);
+
     if (producto && producto.cantidad > 1) {
-      producto.cantidad = producto.cantidad - 1; // Si tiene más de 1, le restamos 1
-      producto.total = producto.cantidad * producto.precioVenta; // Recalculamos el total
+      producto.cantidad = producto.cantidad - 1;
+      producto.total = producto.cantidad * producto.precioVenta;
+      guardarDatosEnLocalStorage(carrito);
+      set({ productosCarrito: [...carrito] });
     } else {
-      const nuevosProductos = carrito.filter(p => p.id !== id); // Si tiene 1 o menos, lo eliminamos
-      set({ productosCarrito: nuevosProductos }); // Actualizamos sin ese producto
-      return; // Salimos de la función
+      const nuevosProductos = carrito.filter(p => p.id !== id);
+      guardarDatosEnLocalStorage(nuevosProductos);
+      set({ productosCarrito: nuevosProductos });
+      return;
     }
-    
-    set({ productosCarrito: [...carrito] }); // Actualizamos el estado
   },
 
   eliminarProductoDelCarrito: (id) => {
-    const carrito = get().productosCarrito; // Obtenemos los productos
-    const nuevosProductos = carrito.filter(p => p.id !== id); // Filtramos para quitar el producto
-    set({ productosCarrito: nuevosProductos }); // Actualizamos el estado
+    const carrito = get().productosCarrito;
+    const nuevosProductos = carrito.filter(p => p.id !== id);
+    guardarDatosEnLocalStorage(nuevosProductos);
+    set({ productosCarrito: nuevosProductos });
   },
 
   total: () => {
-    const carrito = get().productosCarrito; // Obtenemos los productos
-    let suma = 0; // Variable para sumar el total
-    for (let i = 0; i < carrito.length; i++) { // Recorremos todos los productos
-      suma = suma + (carrito[i].precioVenta * carrito[i].cantidad); // Sumamos precio por cantidad
+    const carrito = get().productosCarrito;
+    let suma = 0;
+    for (let i = 0; i < carrito.length; i++) {
+      suma = suma + (carrito[i].precioVenta * carrito[i].cantidad);
     }
-    return suma; // Devolvemos el total
+    return suma;
   },
 
   cantidadTotal: () => {
-    const carrito = get().productosCarrito; // Obtenemos los productos
-    let total = 0; // Variable para contar
-    for (let i = 0; i < carrito.length; i++) { // Recorremos todos los productos
-      total = total + carrito[i].cantidad; // Sumamos las cantidades
+    const carrito = get().productosCarrito;
+    let total = 0;
+    for (let i = 0; i < carrito.length; i++) {
+      total = total + carrito[i].cantidad;
     }
-    return total; // Devolvemos el total de productos
+    return total;
   },
 
   limpiar: () => {
-    set({ productos: [] }); // Ponemos el array vacío para limpiar todo
+    guardarDatosEnLocalStorage([]);
+    set({ productosCarrito: [] });
   }
-
 }));

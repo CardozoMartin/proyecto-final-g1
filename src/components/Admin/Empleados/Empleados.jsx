@@ -117,12 +117,31 @@ const Empleados = () => {
     };
 
     try {
+      let resultado;
       if (idEmpleadoEditar) {
-        await editarEmpleado(idEmpleadoEditar, datosEmpleado);
-        mostrarMensaje("Empleado actualizado correctamente.", "success");
+        resultado = await editarEmpleado(idEmpleadoEditar, datosEmpleado);
+        if (resultado?.success) {
+          mostrarMensaje("Empleado actualizado correctamente.", "success");
+        } else {
+          mostrarMensaje(
+            resultado?.error || "Ocurrió un error al guardar el empleado.",
+            "danger"
+          );
+          setOpenModalNuevo(false);
+          return;
+        }
       } else {
-        await crearEmpleado(datosEmpleado);
-        mostrarMensaje("Empleado creado correctamente.", "success");
+        resultado = await crearEmpleado(datosEmpleado);
+        if (resultado?.success) {
+          mostrarMensaje("Empleado creado correctamente.", "success");
+        } else {
+          mostrarMensaje(
+            resultado?.error || "Ocurrió un error al guardar el empleado.",
+            "danger"
+          );
+          setOpenModalNuevo(false);
+          return;
+        }
       }
 
       await obtenerTodosEmpleados();
@@ -153,53 +172,6 @@ const Empleados = () => {
       setOpenModalNuevo(false);
     }
   };
-
-  // const handlerDeleteEmpleado = async (emp) => {
-  //   const swalWithBootstrapButtons = Swal.mixin({
-  //     customClass: {
-  //       confirmButton: "btn btn-success",
-  //       cancelButton: "btn btn-danger"
-  //     },
-  //     buttonsStyling: false
-  //   });
-
-  //   swalWithBootstrapButtons.fire({
-  //     title: "¿Estás seguro?",
-  //     text: "¡No podrás revertir esto!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonText: "Sí, eliminar",
-  //     cancelButtonText: "No, cancelar",
-  //     reverseButtons: true
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       try {
-  //         await eliminarEmpleado(emp.idEmpleados);
-  //         await obtenerTodosEmpleados();
-  //         swalWithBootstrapButtons.fire({
-  //           title: "¡Eliminado!",
-  //           text: "El empleado ha sido eliminado.",
-  //           icon: "success"
-  //         });
-  //         mostrarMensaje("Empleado eliminado correctamente.", "success");
-  //       } catch (error) {
-  //         console.log(error);
-  //         swalWithBootstrapButtons.fire({
-  //           title: "Error",
-  //           text: "Ocurrió un error al eliminar el empleado.",
-  //           icon: "error"
-  //         });
-  //         mostrarMensaje("Ocurrió un error al eliminar el empleado.", "danger");
-  //       }
-  //     } else if (result.dismiss === Swal.DismissReason.cancel) {
-  //       swalWithBootstrapButtons.fire({
-  //         title: "Cancelado",
-  //         text: "El empleado está a salvo :)",
-  //         icon: "error"
-  //       });
-  //     }
-  //   });
-  // };
 
   const handleEditEmpleado = (emp) => {
     Swal.fire({
@@ -261,7 +233,6 @@ const Empleados = () => {
   const closeModalNuevo = () => setOpenModalNuevo(false);
   const closeModalVer = () => setOpenModalVer(false);
 
-
   const resultado = (empleados || []).filter((emp) => {
     if (!terminoBusqueda.trim()) return true;
     const termino = terminoBusqueda.toLowerCase();
@@ -281,6 +252,7 @@ const Empleados = () => {
       emp.DNI.toLowerCase().includes(termino)
     );
   });
+
   return (
     <>
       <BusquedaEmpleado setTerminoBusqueda={setTerminoBusqueda} />

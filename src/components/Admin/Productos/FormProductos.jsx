@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import useCustomProductos from '../../../CustomHooks/useCustomProductos';
-
 import { toast } from 'sonner';
 import useCustomCategorias from '../../../CustomHooks/useCustomCategorias';
+import Swal from 'sweetalert2';
 
-// Ahora recibimos la prop producto para edición
-const FormProductos = ({ producto }) => {
-  const { agregarProducto,editarProducto,obtenerProductos } = useCustomProductos();
-  const { categorias} = useCustomCategorias();
+// Ahora recibimos la prop producto para edición y onSuccess para cerrar el modal
+const FormProductos = ({ producto, onSuccess }) => {
+  const { agregarProducto, editarProducto } = useCustomProductos();
+  const { categorias } = useCustomCategorias();
  
-
   const categoriasAMostrar = categorias.categorias || [];
   console.log('Categorias a mostrar:', categoriasAMostrar);
 
@@ -21,9 +20,12 @@ const FormProductos = ({ producto }) => {
     precioVenta: '',
     cantidadProducto: '',
     nombreCategoria: '',
-    imagenProducto: '' ,
+    imagenProducto: '',
     estadoProductoNuevo: ''
   });
+
+  // Estado para controlar si está procesando
+  const [procesando, setProcesando] = useState(false);
 
   // Si recibimos un producto para editar, llenamos el formulario con sus datos
   useEffect(() => {
@@ -34,10 +36,9 @@ const FormProductos = ({ producto }) => {
         descripcion: producto.descripcion || '',
         precioVenta: producto.precioVenta || '',
         cantidadProducto: producto.cantidadProducto || '',
-        nombreCategoria: producto.nombreCategoria || '',
-        imagenProducto: producto.imagenProducto || '' ,
-        estadoProducto: producto.estadoProductoNuevo || ''
-        
+        nombreCategoria: producto.nombreCategoriaProductos || '',
+        imagenProducto: producto.imagenProducto || '',
+        estadoProductoNuevo: producto.estadoProductoNuevo || ''
       });
     } else {
       // Si no hay producto (modo agregar), limpiamos el formulario
@@ -48,7 +49,7 @@ const FormProductos = ({ producto }) => {
         precioVenta: '',
         cantidadProducto: '',
         nombreCategoria: '',
-        imagenProducto: '' ,
+        imagenProducto: '',
         estadoProductoNuevo: ''
       });
     }
@@ -58,55 +59,78 @@ const FormProductos = ({ producto }) => {
   // Maneja los cambios en los campos del formulario
   const handleAgregarProducto = (e) => {
     e.preventDefault();
-
-    //spin de carga de sweetalert2
     setNuevoProducto({...nuevoProducto, [e.target.name]: e.target.value });
-   
   }
+
   // Maneja el submit del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Si hay producto, estamos en modo edición
-    if (producto) {
-      // Esperamos a que termine la edición antes de refrescar la lista
-      const resultado = await editarProducto(producto.idProductos, nuevoProducto);
-      if (resultado.success) {
-        
-        toast.success('Producto editado correctamente');
-        setNuevoProducto({
-          nombreProducto: '',
-          precioCosto: '',
-          descripcion: '',
-          precioVenta: '',
-          cantidadProducto: '',
-          nombreCategoria: '',
-          imagenProducto: '',
-          estadoProductoNuevo: ''
+    setProcesando(true);
 
+    try {
+      if (producto) {
+        // Preguntar antes de editar con SweetAlert
+        const result = await Swal.fire({
+          title: "¿Editar producto?",
+          text: "¿Estás seguro de que deseas actualizar los datos de este producto?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Sí, actualizar",
+          cancelButtonText: "Cancelar",
+          reverseButtons: true,
         });
-        // Solo refrescamos la lista si la edición fue exitosa
-      } else {
-        toast.error(`Error al editar producto: ${resultado.error}`);
-      }
-    } else {
-      // Agregar producto nuevo
-      const resultado = await agregarProducto(nuevoProducto);
-      if (resultado.success) {
-        setNuevoProducto({
-          nombreProducto: '',
-          precioCosto: '',
-          descripcion: '',
-          precioVenta: '',
-          cantidadProducto: '',
-          nombreCategoria: '',
-          imagenProducto:'',
-          estadoProductoNuevo: ''
 
-        });
-        toast.success('Producto agregado correctamente');
+        if (!result.isConfirmed) {
+          setProcesando(false);
+          return;
+        }
+
+        const resultado = await editarProducto(producto.idProductos, nuevoProducto);
+        if (resultado.success) {
+          toast.success('Producto editado correctamente');
+          setNuevoProducto({
+            nombreProducto: '',
+            precioCosto: '',
+            descripcion: '',
+            precioVenta: '',
+            cantidadProducto: '',
+            nombreCategoria: '',
+            imagenProducto: '',
+            estadoProductoNuevo: ''
+          });
+          if (onSuccess) {
+            onSuccess();
+          }
+        } else {
+          toast.error(`Error al editar producto: ${resultado.error}`);
+        }
       } else {
-        toast.error(`Error al agregar producto: ${resultado.error}`);
+        // Agregar producto nuevo
+        const resultado = await agregarProducto(nuevoProducto);
+        if (resultado.success) {
+          toast.success('Producto agregado correctamente');
+          setNuevoProducto({
+            nombreProducto: '',
+            precioCosto: '',
+            descripcion: '',
+            precioVenta: '',
+            cantidadProducto: '',
+            nombreCategoria: '',
+            imagenProducto: '',
+            estadoProductoNuevo: ''
+          });
+          if (onSuccess) {
+            onSuccess();
+          }
+        } else {
+          toast.error(`Error al agregar producto: ${resultado.error}`);
+        }
       }
+    } catch (error) {
+      toast.error('Error inesperado al procesar la operación');
+      console.error('Error en handleSubmit:', error);
+    } finally {
+      setProcesando(false);
     }
   }
         
@@ -126,6 +150,7 @@ const FormProductos = ({ producto }) => {
             placeholder="Ingrese el nombre del producto" 
             className="form-control"
             required
+            disabled={procesando}
           />
         </div>
          {/* Campo: Imagen producto */}
@@ -139,6 +164,7 @@ const FormProductos = ({ producto }) => {
             placeholder="Ingrese la URL de la imagen" 
             className="form-control"
             required
+            disabled={procesando}
           />
         </div>
         {/* Campo: Precio costo */}
@@ -157,6 +183,7 @@ const FormProductos = ({ producto }) => {
               step="0.01"
               min="0"
               required
+              disabled={procesando}
             />
           </div>
         </div>
@@ -172,6 +199,7 @@ const FormProductos = ({ producto }) => {
             className="form-control"
             rows="3"
             required
+            disabled={procesando}
           />
         </div>
         {/* Campo: Precio de venta */}
@@ -190,6 +218,7 @@ const FormProductos = ({ producto }) => {
               step="0.01"
               min="0"
               required
+              disabled={procesando}
             />
           </div>
         </div>
@@ -208,6 +237,7 @@ const FormProductos = ({ producto }) => {
                 type="number"
                 min="0"
                 required
+                disabled={procesando}
               />
             </div>
           </div>
@@ -221,6 +251,7 @@ const FormProductos = ({ producto }) => {
                 onChange={handleAgregarProducto}
                 className="form-select"
                 required
+                disabled={procesando}
               >
                 <option value="">Seleccione una categoría</option>
                 {categoriasAMostrar.map(categoria => (
@@ -234,7 +265,9 @@ const FormProductos = ({ producto }) => {
               </div>
             </div>
           </div>
-           <div className="col-md-6">
+        </div>
+        <div className="row">
+          <div className="col-md-6">
             <div className="mb-3">
               <label htmlFor="estadoProductoNuevo" className="form-label">Estado</label>
               <select
@@ -244,22 +277,36 @@ const FormProductos = ({ producto }) => {
                 onChange={handleAgregarProducto}
                 className="form-select"
                 required
+                disabled={procesando}
               >
-                <option value="">Seleccione una categoría</option>
+                <option value="">Seleccione un estado</option>
                 <option value="ACTIVO">Activo</option>
                 <option value="INACTIVO">Inactivo</option>
               </select>
               <div className="invalid-feedback">
-                Seleccione una categoría válida.
+                Seleccione un estado válido.
               </div>
             </div>
           </div>
         </div>
         {/* Botón de acción, cambia el texto según si es edición o alta */}
         <div className="d-grid gap-2">
-          <button type="submit" className="btn btn-primary">
-            <i className="fas fa-plus me-2"></i>
-            {producto ? 'Guardar Cambios' : 'Agregar Producto'}
+          <button 
+            type="submit" 
+            className="btn btn-primary"
+            disabled={procesando}
+          >
+            {procesando ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Procesando...
+              </>
+            ) : (
+              <>
+                <i className="fas fa-plus me-2"></i>
+                {producto ? 'Guardar Cambios' : 'Agregar Producto'}
+              </>
+            )}
           </button>
         </div>
       </form>

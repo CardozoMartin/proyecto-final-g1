@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 const useCustomCategorias = () => {
-  const [categorias, setCategorias] = useState({ categorias: [] });
+  const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -14,11 +15,10 @@ const useCustomCategorias = () => {
       setError(null);
       const response = await axios.get(`${API_URL}/api/categorias/obtenerTodasLasCategorias`);
       console.log('Datos recibidos:', response.data);
-      setCategorias({ categorias: response.data.categorias || [] });
+      setCategorias(response.data);
     } catch (error) {
       console.error('Error al obtener las categorías:', error);
       setError(error.response?.data?.message || 'No se pudieron cargar las categorías');
-      setCategorias({ categorias: [] });
     } finally {
       setLoading(false);
     }
@@ -27,22 +27,15 @@ const useCustomCategorias = () => {
   // Para agregar una categoría
   const agregarCategoria = async (nuevaCategoria) => {
     try {
-      const response = await axios.post(`${API_URL}/api/categorias/crearCategoria`, {
-        nombreCategoriaProductos: nuevaCategoria.nombreCategoriaProductos,
-        imagenCategoriaProductos: nuevaCategoria.imagenCategoriaProductos,
-        estado: nuevaCategoria.estado
-      });
-      const nuevaCategoriaData = {
-        idCat_productos: response.data.id,
-        nombreCategoriaProductos: response.data.nombreCategoriaProductos,
-        imagenCategoriaProductos: response.data.imagenCategoriaProductos,
-        estado: response.data.estado
-      };
-      setCategorias(prev => ({
-        categorias: [...(prev.categorias || []), nuevaCategoriaData]
-      }));
-      console.log('Categoría agregada:', nuevaCategoriaData);
-      return { success: true, data: nuevaCategoriaData };
+      const response = await axios.post(`${API_URL}/api/categorias/crearCategoria`, nuevaCategoria);
+     
+      if(response.data) {
+        // Recargar todas las categorías para asegurar que la tabla se actualice
+        await obtenerCategorias();
+        return { success: true, data: response.data };
+      } else {
+        return { success: false, error: "Ocurrió un error" };
+      }
     } catch (error) {
       console.error('Error al agregar categoría:', error);
       return { success: false, error: error.response?.data?.message || error.message };
@@ -57,13 +50,10 @@ const useCustomCategorias = () => {
         imagenCategoriaProductos: categoriaActualizada.imagenCategoriaProductos,
         estado: categoriaActualizada.estado
       });
-      const categoriaActualizadaData = response.data.categoria;
-      setCategorias(prev => ({
-        categorias: prev.categorias.map(cat =>
-          cat.idCat_productos === id ? categoriaActualizadaData : cat
-        )
-      }));
-      return { success: true, data: categoriaActualizadaData };
+      
+      // Recargar todas las categorías para asegurar consistencia
+      await obtenerCategorias();
+      return { success: true, data: response.data.categoria };
     } catch (error) {
       console.error('Error al editar categoría:', error);
       return { success: false, error: error.response?.data?.message || error.message };

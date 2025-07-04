@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import FormVerMensaje from "./FormVerMensaje";
 import useCustomMensajes from "../../../CustomHooks/CustomMensajes/CustomMensajes";
 import BuscarMensaje from "./BuscarMensaje";
+import { toast } from "sonner";
 
 const Mensajes = () => {
   const { mensajes, obtenerMensajes, marcarComoVisto } = useCustomMensajes();
@@ -20,7 +21,7 @@ const Mensajes = () => {
       if (resultado.success) {
         setMensajeVer((prev) => ({ ...prev, estadoMensaje: "VISTO" }));
       } else {
-        alert("Error al marcar el mensaje como visto");
+        toast.error("Error al marcar el mensaje como visto");
       }
     }
   };

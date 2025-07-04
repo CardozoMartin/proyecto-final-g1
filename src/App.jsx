@@ -1,7 +1,6 @@
 import './App.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
-import { Admin, Home, Login, Register } from './routes/Path'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
@@ -14,51 +13,52 @@ import { useUser } from './store/useUser';
 import CartComponente from './components/Cart/CartComponente';
 import Footer from './components/Common/Footer';
 import { useEffect } from 'react';
+import RutasPrivadas from './routes/RoutasPrivadas';
+import RutasPublicas from './routes/RutasPublicas';
+import { Toaster } from 'sonner';
+
+// 🛡 Importar protecciones
+
 
 function App() {
 
-  const {usuario, estaLogueado, inicializar} = useUser()
-  console.log('¿Está logueado?', estaLogueado)
-useEffect(() => {
+  const { inicializar } = useUser()
+
+  useEffect(() => {
     inicializar();
   }, []);
+
   return (
     <>
       <BrowserRouter>
-      <Navbar></Navbar>
+        <Navbar />
+
         <Routes>
           <Route path="/" element={<HomePage />} />
-          
-          {/* Proteger rutas de registro y login */}
-          <Route
-            path="/Register"
-            element={estaLogueado ? <Navigate to="/" replace /> : <RegisterPage />}
-          />
-          <Route
-            path="/Login"
-            element={estaLogueado ? <Navigate to="/" replace /> : <LoginPage />}
-          />
-
           <Route path="/productos" element={<ProductosPage />} />
-          <Route
-            path="/Admin"
-            element={
-              usuario?.cliente?.rol === "ADMIN"
-                ? <AdminPage />
-                : <Navigate to="/login" replace />
-            }
-          />
-          <Route path="/Error" element={<ErrorPage />} />
-          <Route path="/Contact" element={<Contact />} />
           <Route path="/productos/categoria/:nombreCategoria" element={<ProductosPage />} />
+          <Route path="/Contact" element={<Contact />} />
+          <Route path="/Error" element={<ErrorPage />} />
+
+          {/* 🛡 Rutas públicas solo si NO está logueado */}
+          <Route element={<RutasPublicas />}>
+            <Route path="/Login" element={<LoginPage />} />
+            <Route path="/Register" element={<RegisterPage />} />
+          </Route>
+
+          {/* 🛡 Ruta privada para Admin */}
+          <Route element={<RutasPrivadas />}>
+            <Route path="/Admin" element={<AdminPage />} />
+          </Route>
         </Routes>
 
-        <CartComponente></CartComponente>
-        <Footer></Footer>
+        <CartComponente />
+        <Footer />
+
+        <Toaster richColors position="top-right" closeButton />
       </BrowserRouter>
     </>
   )
 }
 
 export default App
-

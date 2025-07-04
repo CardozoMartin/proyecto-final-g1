@@ -6,8 +6,8 @@ import { toast } from 'sonner';
 import { useCartStore } from '../../store/useCartStore';
 
 const ModalFinalizarCompra = ({ openModal, setOpenModal}) => {
-    const { user } = useUser();
-    const { productosCarrito,vaciarCarrito } = useCartStore();
+    const { usuario } = useUser();
+    const { productosCarrito, limpiar } = useCartStore();
     console.log(productosCarrito);
 
 // Calculamos el total de la compra correctamente usando reduce
@@ -19,30 +19,33 @@ const { postCarrito } = useCustomCart()
     //funcion para finalizar la compra
       const carrito = {
             idEmpleados: 24,
-            idClientes: user?.cliente.idClientes,
+            idClientes: usuario?.cliente.idClientes,
             productos: productosCarrito.map(producto => ({
                 idProducto: producto.id,
                 cantidad: producto.cantidad,
                 precioUnitario: Number(producto.precioVenta)
             })),
         }
-    const handleFinalizarCompra = () => {
-       
-        Swal.fire({
+    const handleFinalizarCompra = async () => {
+        const result = await Swal.fire({
             title: '¿Estás seguro de finalizar la compra?',
             text: `Total a pagar: $${totalCompra}`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sí, finalizar compra',
             cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                postCarrito(carrito)
+        });
+
+        if (result.isConfirmed) {
+            const respuesta = await postCarrito(carrito);
+            if (respuesta?.success) {
+                limpiar();
                 toast.success('Compra finalizada con éxito');
                 setOpenModal(false);
-                vaciarCarrito();
+            } else {
+                toast.error('Ocurrió un error al finalizar la compra');
             }
-        });
+        }
     }
     return (
         <div>  <div className={`modal fade ${openModal ? 'show' : ''}`} style={{ display: openModal ? 'block' : 'none' }} id="modalCompra" tabIndex="-1" aria-labelledby="modalCompraLabel" aria-hidden={!openModal}>
@@ -50,7 +53,13 @@ const { postCarrito } = useCustomCart()
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title text-dark" id="modalCompraLabel">Detalles de la Compra</h5>
-                        <button type="button" className="btn-close" onClick={() => setOpenModal(false)} aria-label="Close"></button>
+                         <button
+                        type="button"
+                        className="btn btn-danger text-dark ms-auto"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                        onClick={() => setOpenModal(false)}
+                    ><i className="bi bi-x-lg"></i></button>
                     </div>
                     <div className="modal-body text-dark">
                         {/* Aquí puedes mostrar los detalles de la compra */}
@@ -88,19 +97,19 @@ const { postCarrito } = useCustomCart()
                             <div className="card p-3 mb-2 shadow-sm">
                                 <div className="row">
                                     <div className="col-md-6 mb-2">
-                                        <strong>Nombre:</strong> {user?.cliente?.nombreCliente || "-"}
+                                        <strong>Nombre:</strong> {usuario?.cliente?.nombreCliente || "-"}
                                     </div>
                                     <div className="col-md-6 mb-2">
-                                        <strong>Apellido:</strong> {user?.cliente?.apellidoCliente || "-"}
+                                        <strong>Apellido:</strong> {usuario?.cliente?.apellidoCliente || "-"}
                                     </div>
                                     <div className="col-md-6 mb-2">
-                                        <strong>Email:</strong> {user?.cliente?.emailCliente || "-"}
+                                        <strong>Email:</strong> {usuario?.cliente?.emailCliente || "-"}
                                     </div>
                                     <div className="col-md-6 mb-2">
-                                        <strong>Teléfono:</strong> {user?.cliente?.telefonoCliente || "-"}
+                                        <strong>Teléfono:</strong> {usuario?.cliente?.telefonoCliente || "-"}
                                     </div>
                                     <div className="col-12 mb-2">
-                                        <strong>Dirección:</strong> {user?.cliente?.direccionCliente || user?.cliente?.domicilioCliente || "-"}
+                                        <strong>Dirección:</strong> {usuario?.cliente?.direccionCliente || usuario?.cliente?.domicilioCliente || "-"}
                                     </div>
                                 </div>
                             </div>

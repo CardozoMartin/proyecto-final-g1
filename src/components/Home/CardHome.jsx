@@ -22,9 +22,9 @@ const CardHome = ({ categorias }) => {
                   {cat.descripcion || "Sin descripción disponible."}
                 </p>
                 <Link
-                  to={`/productos/categoria/${encodeURIComponent(
+                  to={`/productos/categoria/${
                     cat.nombreCategoriaProductos
-                  )}`}
+                  }`}
                   className="btn btn-item"
                 >
                   Ver más

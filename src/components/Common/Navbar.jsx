@@ -66,11 +66,9 @@ const Navbar = () => {
                                     <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Admin}>Admin</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link nav-item active fw-bolder" aria-current="page" to={Contact}>Contacto</Link>
-                                </li>
-                                <li className="nav-item">
                                     <Link className="nav-link nav-item active fw-bolder" aria-current="page" to="/productos">Productos</Link>
                                 </li>
+                                {/* Contacto NO se muestra para ADMIN */}
                             </>
                         )}
                         {/* Mostrar solo para CLIENTE */}

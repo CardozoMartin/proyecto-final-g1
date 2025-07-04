@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useCustomProveedores from "../../../CustomHooks/CustomProveedores/CustomProveedores";
 import { toast } from "sonner";
+import Swal from "sweetalert2";
 import "../../../css/Proveedores/FormsProveedores.css";
 
 const FormEditar = ({ proveedor, onClose }) => {
@@ -34,6 +35,23 @@ const FormEditar = ({ proveedor, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    // Preguntar antes de editar
+    const result = await Swal.fire({
+      title: "¿Editar proveedor?",
+      text: "¿Estás seguro de que deseas actualizar los datos de este proveedor?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, actualizar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    });
+
+    if (!result.isConfirmed) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await actualizarProveedor(proveedor.idProveedores, nuevoProveedor);
 

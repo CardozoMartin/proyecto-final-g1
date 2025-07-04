@@ -7,14 +7,14 @@ import FormClientes from "./FormClientes";
 
 const Cliente = () => {
   //--------------Importaciones del useCliente
-  const { cliente, nuevoEstado, loading} = useCustomCliente();
+  const { cliente, nuevoEstado, loading } = useCustomCliente();
   console.log(cliente);
   const resultado = cliente?.Clientes || cliente || [];
 
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [mostrarInfo, setMostrarInfo] = useState(false);
-  const [infoUser, setInfoUser]= useState({})
-  const [openModal, setOpenModal]=useState(false)
+  const [infoUser, setInfoUser] = useState({})
+  const [openModal, setOpenModal] = useState(false)
 
   const getStatusBadge = (status) => {
     const badges = {
@@ -29,14 +29,14 @@ const Cliente = () => {
     setOpenModal(true);
     setInfoUser(usuario)
   };
-// Nueva función para cambiar el estado en el backend
-  const handleToggleEstado =  (usuario) => {
+  // Nueva función para cambiar el estado en el backend
+  const handleToggleEstado = (usuario) => {
     nuevoEstado(usuario);
   };
   if (
     loading
-  ){
-    return(<div>
+  ) {
+    return (<div>
       cargando
     </div>)
   }
@@ -84,7 +84,7 @@ const Cliente = () => {
                           <div className="btn-group" role="group">
                             <button className="btn btn-outline-primary btn-sm" onClick={() => handleVer(usuario)}>Ver</button>
                             <br />
-                            <button className={`btn btn-sm ${usuario.estadoCliente === "Activo"? "btn-warning" : "btn-success" }`} onClick={() => handleToggleEstado(usuario)}>
+                            <button className={`btn btn-sm ${usuario.estadoCliente === "Activo" ? "btn-warning" : "btn-success"}`} onClick={() => handleToggleEstado(usuario)}>
                               {usuario.estadoCliente === "Activo" ? "Desactivar" : "Activar"}
                             </button>
                           </div>
@@ -141,50 +141,50 @@ const Cliente = () => {
         </div>
       </div>
       {openModal && (
-  <div
-    className={`modal fade ${openModal ? 'show' : ''}`}
-    style={{ display: openModal ? 'block' : 'none' }}
-    id="modalCompra"
-    tabIndex="-1"
-    aria-labelledby="modalCompraLabel"
-    aria-hidden={!openModal}
-  >
-    <div className="modal-dialog modal-lg">
-      <div className="modal-content">
-        <div className="modal-header">
-          <button type="button" className="btn-close" aria-label="Close" onClick={() => setOpenModal(false)}></button>
-        </div>
-        <div className="modal-body text-dark">
-          <div className="mt-4 text-dark">
-            <h5>Datos Personales</h5>
-            <div className="card p-3 mb-2 shadow-sm">
-              <div className="row">
-                <div className="col-md-6 mb-2">
-                  <strong>Nombre:</strong> {infoUser?.nombreCliente}
+        <div
+          className={`modal fade ${openModal ? 'show' : ''}`}
+          style={{ display: openModal ? 'block' : 'none' }}
+          id="modalCompra"
+          tabIndex="-1"
+          aria-labelledby="modalCompraLabel"
+          aria-hidden={!openModal}
+        >
+          <div className="modal-dialog modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="btn-close" aria-label="Close" onClick={() => setOpenModal(false)}></button>
+              </div>
+              <div className="modal-body text-dark">
+                <div className="mt-4 text-dark">
+                  <h5>Datos Personales</h5>
+                  <div className="card p-3 mb-2 shadow-sm">
+                    <div className="row">
+                      <div className="col-md-6 mb-2">
+                        <strong>Nombre:</strong> {infoUser?.nombreCliente}
+                      </div>
+                      <div className="col-md-6 mb-2">
+                        <strong>Apellido:</strong> {infoUser?.apellidoCliente}
+                      </div>
+                      <div className="col-md-6 mb-2">
+                        <strong>Email:</strong> {infoUser?.emailCliente}
+                      </div>
+                      <div className="col-md-6 mb-2">
+                        <strong>Teléfono:</strong> {infoUser?.telefonoCliente}
+                      </div>
+                      <div className="col-12 mb-2">
+                        <strong>Dirección:</strong> {infoUser?.domicilioCliente}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="col-md-6 mb-2">
-                  <strong>Apellido:</strong> {infoUser?.apellidoCliente}
-                </div>
-                <div className="col-md-6 mb-2">
-                  <strong>Email:</strong> {infoUser?.emailCliente}
-                </div>
-                <div className="col-md-6 mb-2">
-                  <strong>Teléfono:</strong> {infoUser?.telefonoCliente}
-                </div>
-                <div className="col-12 mb-2">
-                  <strong>Dirección:</strong> {infoUser?.domicilioCliente}
-                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setOpenModal(false)}>Cerrar</button>
               </div>
             </div>
           </div>
         </div>
-        <div className="modal-footer">
-          <button type="button" className="btn btn-secondary" onClick={() => setOpenModal(false)}>Cerrar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
 
     </>
   );

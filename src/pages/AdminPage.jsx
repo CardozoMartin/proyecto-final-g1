@@ -48,7 +48,7 @@ const AdminPage = () => {
     { id: "products", label: "Productos", icon: "🛍️" },
     { id: "customers", label: "Cliente", icon: "👥" },
     { id: 'supplients', label: 'Proveedores', icon: '👥' },
-   { id: 'categories', label: 'Categorías', icon: '🏷️' },
+    { id: 'categories', label: 'Categorías', icon: '🏷️' },
     { id: "empleados", label: "Empleados", icon: "👥" },
     { id: "mensajes", label: "Mensajes", icon: "👥" }
   ];
@@ -58,9 +58,8 @@ const AdminPage = () => {
       <div className="d-flex min-vh-100">
         {/* Sidebar */}
         <div
-          className={`bg-dark text-white ${
-            sidebarCollapsed ? "sidebar-collapsed" : "sidebar-expanded"
-          }`}
+          className={`bg-dark text-white ${sidebarCollapsed ? "sidebar-collapsed" : "sidebar-expanded"
+            }`}
           style={{
             width: sidebarCollapsed ? "70px" : "250px",
             transition: "width 0.3s ease",
@@ -93,11 +92,10 @@ const AdminPage = () => {
             {menuItems.map((item) => (
               <button
                 key={item.id}
-                className={`nav-link text-start border-0 rounded mb-2 p-3 ${
-                  activeTab === item.id
+                className={`nav-link text-start border-0 rounded mb-2 p-3 ${activeTab === item.id
                     ? "bg-primary text-white"
                     : "text-light bg-transparent hover-bg-secondary"
-                }`}
+                  }`}
                 onClick={() => setActiveTab(item.id)}
                 style={{
                   transition: "all 0.2s ease",
@@ -165,11 +163,10 @@ const AdminPage = () => {
                                 {stat.value}
                               </h3>
                               <small
-                                className={`text-${
-                                  stat.color === "warning"
+                                className={`text-${stat.color === "warning"
                                     ? "danger"
                                     : "success"
-                                }`}
+                                  }`}
                               >
                                 {stat.change} vs mes anterior
                               </small>
@@ -211,25 +208,25 @@ const AdminPage = () => {
                       </div>
                       <div className="card-body">
                         <div className="d-grid gap-2">
-                          <button 
+                          <button
                             className="btn btn-primary btn-sm"
                             onClick={() => setActiveTab('customers')}
                           >
                             <span className="me-2">👥</span>Ver Clientes
                           </button>
-                          <button 
+                          <button
                             className="btn btn-outline-primary btn-sm"
                             onClick={() => setActiveTab('orders')}
                           >
                             <span className="me-2">📦</span>Ver Pedidos
                           </button>
-                          <button 
+                          <button
                             className="btn btn-outline-primary btn-sm"
                             onClick={() => setActiveTab('products')}
                           >
                             <span className="me-2">🛍️</span>Ver Productos
                           </button>
-                          <button 
+                          <button
                             className="btn btn-outline-primary btn-sm"
                             onClick={() => setActiveTab('categories')}
                           >
@@ -264,20 +261,20 @@ const AdminPage = () => {
               <Mensajes menuItems={menuItems} activeTab={activeTab} />
             )}
 
-           {activeTab === "categories" && (
-  <Categorias menuItems={menuItems} activeTab={activeTab} />
-)}
+            {activeTab === "categories" && (
+              <Categorias menuItems={menuItems} activeTab={activeTab} />
+            )}
 
-             {activeTab === 'supplients' && (
-            <div className="card shadow-sm border-0">
-              <div className="card-body p-0">
-                <Proveedores/>
+            {activeTab === 'supplients' && (
+              <div className="card shadow-sm border-0">
+                <div className="card-body p-0">
+                  <Proveedores />
+                </div>
+                <div className="card-body p-0">
+
+                </div>
               </div>
-              <div className="card-body p-0">
-  
-              </div>
-            </div>
-          )}
+            )}
           </div>
         </div>
       </div>
@@ -286,4 +283,4 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
-           
+

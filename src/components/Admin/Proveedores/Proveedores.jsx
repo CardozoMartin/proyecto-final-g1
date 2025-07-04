@@ -5,6 +5,7 @@ import FormEditar from "./FormEditar";
 import FormVerProveedor from "./FormVerProveedor";
 import BusquedaProveedor from "./BusquedaProveedor";
 import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 const Proveedores = () => {
   const { proveedor, eliminarProveedor, obtenerProveedor } = useCustomProveedores();
@@ -31,6 +32,20 @@ const Proveedores = () => {
   const resultado = filtrarProveedores();
 
   const handleEliminar = async (id) => {
+    const result = await Swal.fire({
+      title: "¿Eliminar proveedor?",
+      text: "¿Estás seguro de que deseas eliminar este proveedor? Esta acción no se puede deshacer.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true,
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
     try {
       const response = await eliminarProveedor(id);
       if (response.success) {

@@ -5,15 +5,14 @@ import Swal from 'sweetalert2';
 
 const Categorias = () => {
   const { categorias, loading, error, obtenerCategorias, actualizarEstadoCategoria } = useCustomCategorias();
-
   const resultado = categorias.categorias || [];
-  console.log('Resultado de categorías:', resultado);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(null);
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const [selectedCategoriasIds, setSelectedCategoriasIds] = useState([]);
   const [newEstado, setNewEstado] = useState('');
   const [showViewModal, setShowViewModal] = useState(false);
   const [selectedCategoriaDetails, setSelectedCategoriaDetails] = useState(null);
+  const [showFormModal, setShowFormModal] = useState(false); // Nuevo estado para el modal de formulario
 
   // Estilos para los badges de estado
   const getStatusBadge = (estado) => {
@@ -133,7 +132,7 @@ const Categorias = () => {
       .includes(terminoBusqueda.toLowerCase())
   );
 
-  // Estructura principal que siempre se renderiza
+  // Render principal
   const renderContent = () => {
     if (!resultado || resultado.length === 0) {
       return (
@@ -152,11 +151,7 @@ const Categorias = () => {
             <thead>
               <tr>
                 <th>
-                  <input
-                    type="checkbox"
-                    checked={selectedCategoriasIds.length === filteredCategorias.length && filteredCategorias.length > 0}
-                    onChange={handleSelectAll}
-                  />
+                  
                 </th>
                 <th>ID</th>
                 <th>Nombre</th>
@@ -168,11 +163,7 @@ const Categorias = () => {
               {filteredCategorias.map((cat) => (
                 <tr key={cat.idCat_productos}>
                   <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedCategoriasIds.includes(cat.idCat_productos)}
-                      onChange={() => handleSelectCategoria(cat.idCat_productos)}
-                    />
+                   
                   </td>
                   <td>{cat.idCat_productos}</td>
                   <td>{cat.nombreCategoriaProductos}</td>
@@ -185,9 +176,10 @@ const Categorias = () => {
                     <div className="btn-group" role="group">
                       <button
                         className="btn btn-outline-primary btn-sm"
-                        data-bs-toggle="modal"
-                        data-bs-target="#categoriaModal"
-                        onClick={() => setCategoriaSeleccionada(cat)}
+                        onClick={() => {
+                          setCategoriaSeleccionada(cat);
+                          setShowFormModal(true);
+                        }}
                       >
                         Editar
                       </button>
@@ -257,9 +249,10 @@ const Categorias = () => {
               <button
                 type="button"
                 className="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#categoriaModal"
-                onClick={() => setCategoriaSeleccionada(null)}
+                onClick={() => {
+                  setCategoriaSeleccionada(null);
+                  setShowFormModal(true);
+                }}
               >
                 Agregar nueva Categoría
               </button>
@@ -269,38 +262,45 @@ const Categorias = () => {
         </div>
       </div>
 
-      <div
-        className="modal fade"
-        id="categoriaModal"
-        tabIndex="-1"
-        aria-labelledby="categoriaModalLabel"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5 text-dark" id="categoriaModalLabel">
-                {categoriaSeleccionada ? 'Editar Categoría' : 'Agregar Nueva Categoría'}
-              </h1>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <FormCategorias categoria={categoriaSeleccionada} />
+      {/* Modal para agregar/editar categoría */}
+      {showFormModal && (
+        <div className="modal fade show d-block" tabIndex="-1" style={{ background: "rgba(0,0,0,0.3)" }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h1 className="modal-title fs-5 text-dark" id="categoriaModalLabel">
+                  {categoriaSeleccionada ? 'Editar Categoría' : 'Agregar Nueva Categoría'}
+                </h1>
+                 <button
+                        type="button"
+                        className="btn btn-danger text-dark ms-auto"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                        onClick = {() => setShowFormModal(false)}
+                    ><i className="bi bi-x-lg"></i></button>
+              </div>
+              <div className="modal-body">
+                <FormCategorias
+                  categoria={categoriaSeleccionada}
+                  onSuccess={() => {
+                    obtenerCategorias();
+                    setShowFormModal(false);
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
+      {/* Modal para ver detalles */}
       {selectedCategoriaDetails && (
         <div
           className={`modal fade ${showViewModal ? 'show d-block' : ''}`}
           tabIndex="-1"
           aria-labelledby="viewCategoriaModalLabel"
           aria-hidden={!showViewModal}
+          style={{ background: "rgba(0,0,0,0.3)" }}
         >
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
@@ -309,11 +309,12 @@ const Categorias = () => {
                   Detalles de la Categoría {selectedCategoriaDetails.id}
                 </h5>
                 <button
-                  type="button"
-                  className="btn-close"
-                  onClick={handleCloseViewModal}
-                  aria-label="Close"
-                ></button>
+                        type="button"
+                        className="btn btn-danger text-dark ms-auto"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                        onClick={handleCloseViewModal}
+                    ><i className="bi bi-x-lg"></i></button>
               </div>
               <div className="modal-body text-dark">
                 <div className="row">

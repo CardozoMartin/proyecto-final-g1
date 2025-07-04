@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import ModalFinalizarCompra from './ModalFinalizarCompra';
 const CartComponente = () => {
     const { productosCarrito, agregarProductoAlCarrito, restarCantidadProducto, eliminarProductoDelCarrito } = useCartStore();
-    const { user } = useUser()
+    const { usuario } = useUser()
     const { vaciarCarrito } = useCartStore()
     const [openModal, setOpenModal] = useState(false)
     console.log("Productos en el carrito:", productosCarrito);
@@ -38,7 +38,12 @@ const CartComponente = () => {
             <div className="offcanvas offcanvas-start" data-bs-backdrop="static" tabIndex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
                 <div className="offcanvas-header">
                     <h5 className="offcanvas-title" id="staticBackdropLabel">Carrito</h5>
-                    <button type="button" className="btn-close text-dark" data-bs-dismiss="offcanvas" aria-label="Close">X</button>
+                    <button
+                        type="button"
+                        className="btn btn-danger text-dark ms-auto"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                    ><i className="bi bi-x-lg"></i></button>
                 </div>
                 <div className="offcanvas-body">
                     <div>
@@ -60,9 +65,9 @@ const CartComponente = () => {
                                                     <div className="fw-semibold mb-1">{producto.nombreProducto}</div>
                                                     <div className="text-muted small mb-2">{producto.descripcion}</div>
                                                     <div className="d-flex align-items-center gap-2">
-                                                        <button className="btn btn-secondary btn-sm px-2" onClick={() => restarCantidadProducto(producto.idProductos)}>-</button>
+                                                        <button className="btn btn-secondary btn-sm px-2" onClick={() => restarCantidadProducto(producto.id)}> - </button>
                                                         <span className="mx-1 px-2 border rounded bg-light">{producto.cantidad}</span>
-                                                        <button className="btn btn-primary btn-sm px-2" onClick={() => agregarProductoAlCarrito(producto)}>+</button>
+                                                        <button className="btn btn-primary btn-sm px-2" onClick={() => agregarProductoAlCarrito(producto)}> + </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -78,7 +83,7 @@ const CartComponente = () => {
                     </div>
                 </div>
                 {
-                    user ? (
+                    usuario ? (
                         <button className='btn btn-success' onClick={terminarLaCompra}>Finalizar Compra</button>
                     ) : (
                         <div className="alert alert-warning mt-3" role="alert">Por favor, inicia sesión para continuar con la compra.</div>
